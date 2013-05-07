@@ -12,10 +12,12 @@ ESCREVA escreva
 VAR var
 INTEIRO inteiro
 REAL [r]eal
+PI [p][\i]
 LEIA leia
 COMENTARIO [\/\/].*
 VARIAVEL [a-zA-Z]+
 ATRIBUI \<\-
+NUMINTEIRO [0-9]+
 %%
 
 {ALGORITMO} printf("%s - T_ALGORITMO\n", yytext);
@@ -25,17 +27,22 @@ ATRIBUI \<\-
 {STRING}  printf("%s - T_STRING\n", yytext);
 {ESCREVA} printf("%s - T_ESCREVA\n", yytext);
 {COMENTARIO} printf("%s - T_COMENTARIO\n", yytext);
-"(" printf("%s - T_ABRE PARENT\n", yytext);
-")" printf("%s - T_FECHA PARENT\n", yytext);
+"(" printf("%s - T_ABRE_PARENT\n", yytext);
+")" printf("%s - T_FECHA_PARENT\n", yytext);
 "," printf("%s - T_VIRGULA\n", yytext);
 {VAR} printf("%s - T_VAR\n", yytext);
 {INTEIRO} printf("%s - T_INTEIRO\n", yytext);
 {REAL} printf("%s - T_REAL\n", yytext);
+{PI} printf("%s - T_PI\n", yytext);
 {LEIA} printf("%s - T_LEIA\n", yytext);
 {VARIAVEL} printf("%s - T_VARIAVEL\n", yytext);
 ":" printf("%s - T_DECLARAVAR\n", yytext);
 {ATRIBUI} printf("%s - T_ATRIBUI\n", yytext);
 "+" printf("%s - T_SOMA\n", yytext);
+{NUMINTEIRO} printf("%s - T_NUMINTEIRO\n", yytext);
+"*" printf("%s - T_MULT\n", yytext);
+"/" printf("%s - T_DIVISAO\n", yytext);
+"^" printf("%s - T_POTENCIA\n", yytext);
 
 %%
 
