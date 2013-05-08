@@ -28,8 +28,12 @@ COMENTARIO [\/\/].*+
 VARIAVEL [a-zA-Z]+[0-9]*
 ATRIBUI \<\-
 NUMINTEIRO [0-9]+
+DIVISAO [\/]
+
+ 
 %%
 
+\n (yylineno++);
 {ALGORITMO} printf("%s - T_ALGORITMO\n", yytext);
 {FIMALGORITMO} printf("%s - T_FIMALGORITMO\n", yytext);
 {INICIO} printf("%s - T_INICIO\n", yytext);
@@ -51,22 +55,24 @@ NUMINTEIRO [0-9]+
 {SENAO} printf("%s - T_SENAO\n", yytext);
 {ENTAO} printf("%s - T_ENTAO\n", yytext);
 {FIMSE} printf("%s - T_FIMSE\n", yytext);
-{ESCOLHA} printf("%s - T_ESCOLHA\n", yytext);
+{ESCOLHA} ("%s - T_ESCOLHA\n", yytext);
 {CASO} printf("%s - T_CASO\n", yytext);
 {OUTROCASO} printf("%s - T_OUTROCASO\n", yytext);
 {FIMESCOLHA} printf("%s - T_FIMESCOLHA\n", yytext);
 {VARIAVEL} printf("%s - T_VARIAVEL\n", yytext);
 {NUMINTEIRO} printf("%s - T_NUMINTEIRO\n", yytext);
 {ATRIBUI} printf("%s - T_ATRIBUI\n", yytext);
+{DIVISAO} printf("%s - T_DIVISAO\n", yytext);
 ":" printf("%s - T_DECLARAVAR\n", yytext);
 "+" printf("%s - T_SOMA\n", yytext);
 "*" printf("%s - T_MULT\n", yytext);
-"/" printf("%s - T_DIVISAO\n", yytext);
 "^" printf("%s - T_POTENCIA\n", yytext);
 "<" printf("%s - T_MENORQUE\n", yytext);
 "<=" printf("%s - T_MENORIGUALQUE\n", yytext);
 ">" printf("%s - T_MAIORQUE\n", yytext);
 ">=" printf("%s - T_MAIORIGUALQUE\n", yytext);
+. printf("%s - T_DESCONHECIDO. Localizado na linha: %d \n", yytext,yylineno);
+
 %%
 
 main (int argc, char *argv[])
