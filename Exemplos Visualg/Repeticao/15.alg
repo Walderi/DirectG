@@ -1,25 +1,27 @@
-algoritmo "fibonacci aÃ© o n-esimo termo"
-// FunÃ§Ã£o :
-// Autor :
+algoritmo "fibonacci aé o n-esimo termo"
+// Função : A série de Fibonacci é formada pela seqüência
+// 1,1,2,3,5,8,13,21,34,55,... Faça um programa capaz de gerar
+// a série até o n-ésimo termo.
+// Autor : Walderi Moraes Willy Filho
 // Data : 07/05/2013
-// SeÃ§Ã£o de DeclaraÃ§Ãµes 
+// Seção de Declarações 
 var
 an,at,pro,c,n: inteiro
 inicio
       escreval("qual o numero de fibonacci voce quer?")
       leia(n)
       an <- 1
-      escreval("o numero da sequencia Ã© na posicao 1 Ã© 1")
+      escreval("o numero da sequencia é na posicao 1 é 1")
       at <- 1
-      escreval("o numero da sequencia Ã© na posicao 2 Ã© 1")
+      escreval("o numero da sequencia é na posicao 2 é 1")
 
       c <- 1
            enquanto c <= (n-2) faca
                     pro <- an + at
-                    escreval("o numero da sequencia Ã© na posicao ",c+2," Ã© ", pro)
+                    escreval("o numero da sequencia é na posicao ",c+2," é ", pro)
                     an <- at
                     at <- pro
                     c <- c+1
            fimenquanto
-      escreval("o numero da sequencia Ã©: ", at)
+      escreval("o numero da sequencia é: ", at)
 fimalgoritmo
