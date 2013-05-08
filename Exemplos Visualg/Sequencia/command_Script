@@ -1,1 +1,0 @@
-iconv -f CP1252 -t UTF-8 3.alg | dos2unix > teste3.alg
