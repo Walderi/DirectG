@@ -1,21 +1,21 @@
 algoritmo "Positivo ou negativo "
-// Função :
+// FunÃ§Ã£o :
 // Autor :
 // Data : 06/05/2013
-// Seção de Declarações 
+// SeÃ§Ã£o de DeclaraÃ§Ãµes 
 var
 x : real
 
 
 inicio
-// Seção de Comandos
+// SeÃ§Ã£o de Comandos
 escreval ( "Entre com o numero:")
 leia (x)
 
 se x > 0 entao
-   escreval( "O numero é positivo!!")
+   escreval( "O numero Ã© positivo!!")
 senao
-     escreval("O numero é negativo!!")
+     escreval("O numero Ã© negativo!!")
      
 fimse
 

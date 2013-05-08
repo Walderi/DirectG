@@ -1,18 +1,18 @@
 algoritmo "Transformar m em cm"
-// Função :
+// FunÃ§Ã£o :
 // Autor :
 // Data : 06/05/2013
-// Seção de Declarações 
+// SeÃ§Ã£o de DeclaraÃ§Ãµes 
 var
   x : real
   y : real
 
 inicio
-// Seção de Comandos 
+// SeÃ§Ã£o de Comandos 
 escreval("Entre com o valor em metros:")
 leia(x)
 
 y <- x * 100
 
-escreval("O valor em centimetros é:" ,y)
+escreval("O valor em centimetros Ã©:" ,y)
 fimalgoritmo

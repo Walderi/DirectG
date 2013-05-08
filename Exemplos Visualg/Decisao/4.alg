@@ -1,22 +1,22 @@
 algoritmo "Vogal ou consoante "
-// Função :
+// FunÃ§Ã£o :
 // Autor :
 // Data : 06/05/2013
-// Seção de Declarações 
+// SeÃ§Ã£o de DeclaraÃ§Ãµes 
 var
 x : caracter
 
 
 inicio
-// Seção de Comandos
+// SeÃ§Ã£o de Comandos
 escreval ( "Entre com a letra:")
 leia (x)
 
 escolha(x)
- caso "a", "e","i","o","u"                 // Por nao ser Case sensitive nao é
-   escreval( "É uma vogal!!")              // necessário maisculo ou minusculo
+ caso "a", "e","i","o","u"                 // Por nao ser Case sensitive nao Ã©
+   escreval( "Ã‰ uma vogal!!")              // necessÃ¡rio maisculo ou minusculo
 outrocaso
-     escreval("É uma consoante!!")
+     escreval("Ã‰ uma consoante!!")
 fimescolha
 
  

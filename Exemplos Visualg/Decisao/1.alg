@@ -1,22 +1,22 @@
 algoritmo "Maior numero"
-// Função :
+// FunÃ§Ã£o :
 // Autor :
 // Data : 06/05/2013
-// Seção de Declarações 
+// SeÃ§Ã£o de DeclaraÃ§Ãµes 
 var
 x : real
 y : real
 
 inicio
-// Seção de Comandos
+// SeÃ§Ã£o de Comandos
 escreval ( "Entre com o primeiro numero:")
 leia (x)
 escreval ("Entre com o segundo numero:")
 leia(y)
 se x > y entao
-   escreval( "Maior numero é:" , x)
+   escreval( "Maior numero Ã©:" , x)
 senao
-     escreval("Maior numero é:" , y)
+     escreval("Maior numero Ã©:" , y)
      
 fimse
 

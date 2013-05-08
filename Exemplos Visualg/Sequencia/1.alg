@@ -2,7 +2,7 @@ algoritmo "Alo mundo"
 // Função :
 // Autor :
 // Data : 06/05/2013
-// Seção de Declarações 
+// SeÃ§Ã£o de Declarações 
 var
 
 inicio

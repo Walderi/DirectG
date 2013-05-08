@@ -1,18 +1,18 @@
 algoritmo "Area do circulo"
-// Função :
+// FunÃ§Ã£o :
 // Autor :
 // Data : 06/05/2013
-// Seção de Declarações 
+// SeÃ§Ã£o de DeclaraÃ§Ãµes 
 var
   raio : real
   area : real
 
 inicio
-// Seção de Comandos 
+// SeÃ§Ã£o de Comandos 
 escreval("Entre com o valor do lado:")
 leia(raio)
 
 area <- (raio ^2)*pi
 
-escreval("O valor da area é:" ,area)
+escreval("O valor da area Ã©:" ,area)
 fimalgoritmo

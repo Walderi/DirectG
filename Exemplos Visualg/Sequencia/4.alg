@@ -1,8 +1,8 @@
 algoritmo "Media de notas"
-// Função :
+// FunÃ§Ã£o :
 // Autor :
 // Data : 06/05/2013
-// Seção de Declarações 
+// SeÃ§Ã£o de DeclaraÃ§Ãµes 
 var
   x : real
   y : real
@@ -11,7 +11,7 @@ var
   soma : real
   media : real
 inicio
-// Seção de Comandos 
+// SeÃ§Ã£o de Comandos 
 escreval("Entre com a primeira nota:")
 leia(x)
 escreval("Entre com a segunda nota:")

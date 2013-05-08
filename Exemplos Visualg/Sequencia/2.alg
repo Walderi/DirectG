@@ -1,12 +1,12 @@
 algoritmo "O numero foi"
-// Função :
+// FunÃ§Ã£o :
 // Autor :
 // Data : 06/05/2013
-// Seção de Declarações 
+// SeÃ§Ã£o de DeclaraÃ§Ãµes 
 var
   x : inteiro
 inicio
-// Seção de Comandos 
+// SeÃ§Ã£o de Comandos 
 escreval("Entre com um numero:")
 leia(x)
 escreval("O numero digitado foi:" ,x)

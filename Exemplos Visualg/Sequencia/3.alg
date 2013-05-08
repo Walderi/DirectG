@@ -1,14 +1,14 @@
 algoritmo "Soma de 2 numeros"
-// Função :
+// FunÃ§Ã£o :
 // Autor :
 // Data : 06/05/2013
-// Seção de Declarações 
+// SeÃ§Ã£o de DeclaraÃ§Ãµes 
 var
   x : inteiro
   y : inteiro
   soma : inteiro
 inicio
-// Seção de Comandos 
+// SeÃ§Ã£o de Comandos 
 escreval("Entre com o primeiro numero:")
 leia(x)
 escreval("Entre com o segundo numero:")

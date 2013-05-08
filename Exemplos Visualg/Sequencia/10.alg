@@ -1,20 +1,20 @@
 algoritmo "Temperatura C para F"
-// Função :
+// FunÃ§Ã£o :
 // Autor :
 // Data : 06/05/2013
-// Seção de Declarações 
+// SeÃ§Ã£o de DeclaraÃ§Ãµes 
 var
   C : real
   F : real
 
 inicio
-// Seção de Comandos 
+// SeÃ§Ã£o de Comandos 
 escreval("Entre com a temperatura em Celsius:")
 leia(C)
 
 F <- (9*C/5) + 32
 
 
-escreval("O valor em Farenheit é:" , F)
+escreval("O valor em Farenheit Ã©:" , F)
 
 fimalgoritmo

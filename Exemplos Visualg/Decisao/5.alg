@@ -1,15 +1,15 @@
 algoritmo "Media "
-// Função :
+// FunÃ§Ã£o :
 // Autor :
 // Data : 06/05/2013
-// Seção de Declarações 
+// SeÃ§Ã£o de DeclaraÃ§Ãµes 
 var
 nota1 : real
 nota2 : real
 media : real
 
 inicio
-// Seção de Comandos
+// SeÃ§Ã£o de Comandos
 escreval ( "Entre com a primeira nota:") //Pega a primeira nota
 leia (nota1)
 escreval ( "Entre com a segunda nota:")  //pega a segunda nota
@@ -24,6 +24,6 @@ media <- (nota1+nota2)/2                //Faz a media
      escreval("Reprovado!!")           // Senao reprovado
 fimse
    se (media = 10) entao
-    escreval( "Aprovado com Distinção!!")
+    escreval( "Aprovado com DistinÃ§Ã£o!!")
   fimse
 fimalgoritmo
