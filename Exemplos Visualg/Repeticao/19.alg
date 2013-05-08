@@ -1,8 +1,9 @@
 algoritmo "maoir, menor e soma entre 0 e 1000"
-// FunÃ§Ã£o :
-// Autor :
-// Data : 5/7/2011
-// SeÃ§Ã£o de DeclaraÃ§Ãµes 
+// Função : Altere o programa anterior para que ele aceite apenas
+// números entre 0 e 1000.
+// Autor : Walderi Moraes Willy Filho
+// Data : 6/5/2013
+// Seção de Declarações 
 var
   menor,maior,soma,num,c,d: inteiro
 inicio
