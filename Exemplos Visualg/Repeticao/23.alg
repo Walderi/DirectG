@@ -31,4 +31,8 @@ inicio
       fimse
       n <- (n-1)
       ate (n<=1)
+      escreval(" 3 é primo")
+      escreval(" 2 é primo")
+
+      
 fimalgoritmo
