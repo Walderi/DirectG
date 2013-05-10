@@ -1,8 +1,8 @@
 algoritmo "Media"
-// Função : Faça um programa que calcule o mostre a média aritmética de N notas.
+// FunÃ§Ã£o : FaÃ§a um programa que calcule o mostre a mÃ©dia aritmÃ©tica de N notas.
 // Autor : Walderi Moraes Willy Filho
 // Data : 08/5/2013
-// Seção de Declarações 
+// SeÃ§Ã£o de DeclaraÃ§Ãµes 
 var
 c,d,soma,num: inteiro
 inicio

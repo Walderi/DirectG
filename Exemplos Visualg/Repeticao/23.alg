@@ -1,12 +1,12 @@
 algoritmo "primo indicando porque caso nao seja primo qual numero seria divisivel"
-// Função :Faça um programa que mostre todos os primos entre 1 e N sendo N um
-// número inteiro fornecido pelo usuário. O programa deverá mostrar também o
-// número de divisões que ele executou para encontrar os números primos.
-// Serão avaliados o funcionamento, o estilo e o número de testes (divisões)
+// FunÃ§Ã£o :FaÃ§a um programa que mostre todos os primos entre 1 e N sendo N um
+// nÃºmero inteiro fornecido pelo usuÃ¡rio. O programa deverÃ¡ mostrar tambÃ©m o
+// nÃºmero de divisÃµes que ele executou para encontrar os nÃºmeros primos.
+// SerÃ£o avaliados o funcionamento, o estilo e o nÃºmero de testes (divisÃµes)
 // executados.
 // Autor : Walderi Moraes Willy Filho
 // Data : 08/05/2013
-// Seção de Declarações 
+// SeÃ§Ã£o de DeclaraÃ§Ãµes 
 var
 n,m,l: inteiro
 p : logico
@@ -25,14 +25,14 @@ inicio
       fimse
       ate (m<=1)
       se p entao
-        // escreval("não é primo pois é divisivel por ", m)
+        // escreval("nÃ£o Ã© primo pois Ã© divisivel por ", m)
          senao
-      escreval(n," é primo")
+      escreval(n," Ã© primo")
       fimse
       n <- (n-1)
       ate (n<=1)
-      escreval(" 3 é primo")
-      escreval(" 2 é primo")
+      escreval(" 3 Ã© primo")
+      escreval(" 2 Ã© primo")
 
       
 fimalgoritmo

@@ -1,10 +1,10 @@
 algoritmo "primo"
-// Função : Faça um programa que peça um número inteiro e
-// determine se ele é ou não um número primo.
-// Um número primo é aquele que é divisível somente por ele mesmo e por 1.
+// FunÃ§Ã£o : FaÃ§a um programa que peÃ§a um nÃºmero inteiro e
+// determine se ele Ã© ou nÃ£o um nÃºmero primo.
+// Um nÃºmero primo Ã© aquele que Ã© divisÃ­vel somente por ele mesmo e por 1.
 // Autor : Walderi Moraes Willy Filho
 // Data : 08/05/2013
-// Seção de Declarações
+// SeÃ§Ã£o de DeclaraÃ§Ãµes
 var
 n,m,l: inteiro
 p : logico
@@ -21,7 +21,7 @@ inicio
       fimse
       ate (m<=1)
       se p entao
-         escreval("não é primo")
+         escreval("nÃ£o Ã© primo")
          senao
       escreval("e primo")
       fimse

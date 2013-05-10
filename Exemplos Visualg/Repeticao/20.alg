@@ -1,10 +1,10 @@
 algoritmo "fatorial"
-// FunÁ„o : Altere o programa de c·lculo do fatorial,
-// permitindo ao usu·rio calcular o fatorial v·rias vezes
-// e limitando o fatorial a n˙meros inteiros positivos e menores que 16.
+// Fun√ß√£o : Altere o programa de c√°lculo do fatorial,
+// permitindo ao usu√°rio calcular o fatorial v√°rias vezes
+// e limitando o fatorial a n√∫meros inteiros positivos e menores que 16.
 // Autor : Walderi Moraes Willy Filho
 // Data : 07/05/2013
-// SeÁ„o de DeclaraÁıes 
+// Se√ß√£o de Declara√ß√µes 
 var
 an,fat: real
 c,n: inteiro
@@ -25,7 +25,7 @@ inicio
                     c <- c+1
            fimenquanto
       fimse
-      escreval("o fatorial de ",n," È: ", an)
+      escreval("o fatorial de ",n," √©: ", an)
       escreval("digite '-1' para sair")
       ate (n=-1)
 fimalgoritmo

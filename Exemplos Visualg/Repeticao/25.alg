@@ -1,16 +1,16 @@
 algoritmo "Media idade da turma"
-// Função : Faça um programa que peça para n pessoas a sua idade,
-// ao final o programa devera verificar se a média de idade da turma varia entre
-// 0 e 25,26 e 60 e maior que 60; e então, dizer se a turma é jovem,
-// adulta ou idosa, conforme a média calculada.
+// FunÃ§Ã£o : FaÃ§a um programa que peÃ§a para n pessoas a sua idade,
+// ao final o programa devera verificar se a mÃ©dia de idade da turma varia entre
+// 0 e 25,26 e 60 e maior que 60; e entÃ£o, dizer se a turma Ã© jovem,
+// adulta ou idosa, conforme a mÃ©dia calculada.
 // Autor : Walderi Moraes Willy Filho
 // Data : 08/5/2013
-// Seção de Declarações 
+// SeÃ§Ã£o de DeclaraÃ§Ãµes 
 var
 c,d,soma,num: inteiro
 inicio
 c<-0
-escreval("quantas pessoas vão informar a idade?")
+escreval("quantas pessoas vÃ£o informar a idade?")
 leia(d)
 repita
 leia(num)
@@ -19,12 +19,12 @@ leia(num)
 ate(c=d)
 escreva("media de idades ", (soma/c))
 se ((soma/c)>0) e ((soma/c)<25) entao
-   escreval(" e a turma é jovem")
+   escreval(" e a turma Ã© jovem")
    senao
    se ((soma/c)>25) e ((soma/c)<60) entao
-      escreval("e a turma é adulta")
+      escreval("e a turma Ã© adulta")
       senao
-      escreval("e a turma é idosa")
+      escreval("e a turma Ã© idosa")
    fimse
 fimse
 fimalgoritmo

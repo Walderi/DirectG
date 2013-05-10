@@ -21,16 +21,21 @@ FIMSE fims[\e]
 ESCOLHA escolha
 FIMESCOLHA fimescolha
 CASO caso
+INTERROMPA interrompa 
 OUTROCASO outrocaso
 AND [\e]
 OR  [ou]
-COMENTARIO [\/\/].*+
+COMENTARIO [\//]{2}.*
+DIVISAO [\//]{1}
 VARIAVEL [a-zA-Z]+[0-9]*
 ATRIBUI \<\-
 NUMINTEIRO [0-9]+
-DIVISAO [\/]
+ESPACOVAZIO [ ]
+REPITA "repita"
+ATE "ate"
+PROCEDIMENTO "procedimento"
+TAB [\t]
 
- 
 %%
 
 \n (yylineno++);
@@ -52,6 +57,7 @@ DIVISAO [\/]
 {PI} printf("%s - T_PI\n", yytext);
 {LEIA} printf("%s - T_LEIA\n", yytext);
 {SE} printf("%s - T_SE\n", yytext);
+{INTERROMPA} printf("%s - T_INTERROMPA\n",yytext);
 {SENAO} printf("%s - T_SENAO\n", yytext);
 {ENTAO} printf("%s - T_ENTAO\n", yytext);
 {FIMSE} printf("%s - T_FIMSE\n", yytext);
@@ -59,20 +65,27 @@ DIVISAO [\/]
 {CASO} printf("%s - T_CASO\n", yytext);
 {OUTROCASO} printf("%s - T_OUTROCASO\n", yytext);
 {FIMESCOLHA} printf("%s - T_FIMESCOLHA\n", yytext);
-{VARIAVEL} printf("%s - T_VARIAVEL\n", yytext);
 {NUMINTEIRO} printf("%s - T_NUMINTEIRO\n", yytext);
 {ATRIBUI} printf("%s - T_ATRIBUI\n", yytext);
-{DIVISAO} printf("%s - T_DIVISAO\n", yytext);
 ":" printf("%s - T_DECLARAVAR\n", yytext);
 "+" printf("%s - T_SOMA\n", yytext);
+{DIVISAO} printf("%s - T_DIVISAO\n", yytext);
+"-" printf("%s - T_SUBTRACAO\n", yytext);
 "*" printf("%s - T_MULT\n", yytext);
+"!=" printf("%s - T_DIFERENTE\n", yytext);
 "^" printf("%s - T_POTENCIA\n", yytext);
 "<" printf("%s - T_MENORQUE\n", yytext);
 "<=" printf("%s - T_MENORIGUALQUE\n", yytext);
 ">" printf("%s - T_MAIORQUE\n", yytext);
 ">=" printf("%s - T_MAIORIGUALQUE\n", yytext);
+"=" printf("%s - T_IGUAL\n", yytext);
+{ESPACOVAZIO} printf("%s - T_ESPACOVAZIO\n", yytext);
+{TAB} printf("%s - T_TAB\n", yytext);
+{REPITA} printf("%s - T_REPITA\n", yytext);
+{ATE} printf("%s - T_ATE\n", yytext);
+{PROCEDIMENTO} printf("%s - T_PROCEDIMENTO\n",yytext);
+{VARIAVEL} printf("%s - T_VARIAVEL\n", yytext);
 . printf("%s - T_DESCONHECIDO. Localizado na linha: %d \n", yytext,yylineno);
-
 %%
 
 main (int argc, char *argv[])
@@ -83,8 +96,8 @@ main (int argc, char *argv[])
 		fprintf(stderr, "\nCorrija e tente de novo!\n\n");
 	else
 		fprintf(stderr, "\nAew! Escreveu ok o código...\n\n");
-	
+
 	fclose(yyin);
-	
+
 	return 0;	
 }

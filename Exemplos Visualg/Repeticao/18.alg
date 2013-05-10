@@ -1,9 +1,9 @@
 algoritmo "maoir, menor e soma"
-// Função : Faça um programa que, dado um conjunto de N números,
+// FunÃ§Ã£o : FaÃ§a um programa que, dado um conjunto de N nÃºmeros,
 // determine o menor valor, o maior valor e a soma dos valores.
 // Autor : Walderi Moraes Willy Filho
 // Data : 5/7/2011
-// Seção de Declarações 
+// SeÃ§Ã£o de DeclaraÃ§Ãµes 
 var
   menor,maior,soma,num,c,d: inteiro
 inicio
