@@ -72,7 +72,7 @@ TAB [\t]
 {DIVISAO} printf("%s - T_DIVISAO\n", yytext);
 "-" printf("%s - T_SUBTRACAO\n", yytext);
 "*" printf("%s - T_MULT\n", yytext);
-"!=" printf("%s - T_DIFERENTE\n", yytext);
+"<>" printf("%s - T_DIFERENTE\n", yytext);
 "^" printf("%s - T_POTENCIA\n", yytext);
 "<" printf("%s - T_MENORQUE\n", yytext);
 "<=" printf("%s - T_MENORIGUALQUE\n", yytext);
