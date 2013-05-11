@@ -7,24 +7,24 @@ algoritmo "Media idade da turma"
 // Data : 08/5/2013
 // Seção de Declarações 
 var
-c,d,soma,num: inteiro
+contador,QtPessoas,soma,num: inteiro
 inicio
-c<-0
-escreval("quantas pessoas vão informar a idade?")
-leia(d)
-repita
-leia(num)
-         soma <- soma + num
-         c <- c+1
-ate(c=d)
-escreva("media de idades ", (soma/c))
-se ((soma/c)>0) e ((soma/c)<25) entao
-   escreval(" e a turma é jovem")
-   senao
-   se ((soma/c)>25) e ((soma/c)<60) entao
-      escreval("e a turma é adulta")
-      senao
-      escreval("e a turma é idosa")
-   fimse
-fimse
+	contador<-0
+	escreval("Quantas pessoas vao informar a idade?")
+	leia(QtPessoas)
+	repita
+		leia(num)
+		soma <- soma + num
+         	contador <- contador+1
+	ate(contador=QtPessoas)
+	escreva("Media de idades ", (soma/contador))
+	se ((soma/contador)>0) e ((soma/contador)<25) entao
+  		 escreval(" e a turma e Jovem")
+   	senao
+   		se ((soma/contador)>25) e ((soma/contador)<60) entao
+      			escreval(" e a turma e Adulta")
+      		senao
+      			escreval(" e a turma e Idosa")
+   		fimse
+	fimse
 fimalgoritmo
