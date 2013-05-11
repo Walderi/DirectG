@@ -30,11 +30,11 @@ DIVISAO [\//]{1}
 VARIAVEL [a-zA-Z]+[0-9]*
 ATRIBUI \<\-
 NUMINTEIRO [0-9]+
-ESPACOVAZIO [ ]
 REPITA "repita"
 ATE "ate"
 PROCEDIMENTO "procedimento"
-TAB [\t]
+TAB [\t]*
+ESPACOVAZIO [ ]*
 
 %%
 
@@ -79,12 +79,13 @@ TAB [\t]
 ">" printf("%s - T_MAIORQUE\n", yytext);
 ">=" printf("%s - T_MAIORIGUALQUE\n", yytext);
 "=" printf("%s - T_IGUAL\n", yytext);
-{ESPACOVAZIO} printf("%s - T_ESPACOVAZIO\n", yytext);
-{TAB} printf("%s - T_TAB\n", yytext);
 {REPITA} printf("%s - T_REPITA\n", yytext);
 {ATE} printf("%s - T_ATE\n", yytext);
 {PROCEDIMENTO} printf("%s - T_PROCEDIMENTO\n",yytext);
 {VARIAVEL} printf("%s - T_VARIAVEL\n", yytext);
+{TAB} printf("");
+{ESPACOVAZIO} printf("");
+
 . printf("%s - T_DESCONHECIDO. Localizado na linha: %d \n", yytext,yylineno);
 %%
 
