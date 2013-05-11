@@ -10,7 +10,10 @@ ESCREVAL escreval
 STRING \".*\"
 ESCREVA escreva
 VAR var
+LOGICO logico
 INTEIRO inteiro
+VERDADEIRO verdadeiro
+FALSO falso
 REAL [r]eal
 PI [p][\i]
 LEIA leia
@@ -83,6 +86,9 @@ ESPACOVAZIO [ ]*
 "=" printf("%s - T_IGUAL\n", yytext);
 {REPITA} printf("%s - T_REPITA\n", yytext);
 {ATE} printf("%s - T_ATE\n", yytext);
+{LOGICO} printf("%s - T_TIPO_LOGICO\n", yytext);
+{VERDADEIRO} printf("%s - T_LOGICO_VERDADEIRO\n", yytext);
+{FALSO} printf("%s - T__LOGICO_FALSO\n", yytext);
 {PROCEDIMENTO} printf("%s - T_PROCEDIMENTO\n",yytext);
 {DIVISAOINTEIRA} printf("%s - T_DIVISAOINTEIRA\n",yytext);
 {MOD} printf("%s - T_RESTO\n", yytext);
