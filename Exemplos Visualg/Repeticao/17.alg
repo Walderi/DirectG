@@ -4,18 +4,32 @@ algoritmo "fatorial"
 // Autor : Walderi Moraes Willy Filho
 // Data : 07/05/2013
 // Seção de Declarações 
-var
-an,fat,c,n: inteiro
-inicio
-      escreval("fatorial de qual numero?")
-      leia(n)
-      an <- 1
+var     
+    termo : inteiro
+	fatorialAnterior : inteiro
+	fatorial : inteiro
+    numero : inteiro
 
-      c <- 1
-           enquanto c <= n faca
-                    fat <- an * c
-                    an <- fat
-                    c <- c+1
-           fimenquanto
-      escreval("o fatorial de ",n," é: ", an)
+inicio
+	escreval("Digite o numero que se deseja obter o calculo fatorial")
+	leia(numero)
+        
+    enquanto (termo < numero)
+    	se (termo = 0)
+    		entao
+    			fatorial <- 1
+    			senao se (termo = 1) 
+    				entao 
+		                fatotialAnterior <- 1
+    					senao 
+    						entao 
+     						    termoAnterior <- fatorial
+				                fatorial <- termo*termoAnterior
+    					fimse 
+    			fimse
+        fimse 
+        termo <- termo + 1
+ 	fimenquanto  
+ 	
+ 	escreval("o fatorial de ",numero,"= ", fatorial)
 fimalgoritmo

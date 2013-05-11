@@ -4,15 +4,13 @@ algoritmo "Transformar m em cm"
 // Data : 06/05/2013
 // Seção de Declarações 
 var
-  x : real
-  y : real
+	valorMetro : real
+	valorCentimetro : real
 
 inicio
-// Seção de Comandos 
-escreval("Entre com o valor em metros:")
-leia(x)
-
-y <- x * 100
-
-escreval("O valor em centimetros é:" ,y)
+	// Seção de Comandos 
+	escreval("Entre com o valor em metros:")
+	leia(valorMetro)
+	valorCentimetro <- valorMetro * 100
+	escreval("O valor em centimetros é:" ,valorCentimetro)
 fimalgoritmo

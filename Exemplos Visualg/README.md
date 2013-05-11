@@ -12,4 +12,4 @@ Walderi: 15-18 repeticao <br />
 
 André: <br />
 
-Lucas: <br />
+Lucas: 01-06 <br />

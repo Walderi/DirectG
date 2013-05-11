@@ -1,4 +1,4 @@
-algoritmo "fibonacci aé o n-esimo termo"
+algoritmo "fibonacci até o n-esimo termo"
 // Função : A série de Fibonacci é formada pela seqüência
 // 1,1,2,3,5,8,13,21,34,55,... Faça um programa capaz de gerar
 // a série até o n-ésimo termo.
@@ -6,22 +6,42 @@ algoritmo "fibonacci aé o n-esimo termo"
 // Data : 07/05/2013
 // Seção de Declarações 
 var
-an,at,pro,c,n: inteiro
-inicio
-      escreval("qual o numero de fibonacci voce quer?")
-      leia(n)
-      an <- 1
-      escreval("o numero da sequencia é na posicao 1 é 1")
-      at <- 1
-      escreval("o numero da sequencia é na posicao 2 é 1")
+	termo : inteiro
+	termoAnterior : inteiro
+	termoAnteriorAoAnterior : inteiro
+	valorFibonacci : inteiro
+	enesimoTermo : inteiro
 
-      c <- 1
-           enquanto c <= (n-2) faca
-                    pro <- an + at
-                    escreval("o numero da sequencia é na posicao ",c+2," é ", pro)
-                    an <- at
-                    at <- pro
-                    c <- c+1
-           fimenquanto
-      escreval("o numero da sequencia é: ", at)
+inicio
+	escreval("Escreva o tamanho da sequencia a ser gerada")
+    leia(enesimoTermo)
+    termo <- 0
+    
+    enquanto (termo < enesimoTermo)
+    	se (termo = 0)
+    		entao
+    			valorFibonacci <- 0
+    			escreval(" ", valorFibonacci)
+    			senao se (termo = 1) 
+    				entao 
+    				valorFibonacci <- 1
+	                escreval(" ", valorFibonacci)
+    					senao se (termo = 2)
+    						entao 
+    							valorFibonacci <- 1
+	               				termoAnterior <- 1
+	                            termoAnteriorAoAnterior <-0
+    							escreval(" ", valorFibonacci)
+    							senao se (termo > 2)
+    								entao
+    									termoAnteriorAoAnterior <- termoAnterior
+    					                termoAnterior <- valorFibonacci
+    					                valorFibonacci <- termoAnteriorAoAnterior + termoAnterior
+    					                escreval(" ", (valorFibonacci))
+    						    fimse 
+    					fimse
+    		    fimse 
+    	fimse
+    	termo <- termo + 1
+	fimenquanto    	
 fimalgoritmo

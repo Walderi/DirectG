@@ -4,21 +4,18 @@ algoritmo "Maior numero"
 // Data : 06/05/2013
 // Seção de Declarações 
 var
-x : real
-y : real
+	primeiroNum : real
+	segundoNum : real
 
 inicio
-// Seção de Comandos
-escreval ( "Entre com o primeiro numero:")
-leia (x)
-escreval ("Entre com o segundo numero:")
-leia(y)
-se x > y entao
-   escreval( "Maior numero é:" , x)
-senao
-     escreval("Maior numero é:" , y)
-     
-fimse
-
- 
+	// Seção de Comandos
+	escreval ( "Entre com o primeiro numero:")
+	leia (primeiroNum)
+	escreval ("Entre com o segundo numero:")
+	leia(segundoNum )
+	se primeiroNum > segundoNum  entao
+		escreval( "Maior numero é:" , primeiroNum)
+	senao
+		escreval("Maior numero é:" , segundoNum )   
+	fimse 
 fimalgoritmo

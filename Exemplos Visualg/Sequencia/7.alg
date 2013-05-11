@@ -4,15 +4,13 @@ algoritmo "Area do quadrado"
 // Data : 06/05/2013
 // Seção de Declarações 
 var
-  lado : real
-  area : real
+	lado : real
+	area : real
 
 inicio
-// Seção de Comandos 
-escreval("Entre com o valor do lado:")
-leia(lado)
-
-area <- lado^lado
-
-escreval("O valor da area é:" ,area)
+	// Seção de Comandos 
+	escreval("Entre com o valor do lado:")
+	leia(lado)
+	area <- lado^lado
+	escreval("O valor da area é:" ,area)
 fimalgoritmo
