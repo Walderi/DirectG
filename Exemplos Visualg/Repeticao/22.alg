@@ -1,27 +1,36 @@
-algoritmo "primo indicando porque caso nao seja primo qual numero seria divisivel"
+algoritmo "primo e nao primo "
 // Função : Altere o programa de cálculo dos números primos, informando,
 // caso o número não seja primo, por quais número ele é divisível.
-// Autor : Walderi Moraes Willy Filho
+// Autor : Walderi Moraes Willy Filho || George Lucas Gomes
 // Data : 08/05/2013
 // Seção de Declarações 
 var
-n,m,l: inteiro
-p : logico
+num,divisor,restodiv: inteiro
+primo : logico
 inicio
-      leia(n)
-      m <- n\2
-      repita
-      l <- n mod m
-      se (l <> 0) entao
-         m <- m-1
-         senao
-        p <- verdadeiro
-        interrompa
-      fimse
-      ate (m<=1)
-      se p entao
-         escreval("não é primo")
-         senao
-      escreval("e primo pois é divisivel por ", m)
-      fimse
+	escreval ("Entre com o numero desejado:")		
+	leia(num)
+	divisor <- num
+	primo <- verdadeiro
+	repita
+		restodiv <- num mod divisor
+		se (restodiv = 0) e (divisor <> 1) e (num > 1) entao
+			divisor <- divisor-1
+			primo <- falso
+			escreval("Divisivel por ", divisor+1)
+         	senao
+        		divisor <- divisor-1			
+      		fimse
+		
+		se (divisor+1 = num) entao
+			primo <-verdadeiro
+		fimse
+      	ate (divisor<=1)
+      	se primo entao
+		escreval("Divisivel por ",1)
+		escreval("E primo!")
+	senao
+      		escreval("Divisivel por 1")
+		escreval("Nao e primo")
+      	fimse
 fimalgoritmo
