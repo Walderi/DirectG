@@ -27,6 +27,8 @@ AND [\e]
 OR  [ou]
 COMENTARIO [\//]{2}.*
 DIVISAO [\//]{1}
+DIVISAOINTEIRA [\\]{1}
+MOD mod
 VARIAVEL [a-zA-Z]+[0-9]*
 ATRIBUI \<\-
 NUMINTEIRO [0-9]+
@@ -82,6 +84,8 @@ ESPACOVAZIO [ ]*
 {REPITA} printf("%s - T_REPITA\n", yytext);
 {ATE} printf("%s - T_ATE\n", yytext);
 {PROCEDIMENTO} printf("%s - T_PROCEDIMENTO\n",yytext);
+{DIVISAOINTEIRA} printf("%s - T_DIVISAOINTEIRA\n",yytext);
+{MOD} printf("%s - T_RESTO\n", yytext);
 {VARIAVEL} printf("%s - T_VARIAVEL\n", yytext);
 {TAB} printf("");
 {ESPACOVAZIO} printf("");
