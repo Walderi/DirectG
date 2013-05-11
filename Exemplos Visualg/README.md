@@ -8,7 +8,7 @@ George Lucas Gomes: 19-25 <br />
 
 Sérgio: <br />
 
-Walderi: <br />
+Walderi: 15-18 repeticao <br />
 
 André: <br />
 
