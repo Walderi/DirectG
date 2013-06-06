@@ -13,3 +13,5 @@ Walderi: 15-18 repeticao <br />
 André: <br />
 
 Lucas: 01-06 <br />
+
+Os exercicios de funções tem que ter funções não procedimentos. <br />
