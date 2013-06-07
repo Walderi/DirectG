@@ -1,4 +1,4 @@
-lgoritmo "Nome na vertical em escada"
+algoritmo "Nome na vertical em escada"
 
 // Função :
 

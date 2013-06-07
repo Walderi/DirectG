@@ -1,4 +1,4 @@
-lgoritmo "Nome ao contrario em maiusculo"
+algoritmo "Nome ao contrario em maiusculo"
 
 // Função :
 

@@ -1,7 +1,7 @@
 %option yylineno
 %{
 #define YYSTYPE double
-#include "baskara.tab.h"
+#include "directg.tab.h"
 #include <stdlib.h>
 %}
 
@@ -44,6 +44,16 @@ NUMREAL 	{NUMINTEIRO}\.{NUMINTEIRO}
 REPITA 		[rR][eE][pP][iI][tT][aA]
 ATE 		[aA][tT][e]
 PROCEDIMENTO 	[pP][rR][oO][cC][eE][dD][iI][mM][eE][nN][tT][oO]
+FIMPROCEDIMENTO [fF][iI][mM][pP][rR][oO][cC][eE][dD][iI][mM][eE][nN][tT][oO]
+FUNCAO		[fF][uU][nN][cC][aA][oO]
+FIMFUNCAO	[Ff][Ii][mM][fF][uU][nN][cC][aA][oO]
+RETORNE		[Rr][eE][tT][oO][rR][nN][eE]
+COMPR		[Cc][Oo][Mm][Pp][Rr]
+VETOR 		[vV][eE][tT][oO][rR]
+DE		[dD][eE]
+COPIA		[cC][oO][pP][iI][aA]
+MAIUSC		[mM][aA][iI][uU][Ss][Cc]
+
 ESPACOVAZIO 	[ \t\r]+
 
 %%
@@ -99,9 +109,21 @@ ESPACOVAZIO 	[ \t\r]+
 {VERDADEIRO} 		return T_LOGICO_VERDADEIRO;
 {FALSO} 		return T_LOGICO_FALSO;
 {PROCEDIMENTO} 		return T_PROCEDIMENTO;
+{FIMPROCEDIMENTO}	return T_FIMPROCEDIMENTO;
+{FUNCAO}		return T_FUNCAO;
+{FIMFUNCAO}		return T_FIMFUNCAO;
+{RETORNE}		return T_RETORNE;
 {DIVISAOINTEIRA}	return T_DIVISAOINTEIRA;
 {MOD} 			return T_RESTO;
 {VARIAVEL} 		return T_VARIAVEL;
+{COMPR}			return T_COMPR;
+{VETOR]			return T_VETOR;
+"["			return T_ABRECOLCHETE;
+"]"			return T_FECHACOLCHETE;
+".."			return T_PONTOPONTO;
+{DE}			return T_DE;
+{COPIA}			return T_COPIA;
+{MAIUSC}		return T_MAIUSC;
 . 			{printf("Invalido: %s\n", yytext);}
 
 %%

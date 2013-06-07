@@ -1,4 +1,4 @@
-algoritmo "Nome na vertical em escada invertida"
+lgoritmo "Nome na vertical em escada"
 
 // Função :
 
@@ -30,17 +30,13 @@ para i de 1 ate tam faca
 
      vet[i] <- copia(nome,i,1)
 
-fimpara
-
-para i de tam ate 1 passo -1 faca
-
-       para j de 1 ate i faca
+     para j de 1 ate tam faca
 
           escreva(Maiusc(vet[j]))
 
-       fimpara
+     fimpara
 
-       escreval("")
+     escreval("")
 
 fimpara
 
