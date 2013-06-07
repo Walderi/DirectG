@@ -51,7 +51,6 @@ RETORNE		[Rr][eE][tT][oO][rR][nN][eE]
 COMPR		[Cc][Oo][Mm][Pp][Rr]
 VETOR 		[vV][eE][tT][oO][rR]
 DE		[dD][eE]
-CARACTERE	[cC][aA][Rr][Aa][Cc][Tt][Ee][Rr][Ee]
 COPIA		[cC][oO][pP][iI][aA]
 MAIUSC		[mM][aA][iI][uU][Ss][Cc]
 
@@ -123,7 +122,6 @@ ESPACOVAZIO 	[ \t\r]+
 "]"			return T_FECHACOLCHETE;
 ".."			return T_PONTOPONTO;
 {DE}			return T_DE;
-{CARACTERE}		return T_CARACTERE;
 {COPIA}			return T_COPIA;
 {MAIUSC}		return T_MAIUSC;
 . 			{printf("Invalido: %s\n", yytext);}

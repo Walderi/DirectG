@@ -12,7 +12,7 @@
 %token T_VIRGULA
 %token T_AND T_OR
 %token T_VAR
-%token T_INTEIRO T_REAL
+%token T_INTEIRO T_REAL T_CARACTERE
 %token T_PI
 %token T_LEIA
 %token T_INTERROMPA
@@ -78,6 +78,7 @@ variavel:
 tipo:
 	T_INTEIRO
 	| T_REAL
+	| T_CARACTERE
 ;
 
 rotinas:
@@ -119,6 +120,14 @@ Expression:
 	| Expression T_POTENCIA Expression   
 	| T_ABRE_PARENT Expression T_FECHA_PARENT  
     	| raiz 
+;
+FuncaoExistente:
+	comprimento
+	| copia
+;
+
+comprimento:
+	T_COMPR T_ABRE_PARENT T_VARIAVEL T_FECHA_PARENT
 ;
 
 raiz: 
