@@ -20,7 +20,7 @@ inicio
 	    se(num = 2) entao
 			escreval("é primo")
 	    senao
-	    enquanto(divisor < num)
+	    enquanto(divisor <n num)
 	    	restodiv = (num mod divisor)
 	    	se (restodiv = 0 )
 	        	escreval("não é primo")
