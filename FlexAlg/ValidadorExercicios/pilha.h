@@ -1,19 +1,27 @@
 #ifndef _PILHA_H_
 #define _PILHA_H_
 
-#define MAX_TAM 9999
+#define MAX_TAM_STR 300
+#define MAX_TAM_PILHA 9999
 
 typedef int tipoLinha;
 
-typedef char [MAX_TAM] tipoString;
+typedef char [MAX_TAM_STR] tipoString;
 
-typedef struct TipoPilha {
+typedef struct DadoPilha {
 	tipoLinha lineNo;
 	tipoString Errno;
-} TipoPilha;
+} DadoPilha;
 
-TipoPilha minhaPilha;
+typedef struct TipoPilha {
+	int elementos;
+	DadoPilha pilha [MAX_TAM_PILHA];
+}TipoPilha;
 
-int push (TipoPilha pilha );
+TipoPilha compPilha;
+
+int push (TipoPilha pilha, int lineNo, char *Errno);
+
+void PilhaVazia(TipoPilha pilha);
 
 int pop_all (TipoPilha pilha);
