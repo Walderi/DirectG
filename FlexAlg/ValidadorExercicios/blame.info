@@ -8,9 +8,9 @@ caracter vs caractere (tipagem) - Lucas
 
 procedimento - George
 
-Ver se o Inicio(com I maiusculo realmente representa o Inicio de uma funcao)???? WTF! - Sergio
+Ver se o Inicio(com I maiusculo realmente representa o Inicio de uma funcao)???? WTF! - Não tem diferença! nao é case sensitive
 
-diferenciar funcao nativa de funcao estrangeira - Sergio
+diferenciar funcao nativa de funcao estrangeira - Como assim? procedimento de funcao? se for é só que procedimento nao tem return
 
 para - Walderi
 
@@ -36,10 +36,10 @@ Copia() - Lucas
 
 Maiusc() - Andre
 
-vetor - Sergio
+vetor - A mudança esta dentro de declaravariavel e adicionado uma funçao vetor
 
 expressÃo MOD - Andre
 
-verifica integridade da bnf - Sergio
+verifica integridade da bnf - Como assim? O que é pra fazer aqui?
 
 acrescentar na wiki expressões lógicas
