@@ -57,8 +57,19 @@ testrep:
 
 testfun:
 	@ echo Testing function algorithms...
-
+	./valida_portugol ../../Exemplos\ Visualg/Funcao/1.alg
+	./valida_portugol ../../Exemplos\ Visualg/Funcao/2.alg
+	./valida_portugol ../../Exemplos\ Visualg/Funcao/3.alg
+	./valida_portugol ../../Exemplos\ Visualg/Funcao/4.alg
+	./valida_portugol ../../Exemplos\ Visualg/Funcao/5.alg
+      
 teststr:
 	@ echo Testing string algorithms...
+	./valida_portugol ../../Exemplos\ Visualg/String/1.alg
+	./valida_portugol ../../Exemplos\ Visualg/String/2.alg
+	./valida_portugol ../../Exemplos\ Visualg/String/3.alg
+	 ./valida_portugol ../../Exemplos\ Visualg/String/4.alg
+	./valida_portugol ../../Exemplos\ Visualg/String/5.alg
 
-testall: testseq testdec testrep
+
+testall: testseq testdec testrep testfun teststr
