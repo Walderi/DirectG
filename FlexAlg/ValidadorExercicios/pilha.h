@@ -12,6 +12,8 @@ typedef struct TipoPilha {
 	tipoString Errno;
 } TipoPilha;
 
+TipoPilha minhaPilha;
+
 int push (TipoPilha pilha );
 
 int pop_all (TipoPilha pilha);
