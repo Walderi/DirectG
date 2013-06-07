@@ -1,6 +1,9 @@
 #ifndef _PILHA_H_
 #define _PILHA_H_
 
+#include <stdio.h>
+#include <stlib.h>
+
 #define MAX_TAM_STR 300
 #define MAX_TAM_PILHA 9999
 
