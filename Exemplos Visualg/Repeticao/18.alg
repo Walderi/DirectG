@@ -32,11 +32,11 @@ inicio
     					menorNumero <- numero
     					maiorNumero <- numero
     					contador <- contador +1	
-    			senão            	
+    			senao            	
 	            	se(numero <= menorNumero)
 	            		entao
 	            			menorNumero <- numero
-	            			senão se (numero >= maiorNumero)
+	            			senao se (numero >= maiorNumero)
 	            				entao
 	            					maiorNumero <- numero
 	            					senao
