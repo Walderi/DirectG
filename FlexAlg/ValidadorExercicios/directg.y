@@ -247,12 +247,12 @@ Condicao:
 ;
 
 Enquanto:
-	T_ENQUANTO T_ABRE_PARENT Condicao T_FECHA_PARENT Rotinas T_FIMENQUANTO
+	T_ENQUANTO T_ABRE_PARENT Condicao T_FECHA_PARENT rotinas T_FIMENQUANTO
 ;
 
 Para:
-	T_PARA Variavel T_DE VariavelInt T_ATE VariavelInt T_FACA Rotinas T_FIMPARA
-	| T_PARA Variavel T_DE VariavelInt T_ATE VariavelVnt T_PASSO T_NUMINTEIRO T_FACA Rotinas T_FIMPARA
+	T_PARA variavel T_DE VariavelInt T_ATE VariavelInt T_FACA rotinas T_FIMPARA
+	| T_PARA variavel T_DE VariavelInt T_ATE VariavelVnt T_PASSO T_NUMINTEIRO T_FACA rotinas T_FIMPARA
 ;
 
 Escolha:
@@ -263,7 +263,7 @@ Selecao:
 	ExpressaoRelacional
 	| T_VARIAVEL
 	| T_STRING
-	| Number
+	| number
 ;
 
 Selecoes:
@@ -272,13 +272,12 @@ Selecoes:
 ;
 
 Caso:
-	T_CASO Selecoes Rotinas T_OUTROCASO Rotinas
-	|T_CASO Selecoes Rotinas Caso T_OUTROCASO Rotinas 
- 
+	T_CASO Selecoes rotinas T_OUTROCASO Rotinas
+	|T_CASO Selecoes rotinas Caso T_OUTROCASO rotinas 
 ;
 
 Repita:
-	T_REPITA Rotinas T_ATE T_ABRE_PARENT Condicao T_FECHA_PARENT
+	T_REPITA rotinas T_ATE T_ABRE_PARENT Condicao T_FECHA_PARENT
 ;
 
 
