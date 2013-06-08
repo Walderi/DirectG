@@ -1,15 +1,17 @@
 LEX=flex
 CC=gcc
+BS=bison
 
 compile: valida_portugol.lex
 	@ echo Compiling...
+	$(BS) -d ./valida_portugol.y
 	$(LEX) -o ./valida_portugol.lex.c ./valida_portugol.lex
-	$(CC) -o ./valida_portugol ./valida_portugol.lex.c -lfl
+	$(CC) -o ./valida_portugol ./valida_portugol.lex.c -lfl -lm 
 	@ echo Compiled!
 	
 clean:
 	@ echo Cleaning...
-	rm -rf ./*.c
+	# rm -rf ./*.c
 	rm -rf ./valida_portugol
 	@ echo Cleaned!
 
