@@ -2,6 +2,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+int erros;
 %}
 
 %token T_ALGORITMO T_FIMALGORITMO
@@ -62,8 +64,14 @@ nome:
     T_STRING
 ;
 
+inicio:
+	T_INICIO
+	| error { erros++; yyerror("Procurou inicio e nao achou!", yylineno, yytext);
+	} 
+;
+
 codigo:
-	declaravariavel T_INICIO rotinas 
+	declaravariavel inicio rotinas 
 	| comentarios codigo	
 ;
 
@@ -71,6 +79,7 @@ declaravariavel:
 	| T_VAR
 	| T_VAR variaveis T_DOISPONTOS tipo
 	| T_VAR variaveis T_DOISPONTOS vetor
+	| error { erros++; yyerror("Erro de declaracao de variaveis", yylineno, yytext); }
 ;
 
 variaveis:
@@ -92,6 +101,7 @@ tipo:
 	| T_REAL
 	| T_CARACTERE
 	| T_VETOR T_DE tipo
+	| error {erros++; yyerror("tipo de variavel inexistente!", yylineno, yytext);}
 ;
 
 vetor: 
@@ -117,7 +127,6 @@ rotina:
 	| se rotina
 	| T_INTERROMPA rotina
 	| funcoes rotina
-	| FuncaoExistente rotina
 ;
 
 se:
@@ -131,10 +140,9 @@ procedimento:
 ;
 
 funcoes:
-	| funcao
-	| procedimento
-	| funcoes funcao
-	| funcoes procedimento
+	funcao
+	procedimento
+	FuncaoExistente
 ;
 
 funcao:
@@ -289,20 +297,24 @@ Repita:
 extern int 	yylineno;
 extern char 	*yytext;
 
-int yyerror(char *s) {
-	printf("Erro %s na Linha %d com o Token nao esperado %s\n", s, yylineno, yytext);
+int yyerror(char *s, int line, char *msg) {
+	printf("Erro %s na Linha %d\n", s, line);
+	printf("Mensagem: %s\n", msg);
+	return 0;
 }
 
-int main(int ac, char **av) {
+int main(int argc, char *argv[] ) {
 	extern FILE *yyin;
-
-	if(ac > 1 && (yyin = fopen(av[1], "r")) == NULL) {
+	
+	if(argc > 1 && (yyin = fopen(argv[1], "r")) == NULL) {
 		perror(av[1]);
-		exit(1);
+		return 1;		
 	}
 
-	if(!yyparse())
-		printf("Tudo foi OK!!\n");
-	else
-		printf("Algoritmo com erro.\n");
+	yyparse();
+
+	if ( erros == 0)
+		printf("Sucesso\n");
+
+	return 0;
 }
