@@ -1,3 +1,4 @@
+
 %option yylineno
 %{
 #define YYSTYPE double
@@ -51,7 +52,7 @@ RETORNE		[Rr][eE][tT][oO][rR][nN][eE]
 COMPR		[Cc][Oo][Mm][Pp][Rr]
 VETOR 		[vV][eE][tT][oO][rR]
 DE		[dD][eE]
-CARACTERE	[cC][aA][Rr][Aa][Cc][Tt][Ee][Rr][Ee]
+CARACTERE	[cC][aA][Rr][Aa][Cc][Tt][Ee][Rr][Ee]?
 COPIA		[cC][oO][pP][iI][aA]
 MAIUSC		[mM][aA][iI][uU][Ss][Cc]
 
@@ -62,51 +63,36 @@ ESPACOVAZIO 	[ \t\r]+
 \n		yylineno++;
 {ESPACOVAZIO} 		{ }
 
-{ALGORITMO} 	return T_ALGORITMO;
-{FIMALGORITMO} 	return  T_FIMALGORITMO;
-{INICIO} 	return T_INICIO;
-{ESCREVAL} 	return  T_ESCREVAL;
-{STRING} 	return  T_STRING;
-{ESCREVA} 	return  T_ESCREVA;
-{COMENTARIO}	return  T_COMENTARIO;
-"(" 		return  T_ABRE_PARENT;
-")" 		return   T_FECHA_PARENT;
-"," 		return  T_VIRGULA;
-{AND} 		return  T_AND;
-{OR}  		return  T_OR;
-{VAR} 		return  T_VAR;
-{RAIZQ} 	return T_RAIZQ;
-{INTEIRO} 	return  T_INTEIRO;
-{REAL} 		return  T_REAL;
-{PI} 		return  T_PI;
-{LEIA} 		return  T_LEIA;
-{SE} 		return  T_SE;
-{INTERROMPA} 	return  T_INTERROMPA;
-{SENAO} 	return  T_SENAO;
-{ENTAO} 	return  T_ENTAO;
-{FIMSE} 	return  T_FIMSE;
-{ESCOLHA} 	return  T_ESCOLHA;
-{CASO} 		return  T_CASO;
-{OUTROCASO} 	return  T_OUTROCASO;
-{FIMESCOLHA} 	return  T_FIMESCOLHA;
-{NUMREAL} 	return T_NUMREAL;
-{NUMINTEIRO} 	return  T_NUMINTEIRO;
-{ATRIBUI} 	return  T_ATRIBUI;
-":" 		return  T_DOISPONTOS;
-"+" 		return  T_SOMA;
-{DIVISAO} 	return  T_DIVISAO;
-"-" 		return  T_SUBTRACAO;
-"*" 		return  T_MULT;
-"<>" 		return  T_DIFERENTE;
-"^" 		return  T_POTENCIA;
-"<" 		return  T_MENORQUE;
-"<=" 		return  T_MENORIGUALQUE;
-">" 		return T_MAIORQUE;
-">=" 		return T_MAIORIGUALQUE;
-"=" 		return T_IGUAL;
-{REPITA} 	return T_REPITA;
-{ATE} 		return T_ATE;
-{LOGICO} 	return T_TIPO_LOGICO;
+{ALGORITMO} 		return T_ALGORITMO;
+{FIMALGORITMO} 		return T_FIMALGORITMO;
+{INICIO} 		return T_INICIO;
+{ESCREVAL} 		return T_ESCREVAL;
+{STRING} 		return T_STRING;
+{ESCREVA} 		return T_ESCREVA;
+{COMENTARIO}		return T_COMENTARIO;
+{AND} 			return T_AND;
+{OR}  			return T_OR;
+{VAR} 			return T_VAR;
+{RAIZQ} 		return T_RAIZQ;
+{INTEIRO} 		return T_INTEIRO;
+{REAL} 			return T_REAL;
+{PI} 			return T_PI;
+{LEIA} 			return T_LEIA;
+{SE} 			return T_SE;
+{INTERROMPA} 		return T_INTERROMPA;
+{SENAO} 		return T_SENAO;
+{ENTAO} 		return T_ENTAO;
+{FIMSE} 		return T_FIMSE;
+{ESCOLHA} 		return T_ESCOLHA;
+{CASO} 			return T_CASO;
+{OUTROCASO} 		return T_OUTROCASO;
+{FIMESCOLHA} 		return T_FIMESCOLHA;
+{NUMREAL} 		return T_NUMREAL;
+{NUMINTEIRO} 		return T_NUMINTEIRO;
+{ATRIBUI} 		return T_ATRIBUI;
+{REPITA} 		return T_REPITA;
+{ATE} 			return T_ATE;
+{LOGICO} 		return T_LOGICO;
 {VERDADEIRO} 		return T_LOGICO_VERDADEIRO;
 {FALSO} 		return T_LOGICO_FALSO;
 {PROCEDIMENTO} 		return T_PROCEDIMENTO;
@@ -114,18 +100,33 @@ ESPACOVAZIO 	[ \t\r]+
 {FUNCAO}		return T_FUNCAO;
 {FIMFUNCAO}		return T_FIMFUNCAO;
 {RETORNE}		return T_RETORNE;
+{DIVISAO} 		return T_DIVISAO;
 {DIVISAOINTEIRA}	return T_DIVISAOINTEIRA;
 {MOD} 			return T_RESTO;
-{VARIAVEL} 		return T_VARIAVEL;
-{COMPR}			return T_COMPR;
-{VETOR]			return T_VETOR;
-"["			return T_ABRECOLCHETE;
-"]"			return T_FECHACOLCHETE;
-".."			return T_PONTOPONTO;
 {DE}			return T_DE;
 {CARACTERE}		return T_CARACTERE;
 {COPIA}			return T_COPIA;
 {MAIUSC}		return T_MAIUSC;
+{COMPR}			return T_COMPR;
+{VETOR}			return T_VETOR;
+{VARIAVEL} 		return T_VARIAVEL;
+":" 			return T_DOISPONTOS;
+"+" 			return T_SOMA;
+"-" 			return T_SUBTRACAO;
+"*" 			return T_MULT;
+"<>" 			return T_DIFERENTE;
+"^" 			return T_POTENCIA;
+"<" 			return T_MENORQUE;
+"<=" 			return T_MENORIGUALQUE;
+">" 			return T_MAIORQUE;
+">=" 			return T_MAIORIGUALQUE;
+"=" 			return T_IGUAL;
+"["			return T_ABRECOLCHETE;
+"]"			return T_FECHACOLCHETE;
+"(" 			return T_ABRE_PARENT;
+")" 			return T_FECHA_PARENT;
+"," 			return T_VIRGULA;
+".."			return T_PONTOPONTO;
 . 			{printf("Invalido: %s\n", yytext);}
 
 %%

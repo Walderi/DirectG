@@ -2,8 +2,6 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-int erros;
 %}
 
 %token T_ALGORITMO T_FIMALGORITMO
@@ -29,7 +27,7 @@ int erros;
 %token T_SOMA T_DIVISAO T_SUBTRACAO T_MULT T_POTENCIA T_MOD
 %token T_DIFERENTE T_MENORQUE T_MENORIGUALQUE T_MAIORQUE T_MAIORIGUALQUE T_IGUAL
 %token T_REPITA T_ATE
-%token T_TIPO_LOGICO T_LOGICO_VERDADEIRO T_LOGICO_FALSO
+%token T_LOGICO_VERDADEIRO T_LOGICO_FALSO
 %token T_DIVISAOINTEIRA
 %token T_RESTO
 %token T_VARIAVEL
@@ -37,6 +35,7 @@ int erros;
 %token T_DOISPONTOS
 %token T_ENQUANTO T_FIMENQUANTO
 %token T_PROCEDIMENTO T_FIMPROCEDIMENTO
+%token T_RETORNE
 %token T_FUNCAO T_FIMFUNCAO
 %token T_SE T_ENTAO T_SENAO T_FIMSE
 %token T_INTERROMPA
@@ -63,23 +62,19 @@ Bloco:
 nome:
     T_STRING
 ;
-
-inicio:
-	T_INICIO
-	| error { erros++; yyerror("Procurou inicio e nao achou!", yylineno, yytext);
-	} 
-;
-
 codigo:
-	declaravariavel inicio rotinas 
+	declaravariavel T_INICIO rotinas 
 	| comentarios codigo	
 ;
 
+blocoVar:
+	| variaveis T_DOISPONTOS tipo blocoVar
+	| variaveis T_DOISPONTOS vetor blocoVar
+;
+
 declaravariavel:
-	| T_VAR
-	| T_VAR variaveis T_DOISPONTOS tipo
-	| T_VAR variaveis T_DOISPONTOS vetor
-	| error { erros++; yyerror("Erro de declaracao de variaveis", yylineno, yytext); }
+	| T_VAR blocoVar
+	
 ;
 
 variaveis:
@@ -99,9 +94,7 @@ variavel:
 tipo:
 	T_INTEIRO
 	| T_REAL
-	| T_CARACTERE
-	| T_VETOR T_DE tipo
-	| error {erros++; yyerror("tipo de variavel inexistente!", yylineno, yytext);}
+	| T_CARACTERE	
 ;
 
 vetor: 
@@ -145,13 +138,23 @@ funcoes:
 	FuncaoExistente
 ;
 
+retorne:
+	 T_RETORNE T_ABRE_PARENT T_STRING T_STRING 
+	| T_RETORNE T_STRING
+	| T_RETORNE Expression
+;
+
+nomefuncao:
+	 T_VARIAVEL T_ABRE_PARENT parametros T_FECHA_PARENT
+;
+
 funcao:
-	T_FUNCAO T_VARIAVEL T_ABRE_PARENT parametros T_FECHA_PARENT T_ATRIBUI tipo declaravariavel T_INICIO rotinas T_FIMFUNCAO
+	T_FUNCAO nomefuncao T_DOISPONTOS tipo declaravariavel T_INICIO rotinas retorne T_FIMFUNCAO
 ;
 
 parametros:
-	variaveis T_ATRIBUI tipo
-	| parametros T_VIRGULA variaveis T_ATRIBUI tipo
+	variaveis T_DOISPONTOS tipo
+	| parametros T_VIRGULA variaveis T_DOISPONTOS tipo
 ;	
 
 comentarios:
@@ -166,6 +169,7 @@ comentario:
 Atribuicao:
 	 variavel T_ATRIBUI T_STRING
 	| variavel T_ATRIBUI Expression
+	| variavel T_ATRIBUI FuncaoExistente
 ;
 
 Expression:
@@ -190,6 +194,7 @@ FuncaoExistente:
 
 comprimento:
 	T_COMPR T_ABRE_PARENT T_VARIAVEL T_FECHA_PARENT
+	| T_COMPR T_ABRE_PARENT T_STRING T_FECHA_PARENT
 ;
 
 copia:
@@ -246,8 +251,8 @@ ExpressaoRelacional:
 
 ExpressaoLogica:
 	T_AND
-	|T_OR
-	|T_NOT
+	| T_OR
+	| T_NOT
 ;
 
 Condicao:
@@ -291,30 +296,25 @@ Repita:
 	T_REPITA rotinas T_ATE T_ABRE_PARENT Condicao T_FECHA_PARENT
 ;
 
-
 %%
 
 extern int 	yylineno;
 extern char 	*yytext;
 
-int yyerror(char *s, int line, char *msg) {
-	printf("Erro %s na Linha %d\n", s, line);
-	printf("Mensagem: %s\n", msg);
-	return 0;
+int yyerror(char *s) {
+	printf("Erro %s na Linha %d com o Token nao esperado %s\n", s, yylineno, yytext);
 }
 
-int main(int argc, char *argv[] ) {
+int main(int ac, char **av) {
 	extern FILE *yyin;
 	
-	if(argc > 1 && (yyin = fopen(argv[1], "r")) == NULL) {
+	if(ac > 1 && (yyin = fopen(av[1], "r")) == NULL) {
 		perror(av[1]);
-		return 1;		
+		exit(1);		
 	}
 
-	yyparse();
-
-	if ( erros == 0)
-		printf("Sucesso\n");
-
-	return 0;
+	if(!yyparse())
+		printf("Tudo foi OK!!\n");
+	else
+		printf("Algoritmo com erro.\n");
 }
