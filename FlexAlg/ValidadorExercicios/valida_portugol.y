@@ -2,46 +2,46 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "pilha.c"
 %}
 
+
+/*Estrutura da linguagem*/
+
 %token T_ALGORITMO T_FIMALGORITMO
-%token T_INICIO T_ESCREVAL T_ESCREVA
-%token T_STRING
-%token T_COMENTARIO
+%token T_FIMLINHA
+%token T_VAR T_INICIO T_COMENTARIO T_IDENTIFICADOR T_ATRIBUI T_SEPARADOR
 %token T_ABRE_PARENT T_FECHA_PARENT
 %token T_ABRECOLCHETE T_FECHACOLCHETE
-%token T_VIRGULA
-%token T_AND T_OR T_NOT
-%token T_VAR
+%token T_AND T_OR T_NOT T_XOR
 %token T_INTEIRO T_REAL T_CARACTERE T_LOGICO
-%token T_PI
-%token T_LEIA
-%token T_ESCOLHA T_CASO T_OUTROCASO T_FIMESCOLHA
-%token T_NUMINTEIRO
-%token T_NUMREAL
-%token T_ATRIBUI
-%token T_DECLARAVAR
-%token T_ESPACO
-%token T_PONTOPONTO
-
-%token T_SOMA T_DIVISAO T_SUBTRACAO T_MULT T_POTENCIA T_MOD
-%token T_DIFERENTE T_MENORQUE T_MENORIGUALQUE T_MAIORQUE T_MAIORIGUALQUE T_IGUAL
-%token T_REPITA T_ATE
+%token T_NUMINTEIRO T_NUMREAL T_STRING T_VETOR
+%token T_DECLARAVAR T_PONTOPONTO T_ESPACO
 %token T_LOGICO_VERDADEIRO T_LOGICO_FALSO
-%token T_DIVISAOINTEIRA
-%token T_RESTO
 %token T_VARIAVEL
-%token T_RAIZQ T_COPIA T_COMPR T_MAIUSC
-%token T_DOISPONTOS
-%token T_ENQUANTO T_FIMENQUANTO
 %token T_PROCEDIMENTO T_FIMPROCEDIMENTO
-%token T_RETORNE
-%token T_FUNCAO T_FIMFUNCAO
+%token T_FUNCAO T_FIMFUNCAO T_RETORNE
+
+/*Lacos e desvios condicionais*/
+%token T_REPITA T_ATE
+%token T_ESCOLHA T_CASO T_OUTROCASO T_FIMESCOLHA
+%token T_ENQUANTO T_FIMENQUANTO
 %token T_SE T_ENTAO T_SENAO T_FIMSE
 %token T_INTERROMPA
 %token T_PARA T_DE T_PASSO T_FACA T_FIMPARA
-%token T_VETOR
 
+/*Operadores binarios*/
+%token T_SOMA T_DIVISAO T_SUBTRACAO T_MULT T_POTENCIA T_MOD T_PI
+%token T_DIFERENTE T_MENORQUE T_MENORIGUALQUE T_MAIORQUE T_MAIORIGUALQUE T_IGUAL
+%token T_DIVISAOINTEIRA
+%token T_RESTO
+
+/*Funcoes Internas*/
+%token T_ESCREVAL T_ESCREVA T_LEIA
+%token T_RAIZQ T_COPIA T_COMPR T_MAIUSC
+
+/*Ordem de precedencia */
 %left T_SOMA T_SUBTRACAO
 %left T_MULT T_DIVISAO T_MOD
 %right T_POTENCIA T_RAIZQ
@@ -51,91 +51,280 @@
 %%
 
 Input:
-	
 	| Input Bloco
 ;
 
-Bloco: 
-	T_ALGORITMO nome codigo T_FIMALGORITMO	
+InicioAlgoritmo:
+	T_ALGORITMO
 ;
 
-nome:
-    T_STRING
-;
-codigo:
-	declaravariavel T_INICIO rotinas 
-	| comentarios codigo	
+FimAlgoritmo:
+	T_FIMALGORITMO
 ;
 
-blocoVar:
-	| variaveis T_DOISPONTOS tipo blocoVar
-	| variaveis T_DOISPONTOS vetor blocoVar
+BlocoAlgoritmo: 
+	 InicioAlgoritmo BlocoCodigo FimAlgoritmo
 ;
 
-declaravariavel:
-	| T_VAR blocoVar
-	
+String:
+	T_STRING
 ;
 
-variaveis:
-	variavel
-	| variavel T_VIRGULA variaveis 
+NomeAlgoritmo:
+    String
 ;
 
-VariavelInt:
-	T_NUMINTEIRO
-	|T_VARIAVEL
+InicioLogica:
+	T_INICIO
 ;
 
-variavel:
+BlocoCodigo:
+	NomeAlgoritmo BlocoDeclaracao InicioLogica BlocosLogicos 
+	| Comentarios BlocoCodigo	
+;
+
+InicioBlocoDeclaracao:
+	| T_VAR
+;
+
+BlocoDeclaracao:
+	| InicioBlocoDeclaracao BlocoVariaveis
+	| Comentarios BlocoDeclaracao	
+;
+
+DefineTipo:
+	T_DECLARAVAR
+;
+
+BlocoVariaveis:
+	| Variaveis DefineTipo Tipos BlocoVariaveis
+	| Variaveis DefineTipo TipoVetor BlocoVariaveis
+	| Comentarios BlocoVariaveis
+;
+
+Separador:
+	T_SEPARADOR
+;
+
+Variaveis:
+	Variavel
+	| Variavel Separador Variaveis 
+;
+
+Variavel:
 	T_VARIAVEL
 ;
 
-tipo:
+TipoInteiro:
 	T_INTEIRO
-	| T_REAL
-	| T_CARACTERE	
 ;
 
-vetor: 
-	T_VETOR T_ABRECOLCHETE T_NUMINTEIRO T_PONTOPONTO T_NUMINTEIRO T_FECHACOLCHETE T_DE tipo
+TipoReal: 
+	T_REAL
 ;
 
-rotinas:
-	 comentarios
-	| rotina
-	| comentarios rotinas 
+TipoCaractere:
+	T_CARACTERE
 ;
 
-rotina:
-	| T_STRING rotina
-	| Escreval rotina
-	| Escreva rotina
-	| Leia rotina
-	| Atribuicao rotina
-	| Enquanto rotina
-	| Escolha rotina
-	| Repita rotina
-	| Para rotina
-	| se rotina
-	| T_INTERROMPA rotina
-	| funcoes rotina
+TipoNumerico:
+	TipoInteiro
+	| TipoReal
 ;
 
-se:
-	T_SE Condicao T_ENTAO rotinas T_FIMSE
-	| T_SE Condicao T_ENTAO rotinas T_SENAO rotinas T_FIMSE
+TipoLogico:
+	T_LOGICO
 ;
 
-procedimento:
+Tipos:
+	TipoInteiro
+	| TipoReal
+	| TipoCaractere
+	| TipoLogico	
+;
+
+AbreColchete:
+	T_ABRECOLCHETE
+;
+
+FechaColchete:
+	T_FECHACOLCHETE
+;
+
+ExprColcheteVetor:
+	AbreColchete ExprInternaColcheteVetor FechaColchete 
+;
+
+ExprInternaColcheteVetor:
+	PosInicialVetor EntrePosVetor PosFinalVetor
+;
+
+PosInicilVetor:
+	TipoInteiro
+;
+
+EntrePosVetor:
+	T_PONTOPONTO
+;
+
+PosFinalVetor:
+	TipoInteiro
+;
+
+DefineTipoVetor:
+	T_DE
+;
+
+TipoDoTipoVetor:
+	DefineTipoVetor Tipos	
+;
+
+NomeVetor:
+	T_VETOR
+;
+
+TipoVetor: 
+	NomeVetor ExprColcheteVetor TipoDoTipoVetor
+;
+
+BlocosLogicos:
+	BlocoLogico
+	| Comentarios
+	| Comentarios BlocosLogicos 
+;
+
+BlocoLogico:
+	| String BlocoLogico
+	| Funcoes BlocoLogico
+	| Atribuicoes BlocoLogico
+	| Lacos BlocoLogico
+	| Desvios BlocoLogico
+	| Comentarios BlocoLogico
+;
+
+Lacos:
+	BlocoPara
+	| BlocoEnquanto
+	| BlocoRepita
+;
+
+BlocoEnquanto:
+	T_ENQUANTO T_ABRE_PARENT Condicao T_FECHA_PARENT rotinas T_FIMENQUANTO
+;
+
+BlocoPara:
+	T_PARA variavel T_DE VariavelInt T_ATE VariavelInt T_FACA rotinas T_FIMPARA
+	| T_PARA variavel T_DE VariavelInt T_ATE VariavelInt T_PASSO T_NUMINTEIRO T_FACA rotinas T_FIMPARA
+;
+
+Repita:
+	T_REPITA rotinas T_ATE T_ABRE_PARENT Condicao T_FECHA_PARENT
+;
+
+Desvios:
+	BlocosSe
+	| BlocosEscolha
+;
+
+InicioSe:
+	T_SE;
+;
+
+FimSe:
+	T_FIMSE
+;
+
+DesvioEntao:
+	T_ENTAO
+;
+
+CondicoesLogicas:
+	ExpressaoRelacional
+	| ExpressaoRelacional ExpressaoLogica Condicao
+	| T_LOGICO
+;
+
+DesvioSenao:
+	T_SENAO
+;
+
+BlocosSe:
+	InicioSe CondicoesLogicas DesvioEntao BlocosLogicos FimSe
+	| InicioSe CondicoesLogicas DesvioEntao BlocosLogicos DesvioSenao BlocosLogicos FimSe
+	| InicioSe CondicoesLogicas DesvioEntao BlocosLogicos BlocosSe FimSe
+	| InicioSe CondicoesLogicas DesvioEntao BlocosLogicos DesvioSenao BlocosLogicos BlocosSe FimSe
+	| InicioSe CondicoesLogicas DesvioEntao BlocosLogicos BlocosSe DesvioSenao BlocosLogicos BlocosSe FimSe
+;
+
+InicioEscolha:
+	T_ESCOLHA	
+;
+
+FimEscolha:
+	T_FIMESCOLHA
+;
+
+AbreParenteses:
+	T_ABRE_PARENT
+;
+
+FechaParenteses:
+	T_FECHA_PARENT
+;
+ExprEscolha:
+	Variavel
+	| AbreParenteses Variavel FechaParenteses	
+;
+
+BlocosEscolha:
+	InicioEscolha ExprEscolha BlocosCasos FimEscolha	
+;
+
+AbreCaso:
+	T_CASO
+;
+
+OutroCaso:
+	T_OUTROCASO
+;
+
+BlocosCaso:
+	AbreCaso SelecaoCasos BlocosLogicos
+	| AbreCaso SelecaoCasos BlocosLogicos BlocosCaso
+;
+
+BlocoCasos:
+	BlocosCaso OutroCaso BlocosLogicos	 
+;
+
+Selecao:
+	| Variavel
+	| String
+	| TipoNumerico
+;
+
+SelecaoCasos:
+	Selecao
+	| Selecao Separador SelecaoCasos
+;
+
+Atribuicoes:
+
+;
+
+Funcoes:
+
+;
+
+BlocoProcedimento:
 	T_PROCEDIMENTO T_VARIAVEL T_ABRE_PARENT parametros T_FECHA_PARENT declaravariavel T_INICIO rotinas T_FIMPROCEDIMENTO
 	| T_PROCEDIMENTO T_VARIAVEL T_ABRE_PARENT parametros T_ATRIBUI tipo declaravariavel T_INICIO rotinas T_FIMPROCEDIMENTO
 ;
 
-funcoes:
-	funcao
-	procedimento
-	FuncaoExistente
+Funcoes:
+	Funcao
+	| Procedimento
+	| FuncaoNativa
 ;
 
 retorne:
@@ -157,12 +346,12 @@ parametros:
 	| parametros T_VIRGULA variaveis T_DOISPONTOS tipo
 ;	
 
-comentarios:
-	comentario
-	| comentario comentarios
+Comentarios:
+	Comentario
+	| Comentario Comentarios
 ;
 
-comentario:
+Comentario:
 	T_COMENTARIO
 ;
 
@@ -209,12 +398,7 @@ raiz:
 	T_RAIZQ T_ABRE_PARENT Expression T_FECHA_PARENT
 ;
 
-number:
-	T_NUMINTEIRO
-	| T_NUMREAL
-;
-
-Conteudo:
+conteudo:
 	| T_STRING
 	| Expression
 	| Conteudo T_VIRGULA Expression T_DOISPONTOS T_NUMINTEIRO
@@ -255,45 +439,9 @@ ExpressaoLogica:
 	| T_NOT
 ;
 
-Condicao:
-	ExpressaoRelacional
-	| ExpressaoRelacional ExpressaoLogica Condicao
-	| T_LOGICO
-;
-
-Enquanto:
-	T_ENQUANTO T_ABRE_PARENT Condicao T_FECHA_PARENT rotinas T_FIMENQUANTO
-;
-
-Para:
-	T_PARA variavel T_DE VariavelInt T_ATE VariavelInt T_FACA rotinas T_FIMPARA
-	| T_PARA variavel T_DE VariavelInt T_ATE VariavelInt T_PASSO T_NUMINTEIRO T_FACA rotinas T_FIMPARA
-;
-
-Escolha:
-	T_ESCOLHA T_VARIAVEL Caso T_FIMESCOLHA	
-;
-
-Selecao:
-	ExpressaoRelacional
+VariavelInt:
+	T_NUMINTEIRO
 	| T_VARIAVEL
-	| T_STRING
-	| number
-;
-
-Selecoes:
-	Selecao
-	|Selecao T_VIRGULA Selecoes
-;
-
-Caso:
-	T_CASO Selecoes rotinas T_OUTROCASO rotinas
-	|T_CASO Selecoes rotinas Caso T_OUTROCASO rotinas 
- 
-;
-
-Repita:
-	T_REPITA rotinas T_ATE T_ABRE_PARENT Condicao T_FECHA_PARENT
 ;
 
 %%
