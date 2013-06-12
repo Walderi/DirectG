@@ -34,6 +34,7 @@ INTERROMPA 	[iI][nN][tT][eE][rR][rR][oO][mM][pP][Aa]
 OUTROCASO 	[oO][Uu][tT][rR][oO][Cc][aA][sS][oO]
 AND 		[\e E]
 OR  		[oO][uU]
+XOR		[xX][oO][uU]
 COMENTARIO 	[\//]{2}.*
 DIVISAO 	[\//]{1}
 DIVISAOINTEIRA 	[\\]{1}
@@ -58,10 +59,12 @@ MAIUSC		[mM][aA][iI][uU][Ss][Cc]
 
 ESPACOVAZIO 	[ \t\r]+
 
+FIMLINHA	[\n]
+
 %%
 
-\n		yylineno++;
 {ESPACOVAZIO} 		{ }
+{FIMLINHA} 		{ yylineno++; return T_FIMLINHA; }
 
 {ALGORITMO} 		return T_ALGORITMO;
 {FIMALGORITMO} 		return T_FIMALGORITMO;
@@ -71,7 +74,8 @@ ESPACOVAZIO 	[ \t\r]+
 {ESCREVA} 		return T_ESCREVA;
 {COMENTARIO}		return T_COMENTARIO;
 {AND} 			return T_AND;
-{OR}  			return T_OR;
+{OR} 			return T_OR;
+{XOR}			return T_XOR;
 {VAR} 			return T_VAR;
 {RAIZQ} 		return T_RAIZQ;
 {INTEIRO} 		return T_INTEIRO;
@@ -109,8 +113,8 @@ ESPACOVAZIO 	[ \t\r]+
 {MAIUSC}		return T_MAIUSC;
 {COMPR}			return T_COMPR;
 {VETOR}			return T_VETOR;
-{VARIAVEL} 		return T_VARIAVEL;
-":" 			return T_DOISPONTOS;
+{VARIAVEL} 		return T_IDENTIFICADOR;
+":" 			return T_DECLARAVAR;
 "+" 			return T_SOMA;
 "-" 			return T_SUBTRACAO;
 "*" 			return T_MULT;
@@ -125,7 +129,7 @@ ESPACOVAZIO 	[ \t\r]+
 "]"			return T_FECHACOLCHETE;
 "(" 			return T_ABRE_PARENT;
 ")" 			return T_FECHA_PARENT;
-"," 			return T_VIRGULA;
+"," 			return T_SEPARADOR;
 ".."			return T_PONTOPONTO;
 . 			{printf("Invalido: %s\n", yytext);}
 

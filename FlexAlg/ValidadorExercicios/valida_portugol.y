@@ -3,12 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "pilha.c"
 %}
 
 
 /*Estrutura da linguagem*/
-
 %token T_ALGORITMO T_FIMALGORITMO
 %token T_FIMLINHA
 %token T_VAR T_INICIO T_COMENTARIO T_IDENTIFICADOR T_ATRIBUI T_SEPARADOR
@@ -42,6 +40,7 @@
 %token T_RAIZQ T_COPIA T_COMPR T_MAIUSC
 
 /*Ordem de precedencia */
+%left T_AND T_OR T_NOT T_XOR
 %left T_SOMA T_SUBTRACAO
 %left T_MULT T_DIVISAO T_MOD
 %right T_POTENCIA T_RAIZQ
@@ -51,7 +50,7 @@
 %%
 
 Input:
-	| Input Bloco
+	| Input BlocoAlgoritmo
 ;
 
 InicioAlgoritmo:
@@ -88,7 +87,7 @@ InicioBlocoDeclaracao:
 ;
 
 BlocoDeclaracao:
-	| InicioBlocoDeclaracao BlocoVariaveis
+	InicioBlocoDeclaracao BlocoVariaveis
 	| Comentarios BlocoDeclaracao	
 ;
 
@@ -112,7 +111,11 @@ Variaveis:
 ;
 
 Variavel:
-	T_VARIAVEL
+	T_IDENTIFICADOR
+;
+
+Identificador:
+	T_IDENTIFICADOR
 ;
 
 TipoInteiro:
@@ -159,8 +162,8 @@ ExprInternaColcheteVetor:
 	PosInicialVetor EntrePosVetor PosFinalVetor
 ;
 
-PosInicilVetor:
-	TipoInteiro
+PosInicialVetor:
+	NumeroInteiro
 ;
 
 EntrePosVetor:
@@ -168,7 +171,7 @@ EntrePosVetor:
 ;
 
 PosFinalVetor:
-	TipoInteiro
+	NumeroInteiro
 ;
 
 DefineTipoVetor:
@@ -196,7 +199,7 @@ BlocosLogicos:
 BlocoLogico:
 	| String BlocoLogico
 	| Funcoes BlocoLogico
-	| Atribuicoes BlocoLogico
+	| Atribuicao BlocoLogico
 	| Lacos BlocoLogico
 	| Desvios BlocoLogico
 	| Comentarios BlocoLogico
@@ -208,17 +211,95 @@ Lacos:
 	| BlocoRepita
 ;
 
+InicioEnquanto:
+	T_ENQUANTO
+;
+
+FimEnquanto:
+	T_FIMENQUANTO
+;
+
+ExprCondicaoEnquanto:
+	ExpressaoLogica
+	| AbreParenteses ExpressaoLogica FechaParenteses
+;
+
 BlocoEnquanto:
-	T_ENQUANTO T_ABRE_PARENT Condicao T_FECHA_PARENT rotinas T_FIMENQUANTO
+	InicioEnquanto ExprCondicaoEnquanto BlocosLogicos FimEnquanto
+;
+
+InicioPara:
+	T_PARA
+;
+
+FimPara:
+	T_FIMPARA
+;
+
+AlcancePara:
+	T_DE
+;
+
+InicioAlcancePara:
+	Variavel
+	| NumeroInteiro
+;
+
+FimAlcancePara:
+	Variavel
+	| NumeroInteiro
+;
+
+AlcancePasso:
+	Variavel
+	| NumeroInteiro
+;
+
+NumeroInteiro:
+	T_NUMINTEIRO
+;
+
+NumeroReal:
+	T_NUMREAL
+;
+
+Numero:
+	NumeroInteiro
+	| NumeroReal
+;
+
+PassoPara:
+	T_PASSO
+;
+
+ExprCondicaoPara:
+	InicioAlcancePara AlcancePara FimAlcancePara  
+	| InicioAlcancePara AlcancePara FimAlcancePara PassoPara AlcancePasso
+;
+
+FacaPara:
+	T_FACA
 ;
 
 BlocoPara:
-	T_PARA variavel T_DE VariavelInt T_ATE VariavelInt T_FACA rotinas T_FIMPARA
-	| T_PARA variavel T_DE VariavelInt T_ATE VariavelInt T_PASSO T_NUMINTEIRO T_FACA rotinas T_FIMPARA
+	InicioPara ExprCondicaoPara FacaPara BlocosLogicos FimPara
 ;
 
-Repita:
-	T_REPITA rotinas T_ATE T_ABRE_PARENT Condicao T_FECHA_PARENT
+InicioRepita:
+	T_REPITA
+;
+
+RepitaAte:
+	T_ATE
+;
+
+ExprRepitaAte:
+	ExpressaoLogica
+	| AbreParenteses ExpressaoLogica FechaParenteses 
+;
+
+BlocoRepita:
+	InicioRepita BlocosLogicos RepitaAte ExprRepitaAte
 ;
 
 Desvios:
@@ -227,7 +308,7 @@ Desvios:
 ;
 
 InicioSe:
-	T_SE;
+	T_SE
 ;
 
 FimSe:
@@ -238,22 +319,16 @@ DesvioEntao:
 	T_ENTAO
 ;
 
-CondicoesLogicas:
-	ExpressaoRelacional
-	| ExpressaoRelacional ExpressaoLogica Condicao
-	| T_LOGICO
-;
-
 DesvioSenao:
 	T_SENAO
 ;
 
 BlocosSe:
-	InicioSe CondicoesLogicas DesvioEntao BlocosLogicos FimSe
-	| InicioSe CondicoesLogicas DesvioEntao BlocosLogicos DesvioSenao BlocosLogicos FimSe
-	| InicioSe CondicoesLogicas DesvioEntao BlocosLogicos BlocosSe FimSe
-	| InicioSe CondicoesLogicas DesvioEntao BlocosLogicos DesvioSenao BlocosLogicos BlocosSe FimSe
-	| InicioSe CondicoesLogicas DesvioEntao BlocosLogicos BlocosSe DesvioSenao BlocosLogicos BlocosSe FimSe
+	InicioSe ExpressaoLogica DesvioEntao BlocosLogicos FimSe
+	| InicioSe ExpressaoLogica DesvioEntao BlocosLogicos DesvioSenao BlocosLogicos FimSe
+	| InicioSe ExpressaoLogica DesvioEntao BlocosLogicos BlocosSe FimSe
+	| InicioSe ExpressaoLogica DesvioEntao BlocosLogicos DesvioSenao BlocosLogicos BlocosSe FimSe
+	| InicioSe ExpressaoLogica DesvioEntao BlocosLogicos BlocosSe DesvioSenao BlocosLogicos BlocosSe FimSe
 ;
 
 InicioEscolha:
@@ -277,7 +352,7 @@ ExprEscolha:
 ;
 
 BlocosEscolha:
-	InicioEscolha ExprEscolha BlocosCasos FimEscolha	
+	InicioEscolha ExprEscolha BlocoCasos FimEscolha	
 ;
 
 AbreCaso:
@@ -308,43 +383,75 @@ SelecaoCasos:
 	| Selecao Separador SelecaoCasos
 ;
 
-Atribuicoes:
-
-;
-
-Funcoes:
-
-;
-
-BlocoProcedimento:
-	T_PROCEDIMENTO T_VARIAVEL T_ABRE_PARENT parametros T_FECHA_PARENT declaravariavel T_INICIO rotinas T_FIMPROCEDIMENTO
-	| T_PROCEDIMENTO T_VARIAVEL T_ABRE_PARENT parametros T_ATRIBUI tipo declaravariavel T_INICIO rotinas T_FIMPROCEDIMENTO
-;
-
 Funcoes:
 	Funcao
-	| Procedimento
+	| BlocoProcedimento
 	| FuncaoNativa
 ;
 
-retorne:
-	 T_RETORNE T_ABRE_PARENT T_STRING T_STRING 
-	| T_RETORNE T_STRING
-	| T_RETORNE Expression
+FuncaoRetornavel:
+	Funcao
+	| FuncaoNativa
 ;
 
-nomefuncao:
-	 T_VARIAVEL T_ABRE_PARENT parametros T_FECHA_PARENT
+IniciaFuncao:
+	T_FUNCAO
 ;
 
-funcao:
-	T_FUNCAO nomefuncao T_DOISPONTOS tipo declaravariavel T_INICIO rotinas retorne T_FIMFUNCAO
+FimFuncao:
+	T_FIMFUNCAO
 ;
 
-parametros:
-	variaveis T_DOISPONTOS tipo
-	| parametros T_VIRGULA variaveis T_DOISPONTOS tipo
+DefinidorFuncao:
+	T_DECLARAVAR	
+;
+
+Funcao:
+	IniciaFuncao NomeFuncao DefinidorFuncao Tipos BlocoDeclaracao InicioLogica BlocosLogicos Retorno FimFuncao 
+;
+
+PalavraRetorno:
+	T_RETORNE
+;
+
+ExprRetorno:
+	AbreParenteses String FechaParenteses
+	| String
+	| ArtmExpr
+;
+
+Retorno:
+	PalavraRetorno ExprRetorno
+;
+
+NomeFuncao:
+	 Identificador AbreParenteses Assinatura FechaParenteses
+;
+
+DefineVarAssinatura:
+	T_DECLARAVAR
+;
+
+Assinatura:
+	Variaveis DefineVarAssinatura Tipos
+	| Assinatura Separador Assinatura
 ;	
+
+InicioProcedimento:
+	T_PROCEDIMENTO
+;
+
+FimProcedimento:
+	T_FIMPROCEDIMENTO
+;
+
+NomeProcedimento:
+	Identificador AbreParenteses Assinatura FechaParenteses
+;
+
+BlocoProcedimento:
+	InicioProcedimento NomeProcedimento BlocoDeclaracao InicioLogica BlocosLogicos FimProcedimento
+;
 
 Comentarios:
 	Comentario
@@ -355,73 +462,156 @@ Comentario:
 	T_COMENTARIO
 ;
 
+Atribuidor:
+	T_ATRIBUI
+;
+
+LogicoFalso:
+	T_LOGICO_FALSO	
+;
+
+LogicoVerdadeiro:
+	T_LOGICO_VERDADEIRO
+;
+
+Atribuido:
+	String
+	| ArtmExpr
+	| FuncaoRetornavel
+	| LogicoFalso
+	| LogicoVerdadeiro
+;
+
 Atribuicao:
-	 variavel T_ATRIBUI T_STRING
-	| variavel T_ATRIBUI Expression
-	| variavel T_ATRIBUI FuncaoExistente
+	Identificador Atribuidor Atribuido
 ;
 
-Expression:
-	number 
-	| variavel 
-	| Expression T_SOMA Expression  
-	| Expression T_SUBTRACAO Expression   
-	| Expression T_MULT Expression   
-	| Expression T_DIVISAO Expression
-	| Expression T_MOD Expression   
-	| T_SUBTRACAO Expression   
-	| Expression T_POTENCIA Expression   
-	| T_ABRE_PARENT Expression T_FECHA_PARENT  
-    	| raiz 
+ExprSoma:
+	T_SOMA
 ;
 
-FuncaoExistente:
-	comprimento
-	| copia
-	| maiusc
+ExprSub:
+	T_SUBTRACAO
 ;
 
-comprimento:
-	T_COMPR T_ABRE_PARENT T_VARIAVEL T_FECHA_PARENT
-	| T_COMPR T_ABRE_PARENT T_STRING T_FECHA_PARENT
+ExprMult:
+	T_MULT
 ;
 
-copia:
-	T_COPIA T_ABRE_PARENT T_VARIAVEL T_VIRGULA T_NUMINTEIRO T_VIRGULA T_NUMINTEIRO T_FECHA_PARENT
+ExprDiv:
+	T_DIVISAO
 ;
 
-maiusc:
-	T_MAIUSC T_ABRE_PARENT T_VARIAVEL T_FECHA_PARENT
+ExprDivInt:
+	T_DIVISAOINTEIRA
+; 
+
+ExprMod:
+	T_MOD
 ;
 
-raiz: 
-	T_RAIZQ T_ABRE_PARENT Expression T_FECHA_PARENT
+Negativo:
+	T_SUBTRACAO
 ;
 
-conteudo:
-	| T_STRING
-	| Expression
-	| Conteudo T_VIRGULA Expression T_DOISPONTOS T_NUMINTEIRO
-	| Conteudo T_VIRGULA Expression T_DOISPONTOS T_NUMINTEIRO T_DOISPONTOS T_NUMINTEIRO
+ExprPot:
+	T_POTENCIA
 ;
-ParametroFUNC:
-	T_ABRE_PARENT Conteudo T_FECHA_PARENT
-	
+
+ArtmExpr:
+	Numero
+	| Variavel 
+	| ArtmExpr ExprSoma ArtmExpr 
+	| ArtmExpr ExprSub ArtmExpr 
+	| ArtmExpr ExprMult ArtmExpr    
+	| ArtmExpr ExprDiv ArtmExpr 
+	| ArtmExpr ExprDivInt ArtmExpr 
+	| ArtmExpr ExprMod ArtmExpr   
+	| Negativo ArtmExpr  
+	| ArtmExpr ExprPot ArtmExpr  
+	| AbreParenteses ArtmExpr FechaParenteses  
+    	| FuncaoRetornavel
+;
+
+FuncaoNativa:
+	Comprimento
+	| Copia
+	| Maiusc
+	| Raiz
+	| Escreva
+	| Escreval
+	| Leia
+;
+
+InicioComprimento:
+	T_COMPR
+;
+
+Comprimento:
+	InicioComprimento AbreParenteses Variavel FechaParenteses
+	| InicioComprimento AbreParenteses String FechaParenteses
+;
+
+InicioCopia:
+	T_COPIA
+;
+
+Copia:
+	InicioCopia AbreParenteses Variavel Separador NumeroInteiro Separador NumeroInteiro FechaParenteses
+;
+
+InicioMaiusc:
+	T_MAIUSC
+;
+
+Maiusc:
+	InicioMaiusc AbreParenteses Variavel FechaParenteses
+;
+
+InicioRaiz:
+	T_RAIZQ
+;
+
+Raiz: 
+	InicioRaiz AbreParenteses ArtmExpr FechaParenteses
+;
+
+ExprEscreva:
+	| String
+	| ArtmExpr
+	| ExprEscreva Separador ArtmExpr NumeroInteiro
+	| ExprEscreva Separador ArtmExpr DefineTipo NumeroInteiro DefineTipo NumeroInteiro
+;
+
+ParametrosEscreva:
+	AbreParenteses ExprEscreva FechaParenteses
+;
+
+InicioEscreva:
+	T_ESCREVA
 ;
 
 Escreva:
-	T_ESCREVA ParametroFUNC
+	InicioEscreva ParametrosEscreva
+;
+
+InicioEscreval:
+	T_ESCREVAL
 ;
 
 Escreval:
-	T_ESCREVAL ParametroFUNC	
+	InicioEscreval ParametrosEscreva	
+;
+
+InicioLeia:
+	T_LEIA
 ;
 
 Leia:
-	T_LEIA T_ABRE_PARENT T_VARIAVEL T_FECHA_PARENT
+	InicioLeia AbreParenteses Variavel FechaParenteses
 ;
 
-Relacional:
+CondicoesLogicas:
 	T_IGUAL
 	| T_DIFERENTE
 	| T_MENORQUE
@@ -429,20 +619,36 @@ Relacional:
 	| T_MAIORQUE
 	| T_MAIORIGUALQUE 
 ;
-ExpressaoRelacional:
-	Expression Relacional Expression	
-;
 
 ExpressaoLogica:
-	T_AND
-	| T_OR
-	| T_NOT
+	ArtmExpr CondicoesLogicas ArtmExpr
+	| ExpressaoLogica OperadoresLogicos
 ;
 
-VariavelInt:
-	T_NUMINTEIRO
-	| T_VARIAVEL
+
+LogicoAnd:
+	T_AND
 ;
+
+LogicoOr:
+	T_OR
+;
+
+LogicoNot:
+	T_NOT
+;
+
+LogicoXor:
+	T_XOR
+;
+
+OperadoresLogicos:
+	LogicoAnd
+	| LogicoOr
+	| LogicoNot
+	| LogicoXor
+;
+
 
 %%
 
