@@ -13,24 +13,34 @@ variavel variavel1;
 }
 
 // A função hash_inserir insere as variaveis dentro da tabela as informações,
-// Ela passa como parametro 
+// Ela passa como parametro
 void hash_inserir(char[] nome, char[] tipo, char[] escopo){
 	varivel variavel1;
 	int id;
+	int existe;
+
+		existe = hash_existe(nome ,tipo,escopo);
+		
+		if(existe == 0){
 	for(id=0; id < TAM_MAX; id++){
 		
 		if(variavel1[id].nome == NULL){
+		
 			strcpy(varivel1[id].nome , nome);
 			strcpy(varivel1[id].tipo , tipo);
 			strcpy(varivel1[id].escopo , escopo);
 			varivel1[id].valordefault = NULL ;
 			break;
 				} else {
-			printf("EXCESSO DE VARIAVEIS!! ESTOURO DE MEMORIA!");
+			printf("EXCESSO DE VARIAVEIS!! ESTOURO DE MEMORIA!\n");
 				}
 		
 	}
+	} else {
+		printf("VARIAVEL JÁ DECLARADA!!\n")
+	}
 }
+
 //A função hash_busca vai procurar por toda tabela qual o id da variavel
 int hash_busca( char[] nome, char[] tipo, char[] escopo){
 	varivel variavel1;
