@@ -3,7 +3,7 @@
 
 // A função hash_inicar seta todos valores da tabela como NULL
 void hash_iniciar(){
-variavel variavel1;
+
 	for(i = 0; i<TAM_MAX; i++){
 		variavel1[i].nome = NULL;
 		variavel1[i].tipo = NULL;
@@ -15,7 +15,7 @@ variavel variavel1;
 // A função hash_inserir insere as variaveis dentro da tabela as informações,
 // Ela passa como parametro
 void hash_inserir(char[] nome, char[] tipo, char[] escopo){
-	varivel variavel1;
+
 	int id;
 	int existe;
 
@@ -43,7 +43,7 @@ void hash_inserir(char[] nome, char[] tipo, char[] escopo){
 
 //A função hash_busca vai procurar por toda tabela qual o id da variavel
 int hash_busca( char[] nome, char[] tipo, char[] escopo){
-	varivel variavel1;
+
 	int id;
 	for(id=0; id < TAM_MAX; id++){
 		
@@ -58,7 +58,7 @@ int hash_busca( char[] nome, char[] tipo, char[] escopo){
 }
 //A função hash_busca vai procurar por toda tabela se a variavel foi declarada(retorna 1) ou nao(retorna 0)
 int hash_existe( char[] nome, char[] tipo, char[] escopo){
-	varivel variavel1;
+
 	int id;
 	for(id=0; id < TAM_MAX; id++){
 		
