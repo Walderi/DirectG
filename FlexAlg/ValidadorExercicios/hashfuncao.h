@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "hash.h"
+
 
 
 int TAM_MAX = 20;
@@ -28,9 +28,10 @@ struct funcao[TAM_MAX] {
 	
 }
 
+funcao *funcao1;
 
 void hashfuncao_iniciar();
-void hashfuncao_inserir(char[] nome, char [] tipodereturn);
-int hashfuncao_busca( char[] nome, char[] tiporeturn);
-int hashfuncao_existe( char[] nome, char[] tiporeturn);
+void hashfuncao_inserir(char[] nome, char [] tipodereturn, funcao *funcao1);
+int hashfuncao_busca( char[] nome, char[] tiporeturn, funcao *funcao1);
+int hashfuncao_existe( char[] nome, char[] tiporeturn, funcao *funcao1);
 #endif

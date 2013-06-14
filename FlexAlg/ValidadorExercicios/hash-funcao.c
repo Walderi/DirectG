@@ -4,7 +4,7 @@
 
 // A funcao hash_inicar seta todos valores da tabela como NULL
 void hashfuncao_iniciar(){
-funcao funcao1;
+
 	for(i = 0; i<TAM_MAX; i++){
 		funcao1[i].nome = NULL;
 		funcao1[i].tipo = NULL;
@@ -16,7 +16,7 @@ funcao funcao1;
 // A funcao hash_inserir insere as variaveis dentro da tabela as informacoes,
 // Ela passa como parametro o nome e o tipo de retorno da funcao
 void hashfuncao_inserir(char[] nome, char[] tiporeturn ){
-	funcao funcao1;
+
 	int id;
 	int existe;
 
@@ -41,7 +41,7 @@ void hashfuncao_inserir(char[] nome, char[] tiporeturn ){
 }
 //A funcao hashfuncao_busca vai procurar por toda tabela qual o id da funcao
 int hashfuncao_busca( char[] nome, char[] tiporeturn){
-	funcao funcao1;
+
 	int id;
 	for(id=0; id < TAM_MAX; id++){
 		
@@ -57,7 +57,7 @@ int hashfuncao_busca( char[] nome, char[] tiporeturn){
 }
 //A funcao hashfuncao_busca vai procurar por toda tabela se a funcao foi declarada(retorna 1) ou nao(retorna 0)
 int hash_existe( char[] nome, char[] tiporeturn){
-	funcao funcao1;
+
 	int id;
 	for(id=0; id < TAM_MAX; id++){
 		
