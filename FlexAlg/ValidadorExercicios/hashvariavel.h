@@ -27,8 +27,10 @@ struct variavel[TAM_MAX] {
 	
 
 }
+variavel varivel1;
+
 void hash_iniciar();
-void hash_inserir(char[] nome, char [] tipo, char[] escopo);
-int hash_busca( char[] nome, char[] tipo, char[] escopo);
-int hash_existe( char[] nome, char[] tipo, char[] escopo);
+void hash_inserir(char[] nome, char [] tipo, char[] escopo, variavel *variavel1);
+int hash_busca( char[] nome, char[] tipo, char[] escopo, variavel *variavel1);
+int hash_existe( char[] nome, char[] tipo, char[] escopo, variavel *variavel1);
 #endif
