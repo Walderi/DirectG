@@ -1,9 +1,7 @@
-
 %option yylineno
 %{
 #define YYSTYPE double
 #include "valida_portugol.tab.h"
-#include <stdlib.h>
 %}
 
 ALGORITMO 	[Aa][Ll][Gg][Oo][Rr][Ii][Tt][Mm][Oo]
@@ -35,11 +33,11 @@ OUTROCASO 	[oO][Uu][tT][rR][oO][Cc][aA][sS][oO]
 AND 		[\e E]
 OR  		[oO][uU]
 XOR		[xX][oO][uU]
-COMENTARIO 	[\//]{2}.*
-DIVISAO 	[\//]{1}
+COMENTARIO 	[\/]{2}.*
+DIVISAO 	[\/]{1}
 DIVISAOINTEIRA 	[\\]{1}
 MOD 		[mM][oO][dD]
-VARIAVEL 	[a-zA-Z]+[0-9]*
+VARIAVEL 	[a-zA-Z]+[a-zA-Z0-9\_]*
 ATRIBUI 	\<\-
 NUMINTEIRO 	[0-9]+
 NUMREAL 	{NUMINTEIRO}\.{NUMINTEIRO}
@@ -59,19 +57,21 @@ MAIUSC		[mM][aA][iI][uU][Ss][Cc]
 
 ESPACOVAZIO 	[ \t\r]+
 
-FIMLINHA	[\n]
+QUEBRA		[\n]+
 
 %%
 
-{ESPACOVAZIO} 		{ }
-{FIMLINHA} 		{ yylineno++; return T_FIMLINHA; }
 
+{ESPACOVAZIO} 		{}
+
+{QUEBRA}		{yylineno++;}
 {ALGORITMO} 		return T_ALGORITMO;
 {FIMALGORITMO} 		return T_FIMALGORITMO;
 {INICIO} 		return T_INICIO;
 {ESCREVAL} 		return T_ESCREVAL;
 {STRING} 		return T_STRING;
 {ESCREVA} 		return T_ESCREVA;
+{DIVISAO} 		return T_DIVISAO;
 {COMENTARIO}		return T_COMENTARIO;
 {AND} 			return T_AND;
 {OR} 			return T_OR;
@@ -104,9 +104,8 @@ FIMLINHA	[\n]
 {FUNCAO}		return T_FUNCAO;
 {FIMFUNCAO}		return T_FIMFUNCAO;
 {RETORNE}		return T_RETORNE;
-{DIVISAO} 		return T_DIVISAO;
 {DIVISAOINTEIRA}	return T_DIVISAOINTEIRA;
-{MOD} 			return T_RESTO;
+{MOD} 			return T_MOD;
 {DE}			return T_DE;
 {CARACTERE}		return T_CARACTERE;
 {COPIA}			return T_COPIA;
@@ -123,14 +122,15 @@ FIMLINHA	[\n]
 "<" 			return T_MENORQUE;
 "<=" 			return T_MENORIGUALQUE;
 ">" 			return T_MAIORQUE;
-">=" 			return T_MAIORIGUALQUE;
+"\>\=" 			return T_MAIORIGUALQUE;
 "=" 			return T_IGUAL;
 "["			return T_ABRECOLCHETE;
 "]"			return T_FECHACOLCHETE;
 "(" 			return T_ABRE_PARENT;
 ")" 			return T_FECHA_PARENT;
 "," 			return T_SEPARADOR;
-".."			return T_PONTOPONTO;
-. 			{printf("Invalido: %s\n", yytext);}
+"\.\."			return T_PONTOPONTO;
+
+. 			{return T_INVALIDO;}
 
 %%

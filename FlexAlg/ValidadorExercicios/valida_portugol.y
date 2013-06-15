@@ -5,10 +5,8 @@
 #include <string.h>
 %}
 
-
 /*Estrutura da linguagem*/
 %token T_ALGORITMO T_FIMALGORITMO
-%token T_FIMLINHA
 %token T_VAR T_INICIO T_COMENTARIO T_IDENTIFICADOR T_ATRIBUI T_SEPARADOR
 %token T_ABRE_PARENT T_FECHA_PARENT
 %token T_ABRECOLCHETE T_FECHACOLCHETE
@@ -20,6 +18,7 @@
 %token T_VARIAVEL
 %token T_PROCEDIMENTO T_FIMPROCEDIMENTO
 %token T_FUNCAO T_FIMFUNCAO T_RETORNE
+%token T_INVALIDO
 
 /*Lacos e desvios condicionais*/
 %token T_REPITA T_ATE
@@ -50,6 +49,7 @@
 %%
 
 Input:
+	
 	| Input BlocoAlgoritmo
 ;
 
@@ -83,12 +83,15 @@ BlocoCodigo:
 ;
 
 InicioBlocoDeclaracao:
-	| T_VAR
+	T_VAR
 ;
 
 BlocoDeclaracao:
-	InicioBlocoDeclaracao BlocoVariaveis
-	| Comentarios BlocoDeclaracao	
+	| InicioBlocoDeclaracao BlocoVariaveis
+	| InicioBlocoDeclaracao		
+	| Comentarios BlocoDeclaracao
+	| Funcoes
+	| InicioBlocoDeclaracao BlocoVariaveis Funcoes	
 ;
 
 DefineTipo:
@@ -111,7 +114,7 @@ Variaveis:
 ;
 
 Variavel:
-	T_IDENTIFICADOR
+	Identificador
 ;
 
 Identificador:
@@ -190,20 +193,30 @@ TipoVetor:
 	NomeVetor ExprColcheteVetor TipoDoTipoVetor
 ;
 
+//-----------------------------------------------------------------------------------------------------------------BLOCOS LOGICOS
+
+Interromper:
+	T_INTERROMPA
+;
+
 BlocosLogicos:
 	BlocoLogico
 	| Comentarios
 	| Comentarios BlocosLogicos 
-;
+	| BlocoLogico BlocosLogicos
+;	
 
 BlocoLogico:
-	| String BlocoLogico
-	| Funcoes BlocoLogico
-	| Atribuicao BlocoLogico
-	| Lacos BlocoLogico
-	| Desvios BlocoLogico
-	| Comentarios BlocoLogico
+	| String
+	| Atribuicao
+	| Lacos
+	| Desvios
+	| Interromper
+	| FuncaoNativa
+	| FuncaoNaoNativa
 ;
+
+//------------------------------------------------------------------------------------------------LACOS
 
 Lacos:
 	BlocoPara
@@ -219,13 +232,10 @@ FimEnquanto:
 	T_FIMENQUANTO
 ;
 
-ExprCondicaoEnquanto:
-	ExpressaoLogica
-	| AbreParenteses ExpressaoLogica FechaParenteses
-;
+//-----------------------------------------------------------------------------------ENQUANTO
 
 BlocoEnquanto:
-	InicioEnquanto ExprCondicaoEnquanto BlocosLogicos FimEnquanto
+	InicioEnquanto ExpressaoLogica BlocosLogicos FimEnquanto
 ;
 
 InicioPara:
@@ -238,6 +248,10 @@ FimPara:
 
 AlcancePara:
 	T_DE
+;
+
+AtePara:
+	RepitaAte
 ;
 
 InicioAlcancePara:
@@ -263,9 +277,14 @@ NumeroReal:
 	T_NUMREAL
 ;
 
+Pi:
+	T_PI
+;
+
 Numero:
 	NumeroInteiro
 	| NumeroReal
+	| Pi
 ;
 
 PassoPara:
@@ -273,16 +292,18 @@ PassoPara:
 ;
 
 ExprCondicaoPara:
-	InicioAlcancePara AlcancePara FimAlcancePara  
-	| InicioAlcancePara AlcancePara FimAlcancePara PassoPara AlcancePasso
+	AlcancePara InicioAlcancePara AtePara FimAlcancePara  
+	| AlcancePara InicioAlcancePara AtePara FimAlcancePara PassoPara AlcancePasso
 ;
 
 FacaPara:
 	T_FACA
 ;
 
+//---------------------------------------------------------------------------------------------------------------PARA
+
 BlocoPara:
-	InicioPara ExprCondicaoPara FacaPara BlocosLogicos FimPara
+	InicioPara Variavel ExprCondicaoPara FacaPara BlocosLogicos FimPara 
 ;
 
 InicioRepita:
@@ -298,9 +319,13 @@ ExprRepitaAte:
 	| AbreParenteses ExpressaoLogica FechaParenteses 
 ;
 
+//-----------------------------------------------------------------------------------------------------------------------REPITA
+
 BlocoRepita:
 	InicioRepita BlocosLogicos RepitaAte ExprRepitaAte
 ;
+
+//--------------------------------------------------------------------------------------------------DESVIOS
 
 Desvios:
 	BlocosSe
@@ -322,6 +347,8 @@ DesvioEntao:
 DesvioSenao:
 	T_SENAO
 ;
+
+//--------------------------------------------------------------------------------------------------------------------------------------SE
 
 BlocosSe:
 	InicioSe ExpressaoLogica DesvioEntao BlocosLogicos FimSe
@@ -351,6 +378,8 @@ ExprEscolha:
 	| AbreParenteses Variavel FechaParenteses	
 ;
 
+//-----------------------------------------------------------------------------------------------------------------------------------ESCOLHA
+
 BlocosEscolha:
 	InicioEscolha ExprEscolha BlocoCasos FimEscolha	
 ;
@@ -368,6 +397,8 @@ BlocosCaso:
 	| AbreCaso SelecaoCasos BlocosLogicos BlocosCaso
 ;
 
+//--------------------------------------------------------------------------------------------------------------------------CASOS
+
 BlocoCasos:
 	BlocosCaso OutroCaso BlocosLogicos	 
 ;
@@ -382,7 +413,7 @@ SelecaoCasos:
 	Selecao
 	| Selecao Separador SelecaoCasos
 ;
-
+//--------------------------------------------------------------------Funcao
 Funcoes:
 	Funcao
 	| BlocoProcedimento
@@ -390,7 +421,7 @@ Funcoes:
 ;
 
 FuncaoRetornavel:
-	Funcao
+	FuncaoNaoNativa
 	| FuncaoNativa
 ;
 
@@ -532,7 +563,7 @@ ArtmExpr:
 	| AbreParenteses ArtmExpr FechaParenteses  
     	| FuncaoRetornavel
 ;
-
+//-----------------------------------------------------------------------FUNCAO NATIVA
 FuncaoNativa:
 	Comprimento
 	| Copia
@@ -541,6 +572,22 @@ FuncaoNativa:
 	| Escreva
 	| Escreval
 	| Leia
+;
+
+FuncaoNaoNativa:
+	Identificador AbreParenteses  FechaParenteses
+	| Identificador AbreParenteses AssinaturaExistente  FechaParenteses
+;
+
+AssinaturaExistente:
+	Variavel
+	| Variavel Separador AssinaturaExistente
+	| Numero
+	| Numero Separador AssinaturaExistente
+	| FuncaoNaoNativa
+	| FuncaoNaoNativa Separador AssinaturaExistente
+	| FuncaoNativa
+	| FuncaoNativa Separador AssinaturaExistente
 ;
 
 InicioComprimento:
@@ -579,7 +626,8 @@ Raiz:
 ExprEscreva:
 	| String
 	| ArtmExpr
-	| ExprEscreva Separador ArtmExpr NumeroInteiro
+	| ExprEscreva Separador ArtmExpr DefineTipo NumeroInteiro
+	| ExprEscreva Separador ArtmExpr
 	| ExprEscreva Separador ArtmExpr DefineTipo NumeroInteiro DefineTipo NumeroInteiro
 ;
 
@@ -622,7 +670,9 @@ CondicoesLogicas:
 
 ExpressaoLogica:
 	ArtmExpr CondicoesLogicas ArtmExpr
-	| ExpressaoLogica OperadoresLogicos
+	| ExpressaoLogica OperadoresLogicos ExpressaoLogica
+	| AbreParenteses ExpressaoLogica FechaParenteses
+	| Variavel
 ;
 
 
@@ -656,7 +706,10 @@ extern int 	yylineno;
 extern char 	*yytext;
 
 int yyerror(char *s) {
-	printf("Erro %s na Linha %d com o Token nao esperado %s\n", s, yylineno, yytext);
+	if (yylineno > 2)
+		yylineno = yylineno - (yylineno-(yylineno-1));
+		
+	printf("Erro %s na Linha %d com o Token nao esperado %s ", s, yylineno-1, yytext);
 }
 
 int main(int ac, char **av) {
