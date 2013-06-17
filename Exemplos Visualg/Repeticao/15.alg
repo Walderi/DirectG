@@ -17,23 +17,20 @@ inicio
     leia(enesimoTermo)
     termo <- 0
     
-    enquanto (termo < enesimoTermo)
-    	se (termo = 0)
-    		entao
+	//termo < enesimoTermo
+    enquanto ()
+    	se (termo = 0) 	entao
     			valorFibonacci <- 0
     			escreval(" ", valorFibonacci)
-    			senao se (termo = 1) 
-    				entao 
+    			senao se (termo = 1) entao 
     				valorFibonacci <- 1
 	                escreval(" ", valorFibonacci)
-    					senao se (termo = 2)
-    						entao 
+    					senao se (termo = 2) entao 
     							valorFibonacci <- 1
 	               				termoAnterior <- 1
 	                            termoAnteriorAoAnterior <-0
     							escreval(" ", valorFibonacci)
-    							senao se (termo > 2)
-    								entao
+    							senao se (termo > 2) entao
     									termoAnteriorAoAnterior <- termoAnterior
     					                termoAnterior <- valorFibonacci
     					                valorFibonacci <- termoAnteriorAoAnterior + termoAnterior

@@ -13,8 +13,8 @@ inicio
 	divisor <- num
 	primo <- verdadeiro
 	repita
-		restodiv <- num mod divisor
-		se (restodiv = 0) e (divisor <> 1) e (num > 1) entao
+		restodiv <- num mod  divisor
+		se ((restodiv = 0) e (divisor <> 1) e (num > 1)) entao
 			divisor <- divisor-1
 			primo <- falso
 			escreval("Divisivel por ", divisor+1)
