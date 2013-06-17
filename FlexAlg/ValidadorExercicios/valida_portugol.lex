@@ -42,6 +42,12 @@ ATRIBUI 	\<\-
 NUMINTEIRO 	[0-9]+
 NUMREAL 	{NUMINTEIRO}\.{NUMINTEIRO}
 REPITA 		[rR][eE][pP][iI][tT][aA]
+PARA		[Pp][Aa][Rr][Aa]
+FIMPARA		[Ff][Ii][Mm][Pp][Aa][Rr][Aa]
+ENQUANTO	[Ee][Nn][Qq][Uu][Aa][Nn][Tt][Oo]
+FIMENQUANTO	[Ff][Ii][Mm][Ee][Nn][Qq][Uu][Aa][Nn][Tt][Oo]
+FACA		[Ff][Aa][Cc][Aa]
+PASSO		[Pp][Aa][Ss][Ss][Oo]
 ATE 		[aA][tT][e]
 PROCEDIMENTO 	[pP][rR][oO][cC][eE][dD][iI][mM][eE][nN][tT][oO]
 FIMPROCEDIMENTO [fF][iI][mM][pP][rR][oO][cC][eE][dD][iI][mM][eE][nN][tT][oO]
@@ -95,6 +101,12 @@ QUEBRA		[\n]+
 {NUMINTEIRO} 		return T_NUMINTEIRO;
 {ATRIBUI} 		return T_ATRIBUI;
 {REPITA} 		return T_REPITA;
+{PARA}			return T_PARA;
+{FIMPARA}		return T_FIMPARA;
+{ENQUANTO}		return T_ENQUANTO;
+{FIMENQUANTO}		return T_FIMENQUANTO;
+{FACA}			return T_FACA;
+{PASSO}			return T_PASSO;
 {ATE} 			return T_ATE;
 {LOGICO} 		return T_LOGICO;
 {VERDADEIRO} 		return T_LOGICO_VERDADEIRO;
@@ -122,10 +134,10 @@ QUEBRA		[\n]+
 "<" 			return T_MENORQUE;
 "<=" 			return T_MENORIGUALQUE;
 ">" 			return T_MAIORQUE;
-"\>\=" 			return T_MAIORIGUALQUE;
+">=" 			return T_MAIORIGUALQUE;
 "=" 			return T_IGUAL;
-"["			return T_ABRECOLCHETE;
-"]"			return T_FECHACOLCHETE;
+"\["			return T_ABRECOLCHETE;
+"\]"			return T_FECHACOLCHETE;
 "(" 			return T_ABRE_PARENT;
 ")" 			return T_FECHA_PARENT;
 "," 			return T_SEPARADOR;

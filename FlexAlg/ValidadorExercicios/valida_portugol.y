@@ -119,6 +119,7 @@ Variavel:
 
 Identificador:
 	T_IDENTIFICADOR
+	| VariavelVetor
 ;
 
 TipoInteiro:
@@ -193,6 +194,12 @@ TipoVetor:
 	NomeVetor ExprColcheteVetor TipoDoTipoVetor
 ;
 
+VariavelVetor:
+	Identificador AbreColchete Variavel FechaColchete
+	| Identificador AbreColchete NumeroInteiro FechaColchete
+;
+
+
 //-----------------------------------------------------------------------------------------------------------------BLOCOS LOGICOS
 
 Interromper:
@@ -224,6 +231,8 @@ Lacos:
 	| BlocoRepita
 ;
 
+//------------------------------------------------------------------------------------------------------------INICIO ENQUANTO
+
 InicioEnquanto:
 	T_ENQUANTO
 ;
@@ -232,11 +241,13 @@ FimEnquanto:
 	T_FIMENQUANTO
 ;
 
-//-----------------------------------------------------------------------------------ENQUANTO
-
 BlocoEnquanto:
 	InicioEnquanto ExpressaoLogica BlocosLogicos FimEnquanto
 ;
+
+//-----------------------------------------------------------------------------------------------------------FIM ENQUANTO
+
+//---------------------------------------------------------------------------------------------------------------PARA
 
 InicioPara:
 	T_PARA
@@ -269,24 +280,6 @@ AlcancePasso:
 	| NumeroInteiro
 ;
 
-NumeroInteiro:
-	T_NUMINTEIRO
-;
-
-NumeroReal:
-	T_NUMREAL
-;
-
-Pi:
-	T_PI
-;
-
-Numero:
-	NumeroInteiro
-	| NumeroReal
-	| Pi
-;
-
 PassoPara:
 	T_PASSO
 ;
@@ -299,8 +292,6 @@ ExprCondicaoPara:
 FacaPara:
 	T_FACA
 ;
-
-//---------------------------------------------------------------------------------------------------------------PARA
 
 BlocoPara:
 	InicioPara Variavel ExprCondicaoPara FacaPara BlocosLogicos FimPara 
@@ -549,6 +540,24 @@ ExprPot:
 	T_POTENCIA
 ;
 
+NumeroInteiro:
+	T_NUMINTEIRO
+;
+
+NumeroReal:
+	T_NUMREAL
+;
+
+Pi:
+	T_PI
+;
+
+Numero:
+	NumeroInteiro
+	| NumeroReal
+	| Pi
+;
+
 ArtmExpr:
 	Numero
 	| Variavel 
@@ -603,8 +612,12 @@ InicioCopia:
 	T_COPIA
 ;
 
+SegundoTermoCopia:
+	InicioAlcancePara
+;
+
 Copia:
-	InicioCopia AbreParenteses Variavel Separador NumeroInteiro Separador NumeroInteiro FechaParenteses
+	InicioCopia AbreParenteses Variavel Separador SegundoTermoCopia Separador NumeroInteiro FechaParenteses
 ;
 
 InicioMaiusc:
