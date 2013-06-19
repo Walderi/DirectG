@@ -18,8 +18,7 @@ inicio
     	se (termo = 0) 
 		entao
     			fatorial <- 1
-    			senao se (termo = 1) 
-				entao 
+    			senao se (termo = 1) entao 
 		                fatotialAnterior <- 1
     					senao entao 
      						    termoAnterior <- fatorial

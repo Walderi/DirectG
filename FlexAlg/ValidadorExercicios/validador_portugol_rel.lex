@@ -1,7 +1,9 @@
+
 %option yylineno
 %{
 #define YYSTYPE double
 #include "valida_portugol.tab.h"
+#include <stdlib.h>
 %}
 
 ALGORITMO 	[Aa][Ll][Gg][Oo][Rr][Ii][Tt][Mm][Oo]
@@ -33,24 +35,18 @@ OUTROCASO 	[oO][Uu][tT][rR][oO][Cc][aA][sS][oO]
 AND 		[\e E]
 OR  		[oO][uU]
 XOR		[xX][oO][uU]
-COMENTARIO 	[/][/].*
-DIVISAO 	[\/]{1}
+COMENTARIO 	[\//]{2}.*
+DIVISAO 	[\//]{1}
 DIVISAOINTEIRA 	[\\]{1}
 MOD 		[mM][oO][dD]
-VARIAVEL 	[a-zA-Z]+[a-zA-Z0-9\_]*
+VARIAVEL 	[a-zA-Z]+[0-9]*
 ATRIBUI 	\<\-
 NUMINTEIRO 	[0-9]+
 NUMREAL 	{NUMINTEIRO}\.{NUMINTEIRO}
 REPITA 		[rR][eE][pP][iI][tT][aA]
-PARA		[Pp][Aa][Rr][Aa]
-FIMPARA		[Ff][Ii][Mm][Pp][Aa][Rr][Aa]
-ENQUANTO	[Ee][Nn][Qq][Uu][Aa][Nn][Tt][Oo]
-FIMENQUANTO	[Ff][Ii][Mm][Ee][Nn][Qq][Uu][Aa][Nn][Tt][Oo]
-FACA		[Ff][Aa][Cc][Aa]
-PASSO		[Pp][Aa][Ss][Ss][Oo]
 ATE 		[aA][tT][e]
-PROCEDIMENTO 	[Pp][Rr][Oo][Cc][Ee][Dd][Ii][Mm][Ee][Nn][Tt][Oo]
-FIMPROCEDIMENTO [Ff][Ii][Mm][Pp][Rr][Oo][Cc][Ee][Dd][Ii][Mm][Ee][Nn][Tt][Oo]
+PROCEDIMENTO 	[pP][rR][oO][cC][eE][dD][iI][mM][eE][nN][tT][oO]
+FIMPROCEDIMENTO [fF][iI][mM][pP][rR][oO][cC][eE][dD][iI][mM][eE][nN][tT][oO]
 FUNCAO		[fF][uU][nN][cC][aA][oO]
 FIMFUNCAO	[Ff][Ii][mM][fF][uU][nN][cC][aA][oO]
 RETORNE		[Rr][eE][tT][oO][rR][nN][eE]
@@ -63,21 +59,19 @@ MAIUSC		[mM][aA][iI][uU][Ss][Cc]
 
 ESPACOVAZIO 	[ \t\r]+
 
-QUEBRA		[\n\r]
+FIMLINHA	[\n]
 
 %%
 
+{ESPACOVAZIO} 		{ }
+{FIMLINHA} 		{ yylineno++; return T_FIMLINHA; }
 
-{ESPACOVAZIO} 		{}
-
-{QUEBRA}		{return T_QUEBRA; yylineno++;}
 {ALGORITMO} 		return T_ALGORITMO;
 {FIMALGORITMO} 		return T_FIMALGORITMO;
 {INICIO} 		return T_INICIO;
 {ESCREVAL} 		return T_ESCREVAL;
 {STRING} 		return T_STRING;
 {ESCREVA} 		return T_ESCREVA;
-{DIVISAO} 		return T_DIVISAO;
 {COMENTARIO}		return T_COMENTARIO;
 {AND} 			return T_AND;
 {OR} 			return T_OR;
@@ -101,12 +95,6 @@ QUEBRA		[\n\r]
 {NUMINTEIRO} 		return T_NUMINTEIRO;
 {ATRIBUI} 		return T_ATRIBUI;
 {REPITA} 		return T_REPITA;
-{PARA}			return T_PARA;
-{FIMPARA}		return T_FIMPARA;
-{ENQUANTO}		return T_ENQUANTO;
-{FIMENQUANTO}		return T_FIMENQUANTO;
-{FACA}			return T_FACA;
-{PASSO}			return T_PASSO;
 {ATE} 			return T_ATE;
 {LOGICO} 		return T_LOGICO;
 {VERDADEIRO} 		return T_LOGICO_VERDADEIRO;
@@ -116,8 +104,9 @@ QUEBRA		[\n\r]
 {FUNCAO}		return T_FUNCAO;
 {FIMFUNCAO}		return T_FIMFUNCAO;
 {RETORNE}		return T_RETORNE;
+{DIVISAO} 		return T_DIVISAO;
 {DIVISAOINTEIRA}	return T_DIVISAOINTEIRA;
-{MOD} 			return T_MOD;
+{MOD} 			return T_RESTO;
 {DE}			return T_DE;
 {CARACTERE}		return T_CARACTERE;
 {COPIA}			return T_COPIA;
@@ -136,13 +125,12 @@ QUEBRA		[\n\r]
 ">" 			return T_MAIORQUE;
 ">=" 			return T_MAIORIGUALQUE;
 "=" 			return T_IGUAL;
-"\["			return T_ABRECOLCHETE;
-"\]"			return T_FECHACOLCHETE;
+"["			return T_ABRECOLCHETE;
+"]"			return T_FECHACOLCHETE;
 "(" 			return T_ABRE_PARENT;
 ")" 			return T_FECHA_PARENT;
 "," 			return T_SEPARADOR;
-"\.\."			return T_PONTOPONTO;
-
-. 			{return T_INVALIDO;}
+".."			return T_PONTOPONTO;
+. 			{printf("Invalido: %s\n", yytext);}
 
 %%

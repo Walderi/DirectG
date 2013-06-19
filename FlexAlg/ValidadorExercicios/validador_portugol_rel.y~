@@ -5,8 +5,10 @@
 #include <string.h>
 %}
 
+
 /*Estrutura da linguagem*/
 %token T_ALGORITMO T_FIMALGORITMO
+%token T_FIMLINHA
 %token T_VAR T_INICIO T_COMENTARIO T_IDENTIFICADOR T_ATRIBUI T_SEPARADOR
 %token T_ABRE_PARENT T_FECHA_PARENT
 %token T_ABRECOLCHETE T_FECHACOLCHETE
@@ -18,8 +20,6 @@
 %token T_VARIAVEL
 %token T_PROCEDIMENTO T_FIMPROCEDIMENTO
 %token T_FUNCAO T_FIMFUNCAO T_RETORNE
-%token T_INVALIDO
-%token T_QUEBRA
 
 /*Lacos e desvios condicionais*/
 %token T_REPITA T_ATE
@@ -50,33 +50,26 @@
 %%
 
 Input:
-	
 	| Input BlocoAlgoritmo
-;
-QuebraComando:
-	T_QUEBRA
-	| Comentario
-;
-	
-QuebrasComando:
-	QuebraComando
-	|QuebraComando QuebrasComando 
 ;
 
 InicioAlgoritmo:
 	T_ALGORITMO
+/*	| {erros++;yyerror("Esperado Algoritmo", yylineno, yytext);}*/
 ;
 
 FimAlgoritmo:
 	T_FIMALGORITMO
+/*	| {erros++;yyerror("Esperado FimAlgoritmo", yylineno, yytext);}*/
 ;
 
 BlocoAlgoritmo: 
-	 InicioAlgoritmo BlocoCodigo FimAlgoritmo QuebrasComando
+	 InicioAlgoritmo BlocoCodigo FimAlgoritmo
 ;
 
 String:
 	T_STRING
+/*	| {erros++;yyerror("Esperado um Nome", yylineno, yytext);}*/
 ;
 
 NomeAlgoritmo:
@@ -84,58 +77,62 @@ NomeAlgoritmo:
 ;
 
 InicioLogica:
-	T_INICIO QuebrasComando
+	T_INICIO
+/*	| {erros++;yyerror("Esperado inicio", yylineno, yytext);}*/
 ;
 
 BlocoCodigo:
-	NomeAlgoritmo QuebrasComando BlocoDeclaracao InicioLogica BlocosLogicos 
+	NomeAlgoritmo BlocoDeclaracao InicioLogica BlocosLogicos 
 	| Comentarios BlocoCodigo	
-
 ;
 
 InicioBlocoDeclaracao:
-	T_VAR QuebrasComando
+	T_VAR
+/*	| {erros++;yyerror("Esperado 'var' para iniciar as variaveis", yylineno, yytext);}	*/
 ;
 
 BlocoDeclaracao:
 	| InicioBlocoDeclaracao BlocoVariaveis
-	| InicioBlocoDeclaracao		
-	| Comentarios BlocoDeclaracao
-	| Funcoes
-	| InicioBlocoDeclaracao BlocoVariaveis Funcoes	
+	| Comentarios BlocoDeclaracao	
+/*	| {erros++;yyerror("Erro na declaração de variavel \nVerifique se é necessario uma variavel ou \nSe o comentario foi corretamente feito", yylineno, yytext);}	*/
 ;
 
 DefineTipo:
 	T_DECLARAVAR
+ /*	| {erros++;yyerror("Esperado ':' na declaraçãao das variaveis", yylineno, yytext);}*/
 ;
 
 BlocoVariaveis:
-	| Variaveis DefineTipo Tipos QuebrasComando BlocoVariaveis
-	| Variaveis DefineTipo TipoVetor QuebrasComando BlocoVariaveis
+	| Variaveis DefineTipo Tipos BlocoVariaveis
+	| Variaveis DefineTipo TipoVetor BlocoVariaveis
 	| Comentarios BlocoVariaveis
-	| QuebrasComando
+/*	| {erros++;yyerror("Erro de declaracao de variaveis \nNão declare nada ou siga o padrao \nvariavel : tipodevariavel \nvariavel1,variavel2 : tipodevariavel  ", yylineno, yytext);}*/
 ;
 
 Separador:
 	T_SEPARADOR
+/*	| {erros++;yyerror("Faltou ',' na sintaxe", yylineno, yytext);}*/
 ;
 
 Variaveis:
 	Variavel
-	| Variavel Separador Variaveis 
+	| Variavel Separador Variaveis
+/*	| {erros++;yyerror("Esperado variaveis para serem iniciadas", yylineno, yytext);} */
 ;
 
 Variavel:
-	Identificador
+	T_IDENTIFICADOR
+/*	| {erros++;yyerror("Nome da variavel invalido", yylineno, yytext);}*/
 ;
 
 Identificador:
 	T_IDENTIFICADOR
-	| VariavelVetor
+/*	| {erros++;yyerror("Nome do identificador invalido", yylineno, yytext);}*/
 ;
 
 TipoInteiro:
 	T_INTEIRO
+/*	| {erros++;yyerror("Nome da variavel invalido \n", yylineno, yytext);}*/
 ;
 
 TipoReal: 
@@ -206,47 +203,25 @@ TipoVetor:
 	NomeVetor ExprColcheteVetor TipoDoTipoVetor
 ;
 
-VariavelVetor:
-	Identificador AbreColchete Variavel FechaColchete
-	| Identificador AbreColchete NumeroInteiro FechaColchete
-;
-
-
-//-----------------------------------------------------------------------------------------------------------------BLOCOS LOGICOS
-
-Interromper:
-	T_INTERROMPA
-;
-
 BlocosLogicos:
-	BlocoLogico 
-	| Comentarios 
-	| Comentarios BlocosLogicos  
-	| BlocoLogico BlocosLogicos 
-;	
+	BlocoLogico
+	| Comentarios
+	| Comentarios BlocosLogicos 
+;
 
 BlocoLogico:
-	| String QuebrasComando
-	| Atribuicao QuebrasComando
-	| Lacos 
-	| Desvios 
-	| Interromper QuebrasComando 
-	| FuncaoNativa QuebrasComando
-	| FuncaoNaoNativa QuebrasComando
-	| QuebrasComando BlocoLogico 
-; 
-
-//------------------------------------------------------------------------------------------------LACOS
+	| String BlocoLogico
+	| Funcoes BlocoLogico
+	| Atribuicao BlocoLogico
+	| Lacos BlocoLogico
+	| Desvios BlocoLogico
+	| Comentarios BlocoLogico
+;
 
 Lacos:
 	BlocoPara
 	| BlocoEnquanto
 	| BlocoRepita
-;
-
-//------------------------------------------------------------------------------------------------------------INICIO ENQUANTO
-FacaEnquanto:
-	T_FACA
 ;
 
 InicioEnquanto:
@@ -257,14 +232,14 @@ FimEnquanto:
 	T_FIMENQUANTO
 ;
 
-BlocoEnquanto:
-	InicioEnquanto ExpressaoLogica FacaEnquanto QuebrasComando BlocosLogicos FimEnquanto QuebrasComando
-	|{yyerror("Error Aqui!");}
+ExprCondicaoEnquanto:
+	ExpressaoLogica
+	| AbreParenteses ExpressaoLogica FechaParenteses
 ;
 
-//-----------------------------------------------------------------------------------------------------------FIM ENQUANTO
-
-//---------------------------------------------------------------------------------------------------------------PARA
+BlocoEnquanto:
+	InicioEnquanto ExprCondicaoEnquanto BlocosLogicos FimEnquanto
+;
 
 InicioPara:
 	T_PARA
@@ -276,10 +251,6 @@ FimPara:
 
 AlcancePara:
 	T_DE
-;
-
-AtePara:
-	RepitaAte
 ;
 
 InicioAlcancePara:
@@ -295,7 +266,19 @@ FimAlcancePara:
 AlcancePasso:
 	Variavel
 	| NumeroInteiro
-	| ArtmExpr
+;
+
+NumeroInteiro:
+	T_NUMINTEIRO
+;
+
+NumeroReal:
+	T_NUMREAL
+;
+
+Numero:
+	NumeroInteiro
+	| NumeroReal
 ;
 
 PassoPara:
@@ -303,8 +286,8 @@ PassoPara:
 ;
 
 ExprCondicaoPara:
-	AlcancePara InicioAlcancePara AtePara FimAlcancePara  
-	| AlcancePara InicioAlcancePara AtePara FimAlcancePara PassoPara AlcancePasso
+	InicioAlcancePara AlcancePara FimAlcancePara  
+	| InicioAlcancePara AlcancePara FimAlcancePara PassoPara AlcancePasso
 ;
 
 FacaPara:
@@ -312,7 +295,7 @@ FacaPara:
 ;
 
 BlocoPara:
-	InicioPara Variavel ExprCondicaoPara FacaPara QuebrasComando BlocosLogicos FimPara QuebrasComando
+	InicioPara ExprCondicaoPara FacaPara BlocosLogicos FimPara
 ;
 
 InicioRepita:
@@ -328,13 +311,9 @@ ExprRepitaAte:
 	| AbreParenteses ExpressaoLogica FechaParenteses 
 ;
 
-//-----------------------------------------------------------------------------------------------------------------------REPITA
-
 BlocoRepita:
-	InicioRepita QuebrasComando BlocosLogicos RepitaAte ExprRepitaAte QuebrasComando
+	InicioRepita BlocosLogicos RepitaAte ExprRepitaAte
 ;
-
-//--------------------------------------------------------------------------------------------------DESVIOS
 
 Desvios:
 	BlocosSe
@@ -357,14 +336,12 @@ DesvioSenao:
 	T_SENAO
 ;
 
-//--------------------------------------------------------------------------------------------------------------------------------------SE
-
 BlocosSe:
-	InicioSe ExpressaoLogica DesvioEntao QuebrasComando BlocosLogicos FimSe QuebrasComando
-	| InicioSe ExpressaoLogica DesvioEntao QuebrasComando BlocosLogicos DesvioSenao QuebrasComando BlocosLogicos FimSe QuebrasComando
-	| InicioSe ExpressaoLogica DesvioEntao QuebrasComando BlocosLogicos BlocosSe FimSe QuebrasComando
-	| InicioSe ExpressaoLogica DesvioEntao QuebrasComando BlocosLogicos DesvioSenao QuebrasComando BlocosLogicos BlocosSe FimSe QuebrasComando
-	| InicioSe ExpressaoLogica DesvioEntao QuebrasComando BlocosLogicos BlocosSe DesvioSenao QuebrasComando BlocosLogicos BlocosSe FimSe QuebrasComando
+	InicioSe ExpressaoLogica DesvioEntao BlocosLogicos FimSe
+	| InicioSe ExpressaoLogica DesvioEntao BlocosLogicos DesvioSenao BlocosLogicos FimSe
+	| InicioSe ExpressaoLogica DesvioEntao BlocosLogicos BlocosSe FimSe
+	| InicioSe ExpressaoLogica DesvioEntao BlocosLogicos DesvioSenao BlocosLogicos BlocosSe FimSe
+	| InicioSe ExpressaoLogica DesvioEntao BlocosLogicos BlocosSe DesvioSenao BlocosLogicos BlocosSe FimSe
 ;
 
 InicioEscolha:
@@ -387,10 +364,8 @@ ExprEscolha:
 	| AbreParenteses Variavel FechaParenteses	
 ;
 
-//-----------------------------------------------------------------------------------------------------------------------------------ESCOLHA
-
 BlocosEscolha:
-	InicioEscolha ExprEscolha QuebrasComando BlocoCasos FimEscolha QuebrasComando	
+	InicioEscolha ExprEscolha BlocoCasos FimEscolha	
 ;
 
 AbreCaso:
@@ -402,14 +377,12 @@ OutroCaso:
 ;
 
 BlocosCaso:
-	AbreCaso SelecaoCasos QuebrasComando BlocosLogicos
-	| AbreCaso SelecaoCasos QuebrasComando BlocosLogicos BlocosCaso
+	AbreCaso SelecaoCasos BlocosLogicos
+	| AbreCaso SelecaoCasos BlocosLogicos BlocosCaso
 ;
 
-//--------------------------------------------------------------------------------------------------------------------------CASOS
-
 BlocoCasos:
-	BlocosCaso OutroCaso QuebrasComando BlocosLogicos	 
+	BlocosCaso OutroCaso BlocosLogicos	 
 ;
 
 Selecao:
@@ -422,7 +395,7 @@ SelecaoCasos:
 	Selecao
 	| Selecao Separador SelecaoCasos
 ;
-//--------------------------------------------------------------------Funcao
+
 Funcoes:
 	Funcao
 	| BlocoProcedimento
@@ -430,7 +403,7 @@ Funcoes:
 ;
 
 FuncaoRetornavel:
-	FuncaoNaoNativa
+	Funcao
 	| FuncaoNativa
 ;
 
@@ -447,7 +420,7 @@ DefinidorFuncao:
 ;
 
 Funcao:
-	IniciaFuncao NomeFuncao DefinidorFuncao Tipos QuebrasComando BlocoDeclaracao InicioLogica BlocosLogicos Retorno FimFuncao QuebrasComando 
+	IniciaFuncao NomeFuncao DefinidorFuncao Tipos BlocoDeclaracao InicioLogica BlocosLogicos Retorno FimFuncao 
 ;
 
 PalavraRetorno:
@@ -465,38 +438,32 @@ Retorno:
 ;
 
 NomeFuncao:
-	 Identificador AbreParenteses BlocoVariaveis FechaParenteses
+	 Identificador AbreParenteses Assinatura FechaParenteses
 ;
 
 DefineVarAssinatura:
 	T_DECLARAVAR
-|{yyerror("6");}
 ;
 
 Assinatura:
-	Identificador DefineVarAssinatura Tipos
+	Variaveis DefineVarAssinatura Tipos
 	| Assinatura Separador Assinatura
-|{yyerror("5");}
 ;	
 
 InicioProcedimento:
 	T_PROCEDIMENTO
-|{yyerror("4");}
 ;
 
 FimProcedimento:
 	T_FIMPROCEDIMENTO
-|{yyerror("3");}
 ;
 
 NomeProcedimento:
 	Identificador AbreParenteses Assinatura FechaParenteses
-|{yyerror("2");}
 ;
 
 BlocoProcedimento:
-	InicioProcedimento NomeProcedimento QuebrasComando BlocoDeclaracao InicioLogica BlocosLogicos FimProcedimento QuebrasComando
-|{yyerror("1");}
+	InicioProcedimento NomeProcedimento BlocoDeclaracao InicioLogica BlocosLogicos FimProcedimento
 ;
 
 Comentarios:
@@ -505,8 +472,8 @@ Comentarios:
 ;
 
 Comentario:
-	T_COMENTARIO QuebrasComando
-; 
+	T_COMENTARIO
+;
 
 Atribuidor:
 	T_ATRIBUI
@@ -529,7 +496,7 @@ Atribuido:
 ;
 
 Atribuicao:
-	Identificador Atribuidor Atribuido 
+	Identificador Atribuidor Atribuido
 ;
 
 ExprSoma:
@@ -564,24 +531,6 @@ ExprPot:
 	T_POTENCIA
 ;
 
-NumeroInteiro:
-	T_NUMINTEIRO
-;
-
-NumeroReal:
-	T_NUMREAL
-;
-
-Pi:
-	T_PI
-;
-
-Numero:
-	NumeroInteiro
-	| NumeroReal
-	| Pi
-;
-
 ArtmExpr:
 	Numero
 	| Variavel 
@@ -596,31 +545,15 @@ ArtmExpr:
 	| AbreParenteses ArtmExpr FechaParenteses  
     	| FuncaoRetornavel
 ;
-//-----------------------------------------------------------------------FUNCAO NATIVA
+
 FuncaoNativa:
-	Comprimento 
-	| Copia 
-	| Maiusc 
-	| Raiz 
-	| Escreva 
-	| Escreval 
-	| Leia 
-;
-
-FuncaoNaoNativa:
-	Identificador AbreParenteses  FechaParenteses
-	| Identificador AbreParenteses AssinaturaExistente  FechaParenteses
-;
-
-AssinaturaExistente:
-	Variavel
-	| Variavel Separador AssinaturaExistente
-	| Numero
-	| Numero Separador AssinaturaExistente
-	| FuncaoNaoNativa
-	| FuncaoNaoNativa Separador AssinaturaExistente
-	| FuncaoNativa
-	| FuncaoNativa Separador AssinaturaExistente
+	Comprimento
+	| Copia
+	| Maiusc
+	| Raiz
+	| Escreva
+	| Escreval
+	| Leia
 ;
 
 InicioComprimento:
@@ -636,12 +569,8 @@ InicioCopia:
 	T_COPIA
 ;
 
-SegundoTermoCopia:
-	InicioAlcancePara
-;
-
 Copia:
-	InicioCopia AbreParenteses Variavel Separador SegundoTermoCopia Separador NumeroInteiro FechaParenteses
+	InicioCopia AbreParenteses Variavel Separador NumeroInteiro Separador NumeroInteiro FechaParenteses
 ;
 
 InicioMaiusc:
@@ -660,15 +589,10 @@ Raiz:
 	InicioRaiz AbreParenteses ArtmExpr FechaParenteses
 ;
 
-CasasDecimais:
-	|T_DECLARAVAR NumeroInteiro
-;
-
 ExprEscreva:
 	| String
-	| ArtmExpr CasasDecimais
-	| ExprEscreva Separador ArtmExpr DefineTipo NumeroInteiro
-	| ExprEscreva Separador ArtmExpr
+	| ArtmExpr
+	| ExprEscreva Separador ArtmExpr NumeroInteiro
 	| ExprEscreva Separador ArtmExpr DefineTipo NumeroInteiro DefineTipo NumeroInteiro
 ;
 
@@ -689,7 +613,7 @@ InicioEscreval:
 ;
 
 Escreval:
-	InicioEscreval ParametrosEscreva 	
+	InicioEscreval ParametrosEscreva	
 ;
 
 InicioLeia:
@@ -698,7 +622,6 @@ InicioLeia:
 
 Leia:
 	InicioLeia AbreParenteses Variavel FechaParenteses
-	|{yyerror("paçoca");}
 ;
 
 CondicoesLogicas:
@@ -712,9 +635,7 @@ CondicoesLogicas:
 
 ExpressaoLogica:
 	ArtmExpr CondicoesLogicas ArtmExpr
-	| ExpressaoLogica OperadoresLogicos ExpressaoLogica
-	| AbreParenteses ExpressaoLogica FechaParenteses
-	| Variavel
+	| ExpressaoLogica OperadoresLogicos
 ;
 
 
@@ -748,10 +669,7 @@ extern int 	yylineno;
 extern char 	*yytext;
 
 int yyerror(char *s) {
-//	if (yylineno > 2)
-//		yylineno = yylineno - (yylineno-(yylineno-1));
-		
-	printf("%s na Linha %d com o Token nao esperado %s \n", s, yylineno, yytext);
+	printf("Erro %s na Linha %d com o Token nao esperado %s\n", s, yylineno, yytext);
 }
 
 int main(int ac, char **av) {
