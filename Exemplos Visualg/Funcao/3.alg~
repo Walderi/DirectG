@@ -1,4 +1,4 @@
-lgoritmo "Função para soma de 3 argumentos"
+algoritmo "Função para soma de 3 argumentos"
 
 // Função :
 
@@ -20,7 +20,7 @@ soma : inteiro
 
 
 
-funcao soma3numeros(n1,n2,n3:inteiro):inteiro
+funcao soma3numeros(n1,n2?n3:inteiro):inteiro
 
 var
 

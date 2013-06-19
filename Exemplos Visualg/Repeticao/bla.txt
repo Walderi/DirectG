@@ -18,7 +18,7 @@ inicio
     termo <- 0
     
 	//termo < enesimoTermo
-    enquanto(termo>0) faca
+    enquanto ()
     	se (termo = 0) 	entao
     			valorFibonacci <- 0
     			escreval(" ", valorFibonacci)

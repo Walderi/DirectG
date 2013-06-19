@@ -10,7 +10,8 @@ var
 
 inicio
 	// Seção de Comandos
-	escreval ( "Entre com a primeira nota:") //Pega a primeira nota
+	escreval ( "Entre com a primeira nota:") 
+	//Pega a primeira nota
 	leia (nota1)
 	escreval ( "Entre com a segunda nota:") //pega a segunda nota
 	leia (nota2)

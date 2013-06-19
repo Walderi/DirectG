@@ -10,7 +10,7 @@ inicio
 	// Seção de Comandos
 	escreval ( "Entre com a letra:")
 	leia (letra)
-	escolha(letra)
+	escolha(letra
 		caso "a", "e","i","o","u"  
       // Por nao ser Case sensitive nao é necessário maisculo ou minusculo
 		    escreval( "É uma vogal!!")   

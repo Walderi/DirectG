@@ -11,10 +11,8 @@ inicio
 	escreval ( "Entre com o F ou M:")
 	leia (genero)
 	escolha(genero)
-		caso "F", "f"
- // Entre Aspas para leitura do caracter
-		    escreval( "F - FEMININO!!") 
-//tanto para F quanto para M
+		caso "F", "f" // Entre Aspas para leitura do caracter
+		    escreval( "F - FEMININO!!") //tanto para F quanto para M
 		caso "M", "m"
 	    	escreval("M - MASCULINO!!")
 		outrocaso

@@ -1,6 +1,6 @@
 algoritmo "Função para imprimir um número n, n vezes"
 
-// Função ?
+// Função :
 
 // Autor :
 

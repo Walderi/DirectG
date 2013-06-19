@@ -38,7 +38,8 @@ inicio
 	    senao
 	fimse
 	
-	se((numero2 > numero1) e (numero3 > numero1)) entao                           //Se o numero 2 for maior que o numero 1
+	se((numero2 > numero1) e (numero3 > numero1)) 
+		entao                           //Se o numero 2 for maior que o numero 1
 			maiornumero <- numero2      //E o numero 3 maior que o numero 1
 	 		menornumero <- numero1      //Entao o numero 2 é o maior e o numero 1 o menor
 	    senao

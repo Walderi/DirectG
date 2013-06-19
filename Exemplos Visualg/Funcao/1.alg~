@@ -14,7 +14,7 @@ n : inteiro
 
 
 
-procedimento imprimeN(n:inteiro)
+procedimento imprimeN(n?inteiro)
 
 var
 

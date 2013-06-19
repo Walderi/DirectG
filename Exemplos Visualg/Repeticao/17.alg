@@ -14,14 +14,14 @@ inicio
 	escreval("Digite o numero que se deseja obter o calculo fatorial")
 	leia(numero)
         
-    enquanto (termo < numero)
-    	se (termo = 0) 
-		entao
+    enquanto (termo < numero) faca
+    	se (termo = 0) entao
     			fatorial <- 1
-    			senao se (termo = 1) 
-				entao 
+    			senao
+			 se (termo = 1)	entao 
 		                fatotialAnterior <- 1
-    					senao entao 
+    					senao
+			 entao 
      						    termoAnterior <- fatorial
 				                fatorial <- termo*termoAnterior
     					fimse 

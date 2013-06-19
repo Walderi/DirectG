@@ -28,7 +28,7 @@ inicio
 	   	senao
 	fimse
 	
-	se ((numero1 > numero3) e (numero3 > numero2)) entao 	// Se o numero 1 for maior que o numero 3
+	se ((numero1 > numero3) e (numero3 > numero2)) entao 												// Se o numero 1 for maior que o numero 3
 	   		maiornumero <- numero1                          // E o numero 3 maior que o numero 2
 	   		menornumero <- numero2                          //entao o numero 1 é o maior e o numero 2 o menor
 	   		meionumero <- numero3
