@@ -447,7 +447,7 @@ DefinidorFuncao:
 ;
 
 Funcao:
-	IniciaFuncao NomeFuncao DefinidorFuncao Tipos QuebrasComando BlocoDeclaracao InicioLogica BlocosLogicos Retorno FimFuncao QuebrasComando 
+	IniciaFuncao NomeFuncao DefinidorFuncao Tipos QuebrasComando BlocoDeclaracao InicioLogica BlocosLogicos Retorno QuebrasComando FimFuncao QuebrasComando 
 ;
 
 PalavraRetorno:
@@ -465,7 +465,7 @@ Retorno:
 ;
 
 NomeFuncao:
-	 Identificador AbreParenteses BlocoVariaveis FechaParenteses
+	 Identificador AbreParenteses Assinatura FechaParenteses
 ;
 
 DefineVarAssinatura:
@@ -474,7 +474,7 @@ DefineVarAssinatura:
 ;
 
 Assinatura:
-	Identificador DefineVarAssinatura Tipos
+	Variaveis DefineVarAssinatura Tipos
 	| Assinatura Separador Assinatura
 |{yyerror("5");}
 ;	
@@ -740,6 +740,7 @@ OperadoresLogicos:
 	| LogicoNot
 	| LogicoXor
 ;
+
 
 
 %%
