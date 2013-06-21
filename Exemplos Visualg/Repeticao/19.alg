@@ -1,4 +1,4 @@
-algoritmo "maior, menor e soma entre 0 e 1000"
+
 // Função : Altere o programa anterior para que ele aceite apenas
 // números entre 0 e 1000.
 // Autor : Walderi Moraes Willy Filho | George Lucas Gomes

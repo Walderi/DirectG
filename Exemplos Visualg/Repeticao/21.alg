@@ -6,30 +6,36 @@ algoritmo "primo"
 // Data : 08/05/2013
 // Seção de Declarações
 var
-num,divisor,restodiv: inteiro
-
+n,m,l: inteiro
+p : logico
 inicio
-	
-	divsor  <- 2
-	escreval ("Entre com o numero desejado:")		
-	leia(num)
-	
-	se(num < 2) entao
-		escreval("invalido")
-	senão
-	    se(num = 2) entao
-			escreval("é primo")
-	    senao
-	    enquanto(divisor < num)
-	    	restodiv = (num mod divisor)
-	    	se (restodiv = 0 )
-	        	escreval("não é primo")
-			    interrompa
-			fimse
-			divisor <- divisor +1
-		fimenquanto
-		se(restodiv <> 0)
-			escreval("é primo")
-		fimse
-	fimse
+
+      escreval("Entre Com o numero desejado:")
+      leia(n)
+      se n=2 entao
+         p<-falso
+         interrompa
+         senao
+         se n=3 entao
+         p<-falso
+         interrompa
+      senao
+      m <- n\2
+      repita
+      l <- n mod m
+      se (l <> 0) entao
+         m <- m-1
+         senao
+        p <- verdadeiro
+        interrompa
+      fimse
+      ate (m<=1)
+      fimse
+      fimse
+      se p entao
+         escreval("não é primo")
+         senao
+      escreval("e primo")
+      fimse
+
 fimalgoritmo
