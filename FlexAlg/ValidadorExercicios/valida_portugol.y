@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "pilha.c"
+int erros;
 %}
 
 /*Estrutura da linguagem*/
@@ -57,6 +58,7 @@ Input:
 QuebraComando:
 	T_QUEBRA
 	| Comentario
+	| error{erros++;yyerror("Erro do fim de linha");}
 ;
 	
 QuebrasComando:
@@ -66,6 +68,7 @@ QuebrasComando:
 
 InicioAlgoritmo:
 	T_ALGORITMO
+	| error{erros++;yyerror("Erro de inicializacao do programa esperado \" ALGORITMO \" ");}
 ;
 
 CabecalhoAlgoritmo:
@@ -74,6 +77,7 @@ CabecalhoAlgoritmo:
 
 FimAlgoritmo:
 	T_FIMALGORITMO
+	| error{erros++;yyerror("Erro de termino de algoritmo esperado \" FIMALGORITMO \" ");}
 ;
 
 BlocoAlgoritmo: 
@@ -86,10 +90,12 @@ String:
 
 NomeAlgoritmo:
 	String
+	| error{erros++;yyerror("Algoritmo sem nome");}
 ;
 
 InicioLogica:
 	T_INICIO QuebrasComando
+	| error{erros++;yyerror("Faltando \" INICIO \" ");} 
 ;
 
 BlocoCodigo:
@@ -100,6 +106,7 @@ BlocoCodigo:
 
 InicioBlocoDeclaracao:
 	T_VAR
+	| error{erros++;yyerror("Faltando \" VAR \" ");}
 ;
 
 BlocoDeclaracao:
@@ -112,6 +119,7 @@ BlocoDeclaracao:
 
 DefineTipo:
 	T_DECLARAVAR
+	| error{erros++;yyerror("Necessario \" : \" para declaracao da variavel");}
 ;
 
 BlocoVariaveis:
@@ -122,6 +130,7 @@ BlocoVariaveis:
 
 Separador:
 	T_SEPARADOR
+	| error{erros++;yyerror("Faltando \",\" para divisao de variaveis");} 
 ;
 
 Variaveis:
@@ -136,6 +145,7 @@ Variavel:
 Identificador:
 	T_IDENTIFICADOR
 	| VariavelVetor
+	| error{erros++;yyerror("Identificador invalido");}
 ;
 
 TipoInteiro:
@@ -153,6 +163,7 @@ TipoCaractere:
 TipoNumerico:
 	TipoInteiro
 	| TipoReal
+	| error{erros++;yyerror("Esperado um numero");}
 ;
 
 TipoLogico:
@@ -168,10 +179,12 @@ Tipos:
 
 AbreColchete:
 	T_ABRECOLCHETE
+	| error{erros++;yyerror("Esperado \"(\"");}
 ;
 
 FechaColchete:
 	T_FECHACOLCHETE
+	| error{erros++;yyerror("Esperado \")\"");}
 ;
 
 ExprColcheteVetor:
@@ -188,6 +201,7 @@ PosInicialVetor:
 
 EntrePosVetor:
 	T_PONTOPONTO
+	| error{erros++;yyerror("Erro na divisao do vetor \"..\"");}
 ;
 
 PosFinalVetor:
@@ -196,6 +210,7 @@ PosFinalVetor:
 
 DefineTipoVetor:
 	T_DE
+	| error{erros++;yyerror("Faltou o termo de condicao do vetor \"DE\"");}
 ;
 
 TipoDoTipoVetor:
@@ -251,6 +266,7 @@ Lacos:
 //------------------------------------------------------------------------------------------------------------INICIO ENQUANTO
 FacaEnquanto:
 	T_FACA
+	| error{erros++;yyerror("Esperado \"FACA\"");}
 ;
 
 InicioEnquanto:
@@ -259,11 +275,12 @@ InicioEnquanto:
 
 FimEnquanto:
 	T_FIMENQUANTO
+	| error{erros++;yyerror("Esperado \"FIMENQUANTO\"");}
 ;
 
 BlocoEnquanto:
 	InicioEnquanto ExpressaoLogica FacaEnquanto QuebrasComando BlocosLogicos FimEnquanto QuebrasComando
-	|{yyerror("Error Aqui!");}
+	|error{errors++;yyerror("Erro no bloco ENQUANTO");}
 ;
 
 //-----------------------------------------------------------------------------------------------------------FIM ENQUANTO
@@ -276,6 +293,7 @@ InicioPara:
 
 FimPara:
 	T_FIMPARA
+	| error{erros++;yyerror("Esperado \"FIMPARA\"");}
 ;
 
 AlcancePara:
@@ -570,6 +588,7 @@ ExprPot:
 
 NumeroInteiro:
 	T_NUMINTEIRO
+	| error{erros++;yyerror("Esperado um numero do tipo inteiro");}
 ;
 
 NumeroReal:
