@@ -3,8 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "pilha.c"
-int erros;
+#include "PilhaDim.c"
+#include "hashDirectG.c"
+int erros=0;
 %}
 
 /*Estrutura da linguagem*/
@@ -266,7 +267,7 @@ Lacos:
 //------------------------------------------------------------------------------------------------------------INICIO ENQUANTO
 FacaEnquanto:
 	T_FACA
-	| error{erros++;yyerror("Esperado \"FACA\"");}
+	| error{erros++; yyerror("Esperado \"FACA\"");}
 ;
 
 InicioEnquanto:
@@ -280,7 +281,7 @@ FimEnquanto:
 
 BlocoEnquanto:
 	InicioEnquanto ExpressaoLogica FacaEnquanto QuebrasComando BlocosLogicos FimEnquanto QuebrasComando
-	|error{errors++;yyerror("Erro no bloco ENQUANTO");}
+	| error{erros++; yyerror("Erro no bloco ENQUANTO");}
 ;
 
 //-----------------------------------------------------------------------------------------------------------FIM ENQUANTO
@@ -771,25 +772,44 @@ OperadoresLogicos:
 extern int 	yylineno;
 extern char 	*yytext;
 
+//chamadas de funcoes da pilha dinamica
+extern void FPVazia(TipoPilha *Pilha);
+extern int Vazia(TipoPilha Pilha);
+extern void Empilha(TipoItem Item, TipoPilha *Pilha);
+extern void Desempilha(TipoPilha *Pilha, TipoItem *Item);
+extern int Tamanho(TipoPilha Pilha);
+
+TipoPilha minhaPilha;
+TipoItem item;
+
 int yyerror(char *s) {
-	if(strcmp(yytext, "\n")==0 || strcmp(yytext,"\r")==0) {
-		yylineno--;  
-		strcpy(yytext,"VAZIO");
-	}
-
-	printf("%s na Linha %d com o Token nao esperado %s \n", s, yylineno, yytext);
+        item.lineNo = yylineno;
+        item.errNo = yytext;
+        Empilha(item,&minhaPilha);
 }
 
-int main(int ac, char **av) {
-	extern FILE *yyin;
-	
-	if(ac > 1 && (yyin = fopen(av[1], "r")) == NULL) {
-		perror(av[1]);
-		exit(1);		
+int main(int argc, char *argv[] ) {
+        FPVazia(&minhaPilha);
+        extern FILE *yyin;
+  	yyin = fopen(argv[1], "r" );
+  	printf("Compilando...\n");
+  	yyparse();
+  	if (erros == 0) {
+        	printf("Sucesso!\n");
+        	return 0;
+  	}
+  	else {
+        	printf("You Suck!\n");
+        	while(Tamanho(minhaPilha) > 0) {
+                	printf("Linha:%d Erro:%s\n",minhaPilha.Topo->Item.lineNo, minhaPilha.Topo->Item.errNo);
+			Desempilha(&minhaPilha,&minhaPilha.Topo->Item);	
+  		}
+  		return 1;
 	}
 
-	if(!yyparse())
-		printf("Tudo foi OK!!\n");
-	else
-		printf("Algoritmo com erro.\n");
 }
+
+int yywrap(void) {
+  return 1;
+}
+
