@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "pilha.c"
 %}
 
 /*Estrutura da linguagem*/
@@ -51,7 +52,7 @@
 
 Input:
 	
-	| Input BlocoAlgoritmo
+	| Input BlocoAlgoritmo QuebrasComando 
 ;
 QuebraComando:
 	T_QUEBRA
@@ -67,12 +68,16 @@ InicioAlgoritmo:
 	T_ALGORITMO
 ;
 
+CabecalhoAlgoritmo:
+	InicioAlgoritmo NomeAlgoritmo QuebraComando
+;
+
 FimAlgoritmo:
 	T_FIMALGORITMO
 ;
 
 BlocoAlgoritmo: 
-	 InicioAlgoritmo BlocoCodigo FimAlgoritmo QuebrasComando
+	 CabecalhoAlgoritmo BlocoCodigo FimAlgoritmo
 ;
 
 String:
@@ -80,7 +85,7 @@ String:
 ;
 
 NomeAlgoritmo:
-    String
+	String
 ;
 
 InicioLogica:
@@ -88,21 +93,21 @@ InicioLogica:
 ;
 
 BlocoCodigo:
-	NomeAlgoritmo QuebrasComando BlocoDeclaracao InicioLogica BlocosLogicos 
+	BlocoDeclaracao InicioLogica BlocosLogicos 
 	| Comentarios BlocoCodigo	
 
 ;
 
 InicioBlocoDeclaracao:
-	T_VAR QuebrasComando
+	T_VAR
 ;
 
 BlocoDeclaracao:
-	| InicioBlocoDeclaracao BlocoVariaveis
-	| InicioBlocoDeclaracao		
+	| InicioBlocoDeclaracao QuebrasComando BlocoVariaveis
+	| InicioBlocoDeclaracao	QuebrasComando	
 	| Comentarios BlocoDeclaracao
 	| Funcoes
-	| InicioBlocoDeclaracao BlocoVariaveis Funcoes	
+	| InicioBlocoDeclaracao QuebrasComando BlocoVariaveis QuebrasComando Funcoes	
 ;
 
 DefineTipo:
@@ -113,7 +118,6 @@ BlocoVariaveis:
 	| Variaveis DefineTipo Tipos QuebrasComando BlocoVariaveis
 	| Variaveis DefineTipo TipoVetor QuebrasComando BlocoVariaveis
 	| Comentarios BlocoVariaveis
-	| QuebrasComando
 ;
 
 Separador:
@@ -470,33 +474,33 @@ NomeFuncao:
 
 DefineVarAssinatura:
 	T_DECLARAVAR
-|{yyerror("6");}
+	|{yyerror("6");}
 ;
 
 Assinatura:
 	Variaveis DefineVarAssinatura Tipos
 	| Assinatura Separador Assinatura
-|{yyerror("5");}
+	|{yyerror("5");}
 ;	
 
 InicioProcedimento:
 	T_PROCEDIMENTO
-|{yyerror("4");}
+	|{yyerror("4");}
 ;
 
 FimProcedimento:
 	T_FIMPROCEDIMENTO
-|{yyerror("3");}
+	|{yyerror("3");}
 ;
 
 NomeProcedimento:
 	Identificador AbreParenteses Assinatura FechaParenteses
-|{yyerror("2");}
+	|{yyerror("2");}
 ;
 
 BlocoProcedimento:
 	InicioProcedimento NomeProcedimento QuebrasComando BlocoDeclaracao InicioLogica BlocosLogicos FimProcedimento QuebrasComando
-|{yyerror("1");}
+	|{yyerror("1");}
 ;
 
 Comentarios:
@@ -749,9 +753,11 @@ extern int 	yylineno;
 extern char 	*yytext;
 
 int yyerror(char *s) {
-//	if (yylineno > 2)
-//		yylineno = yylineno - (yylineno-(yylineno-1));
-		
+	if(strcmp(yytext, "\n")==0 || strcmp(yytext,"\r")==0) {
+		yylineno--;  
+		strcpy(yytext,"VAZIO");
+	}
+
 	printf("%s na Linha %d com o Token nao esperado %s \n", s, yylineno, yytext);
 }
 

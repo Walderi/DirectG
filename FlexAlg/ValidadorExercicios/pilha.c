@@ -1,12 +1,12 @@
-include "pilha.h"
+#include "pilha.h"
 
 int push (TipoPilha pilha, int lineNo, char *Errno)
 {
-	
 	compPilha.pilha[compPilha.elementos].lineNo = lineNo;
-	compPilha.pilha[compPilha.elementos].Errno = Errno; 	
+	strcpy(compPilha.pilha[compPilha.elementos].Errno,Errno);
 	compPilha.elementos ++;
-        return 1; 
+
+	return 1;
 }
 
 void PilhaVazia(TipoPilha pilha)
@@ -16,8 +16,8 @@ void PilhaVazia(TipoPilha pilha)
 	for(i=0; i<MAX_TAM_PILHA; i++)
 	{
 		compPilha.pilha[i].lineNo=0;
-		compPilha.pilha[i].Errno = NULL; 	
-	} 
+		strdup(compPilha.pilha[i].Errno);
+	}
 }
 
 int pop_all (TipoPilha pilha)
@@ -27,8 +27,8 @@ int pop_all (TipoPilha pilha)
 	{
 		printf("Erro encontrado na linha %d, com o tolken %s \n",compPilha.pilha[i].lineNo, compPilha.pilha[i].Errno );
       		compPilha.pilha[i].lineNo=0;
-		compPilha.pilha[i].Errno = NULL; 
-        } 
+		strdup(compPilha.pilha[i].Errno);
+        }
         compPilha.elementos=0;
 	return 1;
 }
