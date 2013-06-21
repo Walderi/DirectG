@@ -1,0 +1,4 @@
+algoritmo
+inicio
+var
+var

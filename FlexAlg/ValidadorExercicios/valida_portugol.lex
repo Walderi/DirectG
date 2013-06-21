@@ -9,7 +9,7 @@ FIMALGORITMO 	[fF][iI][mM][aA][lL][gG][oO][rR][iI][tT][mM][Oo]
 INICIO 		[iI][nN][iI][cC][iI][oO]
 ESCREVAL 	[eE][Ss][cC][rR][eE][vV][aA][lL]
 
-STRING 		\".*\"
+STRING 		\"[^\"\n]*\"
 
 ESCREVA 	[eE][sS][cC][rR][eE][vV][aA]
 VAR 		[V|v][a|A][r|R]
@@ -75,7 +75,7 @@ QUEBRA		[\n\r]
 {FIMALGORITMO} 		return T_FIMALGORITMO;
 {INICIO} 		return T_INICIO;
 {ESCREVAL} 		return T_ESCREVAL;
-{STRING} 		return T_STRING;
+{STRING} 		return T_STRING;			 
 {ESCREVA} 		return T_ESCREVA;
 {DIVISAO} 		return T_DIVISAO;
 {COMENTARIO}		return T_COMENTARIO;
