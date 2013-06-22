@@ -254,6 +254,7 @@ BlocoLogico:
 	| FuncaoNativa QuebrasComando
 	| FuncaoNaoNativa QuebrasComando
 	| QuebrasComando BlocoLogico 
+	| error{erros++;yyerror("Erro no bloco logico");}
 ; 
 
 //------------------------------------------------------------------------------------------------LACOS
@@ -299,6 +300,7 @@ FimPara:
 
 AlcancePara:
 	T_DE
+	| error{erros++; yyerror("Esperado \"DE\"");}
 ;
 
 AtePara:
@@ -308,17 +310,20 @@ AtePara:
 InicioAlcancePara:
 	Variavel
 	| NumeroInteiro
+	| error{erros++;yyerror("Nao encontrado um numero ou variavel do tipo inteiro");}
 ;
 
 FimAlcancePara:
 	Variavel
 	| NumeroInteiro
+	| error{erros++;yyerror("Nao encontrado um numero ou variavel do tipo inteiro");}
 ;
 
 AlcancePasso:
 	Variavel
 	| NumeroInteiro
 	| ArtmExpr
+	| error{erros++;yyerror("Nao encontrado um numero ou variavel do tipo inteiro");}
 ;
 
 PassoPara:
@@ -328,10 +333,12 @@ PassoPara:
 ExprCondicaoPara:
 	AlcancePara InicioAlcancePara AtePara FimAlcancePara  
 	| AlcancePara InicioAlcancePara AtePara FimAlcancePara PassoPara AlcancePasso
+	| error{erros++;yyerror("Erro na condicao para");}
 ;
 
 FacaPara:
 	T_FACA
+	| error{erros++;yyerror("Esperado \"FACA\"");}
 ;
 
 BlocoPara:
@@ -344,17 +351,20 @@ InicioRepita:
 
 RepitaAte:
 	T_ATE
+	| error{erros++;yyerror("Espera \"ATE\" para finalizar o bloco REPITA");}
 ;
 
 ExprRepitaAte:
 	ExpressaoLogica
 	| AbreParenteses ExpressaoLogica FechaParenteses 
+	| error{erros++;yyerror("Erro na expressao do ATE");}
 ;
 
 //-----------------------------------------------------------------------------------------------------------------------REPITA
 
 BlocoRepita:
 	InicioRepita QuebrasComando BlocosLogicos RepitaAte ExprRepitaAte QuebrasComando
+	| error{erros++;yyerror("Erro no bloco REPITA");}
 ;
 
 //--------------------------------------------------------------------------------------------------DESVIOS
@@ -370,14 +380,17 @@ InicioSe:
 
 FimSe:
 	T_FIMSE
+	| error{erros++;yyerror("Esperado \"FIMSE\"");}
 ;
 
 DesvioEntao:
 	T_ENTAO
+	| error{erros++;yyerror("Esperado \"ENTAO\"");}
 ;
 
 DesvioSenao:
 	T_SENAO
+	| error{erros++;yyerror("Esperado \"SENAO\"");}
 ;
 
 //--------------------------------------------------------------------------------------------------------------------------------------SE
@@ -388,6 +401,7 @@ BlocosSe:
 	| InicioSe ExpressaoLogica DesvioEntao QuebrasComando BlocosLogicos BlocosSe FimSe QuebrasComando
 	| InicioSe ExpressaoLogica DesvioEntao QuebrasComando BlocosLogicos DesvioSenao QuebrasComando BlocosLogicos BlocosSe FimSe QuebrasComando
 	| InicioSe ExpressaoLogica DesvioEntao QuebrasComando BlocosLogicos BlocosSe DesvioSenao QuebrasComando BlocosLogicos BlocosSe FimSe QuebrasComando
+	| error{erros++;yyerror("Erro no Bloco SE");}
 ;
 
 InicioEscolha:
@@ -396,37 +410,45 @@ InicioEscolha:
 
 FimEscolha:
 	T_FIMESCOLHA
+	| error{erros++;yyerror("Esperado \"FIMESCOLHA\"");}
 ;
 
 AbreParenteses:
 	T_ABRE_PARENT
+	| error{erros++;yyerror("Esperado \"(\"");}
 ;
 
 FechaParenteses:
 	T_FECHA_PARENT
+	| error{erros++;yyerror("Esperado \")\"");}
 ;
 ExprEscolha:
 	Variavel
 	| AbreParenteses Variavel FechaParenteses	
+	| error{erros++;yyerror("Necessario uma variavel para ESCOLHA");}
 ;
 
-//-----------------------------------------------------------------------------------------------------------------------------------ESCOLHA
+//----------------------------------------------------------------------------------------------------------------------------------ESCOLHA
 
 BlocosEscolha:
 	InicioEscolha ExprEscolha QuebrasComando BlocoCasos FimEscolha QuebrasComando	
+	| error{erros++;yyerror("Erro no Bloco de ESCOLHA");}
 ;
 
 AbreCaso:
 	T_CASO
+	| error{erros++;yyerror("Necessario um CASO");}
 ;
 
 OutroCaso:
 	T_OUTROCASO
+	| error{erros++;yyerror("Necessario um OUTROCASO");}
 ;
 
 BlocosCaso:
 	AbreCaso SelecaoCasos QuebrasComando BlocosLogicos
 	| AbreCaso SelecaoCasos QuebrasComando BlocosLogicos BlocosCaso
+	| error{erros++;yyerror("Erro no bloco caso");}
 ;
 
 //--------------------------------------------------------------------------------------------------------------------------CASOS
@@ -439,6 +461,7 @@ Selecao:
 	| Variavel
 	| String
 	| TipoNumerico
+	| error{erros++;yyerror("Variavel de escolha errada");}
 ;
 
 SelecaoCasos:
@@ -463,24 +486,29 @@ IniciaFuncao:
 
 FimFuncao:
 	T_FIMFUNCAO
+	| error{erros++;yyerror("Esperado \"FIMFUNCAO\"");}
 ;
 
 DefinidorFuncao:
 	T_DECLARAVAR	
+	| error{erros++;yyerror("Esperado \":\"");}
 ;
 
 Funcao:
 	IniciaFuncao NomeFuncao DefinidorFuncao Tipos QuebrasComando BlocoDeclaracao InicioLogica BlocosLogicos Retorno QuebrasComando FimFuncao QuebrasComando 
+	| error{erros++;yyerror("Erro na declaracao de FUNCAO");}
 ;
 
 PalavraRetorno:
 	T_RETORNE
+	| error{erros++;yyerror("Esperado \"RETORNE\"");}
 ;
 
 ExprRetorno:
 	AbreParenteses String FechaParenteses
 	| String
 	| ArtmExpr
+	| error{erros++;yyerror("Parametro de retorno errado");}
 ;
 
 Retorno:
@@ -489,37 +517,37 @@ Retorno:
 
 NomeFuncao:
 	 Identificador AbreParenteses Assinatura FechaParenteses
+	| error{erros++;yyerror("Erro no nome da funcao");}
 ;
 
 DefineVarAssinatura:
 	T_DECLARAVAR
-	|{yyerror("6");}
+	| error{erros++;yyerror("Esperado \":\"");}
 ;
 
 Assinatura:
 	Variaveis DefineVarAssinatura Tipos
 	| Assinatura Separador Assinatura
-	|{yyerror("5");}
+	| error{erros++;yyerror("Erro no parametro da funcao");}
 ;	
 
 InicioProcedimento:
 	T_PROCEDIMENTO
-	|{yyerror("4");}
 ;
 
 FimProcedimento:
 	T_FIMPROCEDIMENTO
-	|{yyerror("3");}
+	| error{erros++;yyerror("Esperado \"FIMPROCEDIMENTO\"");}
 ;
 
 NomeProcedimento:
 	Identificador AbreParenteses Assinatura FechaParenteses
-	|{yyerror("2");}
+	| error{erros++;yyerror("Erro no nome do procedimento");}
 ;
 
 BlocoProcedimento:
 	InicioProcedimento NomeProcedimento QuebrasComando BlocoDeclaracao InicioLogica BlocosLogicos FimProcedimento QuebrasComando
-	|{yyerror("1");}
+	| error{erros++;yyerror("Erro no BlocoProcedimento");}
 ;
 
 Comentarios:
@@ -549,10 +577,12 @@ Atribuido:
 	| FuncaoRetornavel
 	| LogicoFalso
 	| LogicoVerdadeiro
+	| error{erros++;yyerror("Valor atribuido de forma errada");}
 ;
 
 Atribuicao:
 	Identificador Atribuidor Atribuido 
+	| error{erros++;yyerror("Esperado \"<-\"");}
 ;
 
 ExprSoma:
@@ -634,6 +664,7 @@ FuncaoNativa:
 FuncaoNaoNativa:
 	Identificador AbreParenteses  FechaParenteses
 	| Identificador AbreParenteses AssinaturaExistente  FechaParenteses
+	| error{erros++;yyerror("Funcao inexistente");}
 ;
 
 AssinaturaExistente:
@@ -645,6 +676,7 @@ AssinaturaExistente:
 	| FuncaoNaoNativa Separador AssinaturaExistente
 	| FuncaoNativa
 	| FuncaoNativa Separador AssinaturaExistente
+	| error{erros++;yyerror("Erro de assinatura de funcao");}
 ;
 
 InicioComprimento:
@@ -654,6 +686,7 @@ InicioComprimento:
 Comprimento:
 	InicioComprimento AbreParenteses Variavel FechaParenteses
 	| InicioComprimento AbreParenteses String FechaParenteses
+	| error{erros++;yyerror("Erro na funcao Compr()");}
 ;
 
 InicioCopia:
@@ -666,6 +699,7 @@ SegundoTermoCopia:
 
 Copia:
 	InicioCopia AbreParenteses Variavel Separador SegundoTermoCopia Separador NumeroInteiro FechaParenteses
+	| error{erros++;yyerror("Erro na funcao Copia");}
 ;
 
 InicioMaiusc:
@@ -674,6 +708,7 @@ InicioMaiusc:
 
 Maiusc:
 	InicioMaiusc AbreParenteses Variavel FechaParenteses
+	| error{erros++;yyerror("Erro no funcao Maiusc");}
 ;
 
 InicioRaiz:
@@ -682,10 +717,12 @@ InicioRaiz:
 
 Raiz: 
 	InicioRaiz AbreParenteses ArtmExpr FechaParenteses
+	| error{erros++;yyerror("Erro na funcao Raiz");}
 ;
 
 CasasDecimais:
 	|T_DECLARAVAR NumeroInteiro
+	| error{erros++;yyerror("Esperado \":NUMEROINTEIRO\"");}
 ;
 
 ExprEscreva:
@@ -694,10 +731,12 @@ ExprEscreva:
 	| ExprEscreva Separador ArtmExpr DefineTipo NumeroInteiro
 	| ExprEscreva Separador ArtmExpr
 	| ExprEscreva Separador ArtmExpr DefineTipo NumeroInteiro DefineTipo NumeroInteiro
+	| error{erros++;yyerror("Parametro improprio para funcao escreva");}
 ;
 
 ParametrosEscreva:
 	AbreParenteses ExprEscreva FechaParenteses
+	| error{erros++;yyerror("Erro na funcao Escreva");}
 ;
 
 InicioEscreva:
@@ -714,6 +753,7 @@ InicioEscreval:
 
 Escreval:
 	InicioEscreval ParametrosEscreva 	
+	| error{erros++;yyerror("Erro na funcao escreval");}
 ;
 
 InicioLeia:
@@ -722,7 +762,7 @@ InicioLeia:
 
 Leia:
 	InicioLeia AbreParenteses Variavel FechaParenteses
-	|{yyerror("paçoca");}
+	| error{erros++;yyerror("Erro na funcao leia (Antigo paçoca)");}
 ;
 
 CondicoesLogicas:
@@ -732,6 +772,7 @@ CondicoesLogicas:
 	| T_MENORIGUALQUE
 	| T_MAIORQUE
 	| T_MAIORIGUALQUE 
+	| error{erros++;yyerror("Erro na condicao logica");}
 ;
 
 ExpressaoLogica:
@@ -784,7 +825,7 @@ TipoItem item;
 
 int yyerror(char *s) {
         item.lineNo = yylineno;
-        item.errNo = yytext;
+        item.errNo = s;
         Empilha(item,&minhaPilha);
 }
 
