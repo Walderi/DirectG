@@ -29,9 +29,6 @@ typedef struct VetVariavel {
 	TipoVariavel variaveis[TAM_MAX_VARIAVEL];
 }VetVariavel;
 
-VetFuncao hashFuncao;
-VetVariavel hashVariavel;
-
 void hashfuncao_iniciar(VetFuncao *hashFuncao, VetVariavel *hashVariavel);
 void hashfuncao_inserir(char nome[], char tipodereturn[], VetFuncao *hashFuncao);
 int hashfuncao_busca( char nome[], char tiporeturn[], VetFuncao *hashFuncao);

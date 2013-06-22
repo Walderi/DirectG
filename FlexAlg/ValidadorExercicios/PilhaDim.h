@@ -12,6 +12,7 @@ typedef char* TipoString;
 typedef struct {
 	int lineNo;
 	TipoString errNo;
+	TipoString errMsg;
 } TipoItem;
 
 typedef struct TipoCelula *TipoApontador;

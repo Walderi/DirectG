@@ -67,7 +67,7 @@ teststr:
 	./valida_portugol ../../Exemplos\ Visualg/String/1.alg
 	./valida_portugol ../../Exemplos\ Visualg/String/2.alg
 	./valida_portugol ../../Exemplos\ Visualg/String/3.alg
-	 ./valida_portugol ../../Exemplos\ Visualg/String/4.alg
+	./valida_portugol ../../Exemplos\ Visualg/String/4.alg
 	./valida_portugol ../../Exemplos\ Visualg/String/5.alg
 
 

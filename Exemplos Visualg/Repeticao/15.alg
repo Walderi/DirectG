@@ -13,32 +13,36 @@ var
 	enesimoTermo : inteiro
 
 inicio
-	escreval("Escreva o tamanho da sequencia a ser gerada")
-    leia(enesimoTermo)
-    termo <- 0
+
+escreval("Escreva o tamanho da sequencia a ser gerada")
+leia(enesimoTermo)
+termo <- 0
     
-	//termo < enesimoTermo
-    enquanto(termo>0) faca
-    	se (termo = 0) 	entao
-    			valorFibonacci <- 0
-    			escreval(" ", valorFibonacci)
-    			senao se (termo = 1) entao 
+//termo < enesimoTermo
+enquanto (termo < enesimoTermo) faca
+	se (termo = 0) 	entao
+    		valorFibonacci <- 0
+    		escreval(" ", valorFibonacci)
+    		senao 
+			se (termo = 1) entao 
     				valorFibonacci <- 1
-	                escreval(" ", valorFibonacci)
-    					senao se (termo = 2) entao 
-    							valorFibonacci <- 1
+	                	escreval(" ", valorFibonacci)
+    				senao 
+					se (termo = 2) entao 
+    						valorFibonacci <- 1
 	               				termoAnterior <- 1
-	                            termoAnteriorAoAnterior <-0
-    							escreval(" ", valorFibonacci)
-    							senao se (termo > 2) entao
-    									termoAnteriorAoAnterior <- termoAnterior
-    					                termoAnterior <- valorFibonacci
-    					                valorFibonacci <- termoAnteriorAoAnterior + termoAnterior
-    					                escreval(" ", (valorFibonacci))
-    						    fimse 
+	                            		termoAnteriorAoAnterior <-0
+    						escreval(" ", valorFibonacci)
+    						senao
+							se (termo > 2) entao
+    								termoAnteriorAoAnterior <- termoAnterior
+    					               		termoAnterior <- valorFibonacci
+    					               		valorFibonacci <- termoAnteriorAoAnterior + termoAnterior
+    					               		escreval(" ", (valorFibonacci))
+    					    		fimse 
     					fimse
-    		    fimse 
-    	fimse
+			fimse 
+	fimse
     	termo <- termo + 1
 	fimenquanto    	
 fimalgoritmo

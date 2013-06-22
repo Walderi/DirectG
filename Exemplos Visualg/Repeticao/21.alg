@@ -12,30 +12,30 @@ inicio
 
       escreval("Entre Com o numero desejado:")
       leia(n)
-      se n=2 entao
-         p<-falso
-         interrompa
-         senao
-         se n=3 entao
+      se (n=2) entao
          p<-falso
          interrompa
       senao
-      m <- n\2
-      repita
-      l <- n mod m
-      se (l <> 0) entao
-         m <- m-1
+         se (n=3) entao
+            p<-falso
+            interrompa
          senao
-        p <- verdadeiro
-        interrompa
+            m <- n\2
+            repita
+            	l <- n mod m
+      		se (l <> 0) entao
+         		m <- m-1
+         	senao
+        		p <- verdadeiro
+        		interrompa
+      		fimse
+      	    ate (m<=1)
+      	 fimse
       fimse
-      ate (m<=1)
-      fimse
-      fimse
-      se p entao
+      se (p) entao
          escreval("não é primo")
-         senao
-      escreval("e primo")
+      senao
+      	 escreval("e primo")
       fimse
 
 fimalgoritmo

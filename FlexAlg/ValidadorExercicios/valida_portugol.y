@@ -6,6 +6,12 @@
 #include "PilhaDim.c"
 #include "hashDirectG.c"
 int erros=0;
+char escopo[30];
+char variavel[30];
+char tipo[30];
+
+VetFuncao hashFuncao;
+VetVariavel hashVariavel;
 %}
 
 /*Estrutura da linguagem*/
@@ -73,7 +79,7 @@ InicioAlgoritmo:
 ;
 
 CabecalhoAlgoritmo:
-	InicioAlgoritmo NomeAlgoritmo QuebraComando
+	InicioAlgoritmo NomeAlgoritmo {strcpy(escopo, "global");} QuebraComando
 ;
 
 FimAlgoritmo:
@@ -124,7 +130,7 @@ DefineTipo:
 ;
 
 BlocoVariaveis:
-	| Variaveis DefineTipo Tipos QuebrasComando BlocoVariaveis
+	| Variaveis DefineTipo Tipos QuebrasComando {hashvariavel_inserir(variavel, tipo, escopo, &hashVariavel);} BlocoVariaveis
 	| Variaveis DefineTipo TipoVetor QuebrasComando BlocoVariaveis
 	| Comentarios BlocoVariaveis
 ;
@@ -144,13 +150,13 @@ Variavel:
 ;
 
 Identificador:
-	T_IDENTIFICADOR
+	T_IDENTIFICADOR {/*variavel="$1";*/}
 	| VariavelVetor
 	| error{erros++;yyerror("Identificador invalido");}
 ;
 
 TipoInteiro:
-	T_INTEIRO
+	T_INTEIRO {/*tipo="$1";*/}
 ;
 
 TipoReal: 
@@ -175,7 +181,8 @@ Tipos:
 	TipoInteiro
 	| TipoReal
 	| TipoCaractere
-	| TipoLogico	
+	| TipoLogico
+	| error {erros++; yyerror("Tipo de dado invalido!"); }	
 ;
 
 AbreColchete:
@@ -731,6 +738,7 @@ ExprEscreva:
 	| ExprEscreva Separador ArtmExpr DefineTipo NumeroInteiro
 	| ExprEscreva Separador ArtmExpr
 	| ExprEscreva Separador ArtmExpr DefineTipo NumeroInteiro DefineTipo NumeroInteiro
+	| ExprEscreva Separador String
 	| error{erros++;yyerror("Parametro improprio para funcao escreva");}
 ;
 
@@ -820,18 +828,46 @@ extern void Empilha(TipoItem Item, TipoPilha *Pilha);
 extern void Desempilha(TipoPilha *Pilha, TipoItem *Item);
 extern int Tamanho(TipoPilha Pilha);
 
+//instanciacao elementos pilha
+
 TipoPilha minhaPilha;
 TipoItem item;
 
+//chamadas da tabela hash
+
+extern void hashfuncao_iniciar(VetFuncao *hashFuncao, VetVariavel *hashVariavel);
+extern void hashfuncao_inserir(char nome[], char tipodereturn[], VetFuncao *hashFuncao);
+extern int hashfuncao_busca( char nome[], char tiporeturn[], VetFuncao *hashFuncao);
+extern int hashfuncao_existe( char nome[], char tiporeturn[], VetFuncao *hashFuncao);
+extern void hashvariavel_inserir(char nome[], char tipo[], char escopo[], VetVariavel *hashVariavel);
+extern int hashvariavel_busca( char nome[], char tipo[], char escopo[],VetVariavel *hashVariavel );
+extern int hashvariavel_existe( char nome[], char tipo[], char escopo[], VetVariavel *hashVariavel );
+
+
+
 int yyerror(char *s) {
+        if (strcmp(yytext,"\n")==0 || strcmp(yytext,"\r")==0) {
+                yytext="VAZIO";
+		item.lineNo = yylineno--;
+        	item.errNo = yytext;
+        	item.errMsg = s;
+        	Empilha(item,&minhaPilha);
+        }
+	else {
+
         item.lineNo = yylineno;
-        item.errNo = s;
+        item.errNo = yytext;
+        item.errMsg = s;
         Empilha(item,&minhaPilha);
+	}
 }
+
 
 int main(int argc, char *argv[] ) {
         FPVazia(&minhaPilha);
         extern FILE *yyin;
+	short itemTopoNulo=1; //comeca com topo padrao nulo
+	hashfuncao_iniciar(&hashFuncao, &hashVariavel);
   	yyin = fopen(argv[1], "r" );
   	printf("Compilando...\n");
   	yyparse();
@@ -842,12 +878,18 @@ int main(int argc, char *argv[] ) {
   	else {
         	printf("You Suck!\n");
         	while(Tamanho(minhaPilha) > 0) {
-                	printf("Linha:%d Erro:%s\n",minhaPilha.Topo->Item.lineNo, minhaPilha.Topo->Item.errNo);
-			Desempilha(&minhaPilha,&minhaPilha.Topo->Item);	
-  		}
-  		return 1;
+  			if (itemTopoNulo == 0) {
+				printf("Mensagem de erro: %s\nNa linha:%d Token Encontrado:%s\n", minhaPilha.Topo->Item.errMsg,
+                                         minhaPilha.Topo->Item.lineNo, minhaPilha.Topo->Item.errNo);
+                        	Desempilha(&minhaPilha,&minhaPilha.Topo->Item);
+			}
+			else {
+				Desempilha(&minhaPilha,&minhaPilha.Topo->Item);
+				itemTopoNulo = 0;
+			}
+		}
+		return 1;
 	}
-
 }
 
 int yywrap(void) {
