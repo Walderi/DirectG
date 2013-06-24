@@ -3,13 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "PilhaDim.c"
-#include "hashDirectG.c"
+#include "pilha/PilhaDim.c"
+#include "hash/hashDirectG.c"
 int erros=0;
 char escopo[30];
 char variavel[30];
 char tipo[30];
-
+char* a;
 VetFuncao hashFuncao;
 VetVariavel hashVariavel;
 %}
@@ -150,7 +150,7 @@ Variavel:
 ;
 
 Identificador:
-	T_IDENTIFICADOR {/*variavel="$1";*/}
+	T_IDENTIFICADOR {/*sprintf(variavel,"%d",$1);*/}
 	| VariavelVetor
 	| error{erros++;yyerror("Identificador invalido");}
 ;
@@ -887,9 +887,9 @@ int main(int argc, char *argv[] ) {
 				Desempilha(&minhaPilha,&minhaPilha.Topo->Item);
 				itemTopoNulo = 0;
 			}
-		}
-		return 1;
+		}		
 	}
+	return 0;
 }
 
 int yywrap(void) {

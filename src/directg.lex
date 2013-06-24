@@ -1,7 +1,7 @@
 %option yylineno
 %{
 #define YYSTYPE double
-#include "valida_portugol.tab.h"
+#include "directg.tab.h"
 %}
 
 ALGORITMO 	[Aa][Ll][Gg][Oo][Rr][Ii][Tt][Mm][Oo]

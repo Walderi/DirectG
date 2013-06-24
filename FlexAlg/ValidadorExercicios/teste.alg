@@ -1,4 +1,0 @@
-algoritmo
-inicio
-var
-var
