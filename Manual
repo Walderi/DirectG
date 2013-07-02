@@ -1,0 +1,18 @@
+1. Rode o executavel na pasta bin pela linha de comando
+	a) digite o nome do arquivo .alg a ser executado 
+		ex: $ ./directg <arquivo-.alg>
+	b) rode o executavel e crie o arquivo .alg para verificacao simultanea
+	c) utilize o make para executar os exercicios ja feitos com os comandos 
+		make testseq : para testar os exercicios sobre algoritmos sequenciais
+		make testdec : para testar os exercicios sobre algoritmos de decisao
+		make testrep : para testar os exercicios sobre algoritmos de repeticao
+		make testfun : para testar os exercicios sobre algoritmos sobre funcoes
+		make teststr : para testar os exercicios sobre algoritmos sobre strings
+
+Obs. Antes de dar um 'make' na linha de comando execute o 'make clean'
+
+Descricao das pastas
+	bin : pasta com arquivos executaveies
+	src : codigos fontes necessarios para a criacao do executavel 
+	docs: arquivos de descricao do compilador
+	exemplos: exercicios ja feitos 

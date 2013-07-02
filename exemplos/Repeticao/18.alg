@@ -10,12 +10,14 @@ var
     maiorNumero : inteiro
     somaNumeros : inteiro
 	contador : inteiro
+	numero : inteiro
 
 inicio
 	escreval("digite a quantidade de valores")
     leia(qntValores)
-    soma <- 0
+    somaNumeros <- 0
     contador <- 0
+    
     
 	se (qntValores <= 1) entao
    		escreval("quantidade invalida")
@@ -25,11 +27,11 @@ inicio
        			escreval("digite um numero")
             		leia(numero)
             
-            		se (contador > 0) entao
-    				menorNumero <- numero
-    				maiorNumero <- numero
-    				contador <- contador +1	
-    			senao            	
+            		se (contador = 0) entao
+               				menorNumero <- numero
+    			              	maiorNumero <- numero
+    				            contador <- contador +1	
+	               senao            	
 	            		se(numero <= menorNumero) entao
 	            			menorNumero <- numero
 	            		senao
@@ -39,7 +41,7 @@ inicio
 	            			fimse
 	            		fimse
 	            	fimse
-	            	soma  <- soma + numero	
+	            	somaNumeros  <- somaNumeros + numero	
 	           	contador <- contador +1		
 	 
 		fimenquanto
@@ -47,5 +49,5 @@ inicio
             
       escreval("menor numero = ", menorNumero)
       escreval("maior numero =", maiorNumero)
-      escreval("soma = ", soma)
+      escreval("soma = ", somaNumeros)
 fimalgoritmo
