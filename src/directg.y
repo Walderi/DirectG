@@ -79,7 +79,7 @@ InicioAlgoritmo:
 ;
 
 CabecalhoAlgoritmo:
-	InicioAlgoritmo NomeAlgoritmo {strcpy(escopo, "global");} QuebraComando
+	InicioAlgoritmo NomeAlgoritmo {strcpy(escopo, "global");} QuebrasComando
 ;
 
 FimAlgoritmo:
@@ -130,7 +130,7 @@ DefineTipo:
 ;
 
 BlocoVariaveis:
-	| Variaveis DefineTipo Tipos QuebrasComando {hashvariavel_inserir(variavel, tipo, escopo, &hashVariavel);} BlocoVariaveis
+	| Variaveis DefineTipo Tipos QuebrasComando /*{hashvariavel_inserir(variavel, tipo, escopo, &hashVariavel);}*/ BlocoVariaveis
 	| Variaveis DefineTipo TipoVetor QuebrasComando BlocoVariaveis
 	| Comentarios BlocoVariaveis
 ;
@@ -408,6 +408,7 @@ BlocosSe:
 	| InicioSe ExpressaoLogica DesvioEntao QuebrasComando BlocosLogicos BlocosSe FimSe QuebrasComando
 	| InicioSe ExpressaoLogica DesvioEntao QuebrasComando BlocosLogicos DesvioSenao QuebrasComando BlocosLogicos BlocosSe FimSe QuebrasComando
 	| InicioSe ExpressaoLogica DesvioEntao QuebrasComando BlocosLogicos BlocosSe DesvioSenao QuebrasComando BlocosLogicos BlocosSe FimSe QuebrasComando
+	| InicioSe ExpressaoLogica DesvioEntao QuebrasComando BlocosLogicos DesvioSenao BlocosSe FimSe QuebrasComando
 	| error{erros++;yyerror("Erro no Bloco SE");}
 ;
 
@@ -879,8 +880,11 @@ int main(int argc, char *argv[] ) {
         	printf("You Suck!\n");
         	while(Tamanho(minhaPilha) > 0) {
   			if (itemTopoNulo == 0) {
-				printf("Mensagem de erro: %s\nNa linha:%d Token Encontrado:%s\n", minhaPilha.Topo->Item.errMsg,
-                                         minhaPilha.Topo->Item.lineNo, minhaPilha.Topo->Item.errNo);
+				//printf("Mensagem de erro: %s\nNa linha:%d Token Encontrado:%s\n", minhaPilha.Topo->Item.errMsg,
+                                //         minhaPilha.Topo->Item.lineNo, minhaPilha.Topo->Item.errNo);
+				
+				printf("Mensagem de erro: %s\nNa linha:%d Token Encontrado:\n", minhaPilha.Topo->Item.errMsg,
+                                         minhaPilha.Topo->Item.lineNo);
                         	Desempilha(&minhaPilha,&minhaPilha.Topo->Item);
 			}
 			else {

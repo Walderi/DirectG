@@ -1,10 +1,10 @@
 algoritmo "HAAAAAA"
 
-// Função : Altere o programa anterior para que ele aceite apenas
-// números entre 0 e 1000.
+// FunÃ§Ã£o : Altere o programa anterior para que ele aceite apenas
+// nÃºmeros entre 0 e 1000.
 // Autor : Walderi Moraes Willy Filho | George Lucas Gomes
 // Data : 6/5/2013
-// Seção de Declarações 
+// SeÃ§Ã£o de DeclaraÃ§Ãµes 
 var
   menor,maior,soma,num,qtNumeros,contador: inteiro
 inicio

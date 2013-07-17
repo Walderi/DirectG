@@ -7,7 +7,7 @@ algoritmo "primo"
 // SeÃ§Ã£o de DeclaraÃ§Ãµes
 var
 n,m,l: inteiro
-p : logico
+p: logico
 inicio
 
       escreval("Entre Com o numero desejado:")
@@ -25,9 +25,9 @@ inicio
             	l <- n mod m
       		se (l <> 0) entao
          		m <- m-1
-         	senao
-        		p <- verdadeiro
-        		interrompa
+         	senao 
+			p<- verdadeiro 
+			interrompa	
       		fimse
       	    ate (m<=1)
       	 fimse
