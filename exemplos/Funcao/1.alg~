@@ -8,13 +8,13 @@ algoritmo "Função para imprimir um número n, n vezes"
 
 // Seção de Declarações 
 
-
-
 var
 
 n : inteiro
 
-procedimento imprimeN( n:inteiro )
+
+
+procedimento imprimeN (n:inteiro)
 
 var
 

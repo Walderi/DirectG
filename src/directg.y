@@ -79,7 +79,7 @@ InicioAlgoritmo:
 ;
 
 CabecalhoAlgoritmo:
-	InicioAlgoritmo NomeAlgoritmo {strcpy(escopo, "global");} QuebrasComando
+	InicioAlgoritmo NomeAlgoritmo/* {strcpy(escopo, "global");}*/ QuebrasComando
 ;
 
 FimAlgoritmo:
@@ -107,6 +107,7 @@ InicioLogica:
 
 BlocoCodigo:
 	BlocoDeclaracao InicioLogica BlocosLogicos 
+	| BlocoDeclaracao Funcoes  InicioLogica BlocosLogicos
 	| Comentarios BlocoCodigo	
 
 ;
@@ -117,11 +118,10 @@ InicioBlocoDeclaracao:
 ;
 
 BlocoDeclaracao:
-	| InicioBlocoDeclaracao QuebrasComando BlocoVariaveis
+	| InicioBlocoDeclaracao QuebrasComando BlocoVariaveis 
 	| InicioBlocoDeclaracao	QuebrasComando	
 	| Comentarios BlocoDeclaracao
-	| Funcoes
-	| InicioBlocoDeclaracao QuebrasComando BlocoVariaveis QuebrasComando Funcoes	
+	
 ;
 
 DefineTipo:
@@ -315,13 +315,13 @@ AtePara:
 ;
 
 InicioAlcancePara:
-	Variavel
-	| NumeroInteiro
+	ArtmExpr
+	| NumeroInteiro 
 	| error{erros++;yyerror("Nao encontrado um numero ou variavel do tipo inteiro");}
 ;
 
 FimAlcancePara:
-	Variavel
+	ArtmExpr
 	| NumeroInteiro
 	| error{erros++;yyerror("Nao encontrado um numero ou variavel do tipo inteiro");}
 ;
