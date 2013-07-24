@@ -1,6 +1,6 @@
 %option yylineno
 %{
-#define YYSTYPE double 
+#define YYSTYPE double
 #include "directg.tab.h"
 %}
 

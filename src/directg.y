@@ -13,7 +13,7 @@
 extern int 	yylineno;
 extern char 	*yytext;
 
-yyerrork; //stack error correction
+//yyerrork; //stack error correction
 
 
 int erros=0;
@@ -215,7 +215,7 @@ Variaveis:
                  //strcat(param, " ");
                  strcat(param, hashVariavel.variaveis[id].nome);
 
-} Separador {strcat(param, ", ");} Variaveis 
+} Separador {strcat(param, ", ");} Variaveis {strcpy(param, "");}
 ;
 
 
@@ -645,7 +645,7 @@ Variaveisfuncao:
 		 strcat(param, " ");
                  strcat(param, hashVariavel.variaveis[id].nome);
           
-}  Separador{strcat(param, ", ");} Variaveisfuncao
+}  Separador{strcat(param, ", ");} Variaveisfuncao {strcpy(param,"");}
 ;	
 
 InicioProcedimento:
@@ -968,8 +968,8 @@ int yyerror(char *s) {
         item.lineNo = yylineno;
         item.errNo = yytext;
         item.errMsg = s;
-	yyerrork;
-	yyclearin;
+	//yyerrork;
+	//yyclearin;
 
         Empilha(item,&minhaPilha);
 	}
