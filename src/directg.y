@@ -13,17 +13,57 @@
 extern int 	yylineno;
 extern char 	*yytext;
 
+yyerrork; //stack error correction
+
 
 int erros=0;
 char escopo[30];
-char variavel[30];
+char nome[30];
+char nomefuncao[30];
 char tipo[30];
 char* a;
+char param[30];
 FILE *arquivo;
+int id; // Idenficação na busca
+
 
 VetFuncao hashFuncao;
 VetVariavel hashVariavel;
+
+void inserirvariavel(char *Nome,char * Tipo,char * escopo){
+int existe;
+	existe = hashvariavel_existe(Nome, Tipo, escopo , &hashVariavel);
+
+	if (existe == 0) {
+	hashvariavel_inserir(Nome, Tipo,escopo, &hashVariavel);
+	} else {
+	erros++;
+	yyerror("Variavel Já Declarada!! ");
+	}
+}
+
+void inserirfuncao(char* nome, char* tiporeturn){
+int existe;
+
+	existe = hashfuncao_existe(nome, tiporeturn, &hashFuncao);
+	if(existe == 0){
+	hashfuncao_inserir( nome, tiporeturn, &hashFuncao);
+	}else{
+	erros++;
+        yyerror("Função já Declarada!! ");
+	}
+
+
+}
+
+
+
 %}
+
+%error-verbose
+
+%locations
+
 
 /*Estrutura da linguagem*/
 %token T_ALGORITMO T_FIMALGORITMO
@@ -74,7 +114,7 @@ Input:
 	| Input BlocoAlgoritmo QuebrasComando 
 ;
 QuebraComando:
-	T_QUEBRA{fprintf(arquivo, ";");}
+	T_QUEBRA{fprintf(arquivo, "\n");}
 	| Comentario
 	| error{erros++;yyerror("Erro do fim de linha");}
 ;
@@ -86,18 +126,19 @@ QuebrasComando:
 
 InicioAlgoritmo:
 	T_ALGORITMO {arquivo = fopen("../Saida.C","w+"); 
-			fprintf(arquivo , "Algoritmo"); //nao esquecer do fclose
-		     	printf("OLHA O MEU NOME AKEEWW %s\n", $$=strdup(yytext)); //teste impressao
-			}
+		     	strcpy(escopo,"global");
+			fprintf(arquivo, "#include <stdio.h> \n#include <stdlib.h> \n#include <math.h> \n#include <string.h> \n ");			
+
+				}
 	| error{erros++;yyerror("Erro de inicializacao do programa esperado \" ALGORITMO \" ");}
 ;
 
 CabecalhoAlgoritmo:
-	InicioAlgoritmo NomeAlgoritmo QuebrasComando {strcpy($$,$1); printf("HSHH %s\n",$$);  }
+	InicioAlgoritmo NomeAlgoritmo QuebrasComando
 ;
 
 FimAlgoritmo:
-	T_FIMALGORITMO
+	T_FIMALGORITMO {fprintf(arquivo, "return 0; \n } ");}
 	| error{erros++;yyerror("Erro de termino de algoritmo esperado \" FIMALGORITMO \" ");}
 ;
 
@@ -115,13 +156,13 @@ NomeAlgoritmo:
 ;
 
 InicioLogica:
-	T_INICIO QuebrasComando {fprintf(arquivo, "int main() ");}
+	T_INICIO QuebrasComando 
 	| error{erros++;yyerror("Faltando \" INICIO \" ");} 
 ;
 
 BlocoCodigo:
-	BlocoDeclaracao InicioLogica BlocosLogicos 
-	| BlocoDeclaracao Funcoes  InicioLogica BlocosLogicos
+	BlocoDeclaracao InicioLogica {fprintf(arquivo, "int main() {");}  BlocosLogicos 
+	| BlocoDeclaracao Funcoes  InicioLogica {fprintf(arquivo, "int main() {");}   BlocosLogicos
 	| Comentarios BlocoCodigo	
 
 ;
@@ -144,7 +185,12 @@ DefineTipo:
 ;
 
 BlocoVariaveis:
-	| Variaveis DefineTipo Tipos QuebrasComando BlocoVariaveis  
+	| Variaveis DefineTipo Tipos {inserirvariavel(nome,tipo,escopo);
+					id = hashvariavel_busca(nome, tipo, escopo, &hashVariavel);
+				//	fprintf(arquivo, "%s	%s ;", hashVariavel.variaveis[id].tipo,hashVariavel.variaveis[id].nome); }
+									
+					fprintf(arquivo, "%s	%s ;", hashVariavel.variaveis[id].tipo,param); }
+				  QuebrasComando {strcpy(param,"");} BlocoVariaveis 
 	| Variaveis DefineTipo TipoVetor QuebrasComando BlocoVariaveis
 	| Comentarios BlocoVariaveis
 ;
@@ -155,40 +201,61 @@ Separador:
 ;
 
 Variaveis:
-	Variavel
-	| Variavel Separador Variaveis 
+	Variavel {inserirvariavel(nome,tipo,escopo); printf("%s %s",nome, tipo);
+                 id = hashvariavel_busca(nome, tipo, escopo, &hashVariavel);
+                 //strcat(param, hashVariavel.variaveis[id].tipo);
+                 //strcat(param, " ");
+                 strcat(param, hashVariavel.variaveis[id].nome);
+}
+
+
+	| Variavel { inserirvariavel(nome,tipo,escopo); printf("%s %s",nome, tipo);
+                 id = hashvariavel_busca(nome, tipo, escopo, &hashVariavel);
+                 //strcat(param, hashVariavel.variaveis[id].tipo);
+                 //strcat(param, " ");
+                 strcat(param, hashVariavel.variaveis[id].nome);
+
+} Separador {strcat(param, ", ");} Variaveis 
 ;
+
+
+//-------------------------------------------------------------------------------------------------------------------------------BLOCO DE TRAD SUPERIOR
+
 
 Variavel:
 	Identificador
 ;
 
 Identificador:
-	T_IDENTIFICADOR {/*sprintf(variavel,"%d",$1);*/}
+	T_IDENTIFICADOR{$$=strdup(yytext); strcpy(nome, $$);}
 	| VariavelVetor
 	| error{erros++;yyerror("Identificador invalido");}
 ;
 
 TipoInteiro:
-	T_INTEIRO {/*tipo="$1";*/}
+	T_INTEIRO {strcpy(tipo,"int"); }
 ;
 
 TipoReal: 
-	T_REAL
+	T_REAL {strcpy(tipo,"float"); }
+
 ;
 
 TipoCaractere:
-	T_CARACTERE
+	T_CARACTERE {strcpy(tipo,"char"); }
+
 ;
 
 TipoNumerico:
-	TipoInteiro
+	TipoInteiro 
+
 	| TipoReal
 	| error{erros++;yyerror("Esperado um numero");}
 ;
 
 TipoLogico:
-	T_LOGICO
+	T_LOGICO {strcpy(tipo,"short"); }
+
 ;
 
 Tipos:
@@ -197,7 +264,11 @@ Tipos:
 	| TipoCaractere
 	| TipoLogico
 	| error {erros++; yyerror("Tipo de dado invalido!"); }	
+
 ;
+
+//------------------------------------------------------------------------------------------PRE VETOR
+
 
 AbreColchete:
 	T_ABRECOLCHETE
@@ -517,7 +588,14 @@ DefinidorFuncao:
 ;
 
 Funcao:
-	IniciaFuncao NomeFuncao DefinidorFuncao Tipos QuebrasComando BlocoDeclaracao InicioLogica BlocosLogicos Retorno QuebrasComando FimFuncao QuebrasComando 
+	IniciaFuncao{strcpy(escopo,"local");} NomeFuncao DefinidorFuncao Tipos{ inserirfuncao(nomefuncao, tipo);   
+	         id = hashfuncao_busca(nomefuncao, tipo, &hashFuncao); printf("%d" , id);
+                 fprintf(arquivo, "%s    %s (%s) ", hashFuncao.funcoes[id].tiporeturn,hashFuncao.funcoes[id].nome,param);
+	 } QuebrasComando 
+		 
+
+	{fprintf(arquivo, "{ \n");}  BlocoDeclaracao InicioLogica
+	 BlocosLogicos Retorno QuebrasComando {strcpy(escopo,"global");} FimFuncao{fprintf(arquivo, "} \n");} QuebrasComando 
 	| error{erros++;yyerror("Erro na declaracao de FUNCAO");}
 ;
 
@@ -538,7 +616,7 @@ Retorno:
 ;
 
 NomeFuncao:
-	 Identificador AbreParenteses Assinatura FechaParenteses
+	 Identificador {strcpy (nomefuncao, nome);   }   AbreParenteses Assinatura FechaParenteses
 	| error{erros++;yyerror("Erro no nome da funcao");}
 ;
 
@@ -548,9 +626,26 @@ DefineVarAssinatura:
 ;
 
 Assinatura:
-	Variaveis DefineVarAssinatura Tipos
-	| Assinatura Separador Assinatura
+	Variaveisfuncao DefineVarAssinatura Tipos
+	| Assinatura  Separador Assinatura
 	| error{erros++;yyerror("Erro no parametro da funcao");}
+;
+
+Variaveisfuncao:
+        Variavel{ inserirvariavel(nome,tipo,escopo); printf("%s %s",nome, tipo);
+                 id = hashvariavel_busca(nome, tipo, escopo, &hashVariavel);
+                 strcat(param, hashVariavel.variaveis[id].tipo);
+                 strcat(param, " ");
+                 strcat(param, hashVariavel.variaveis[id].nome);
+
+}
+        | Variavel { inserirvariavel(nome,tipo,escopo); printf("%s %s",nome, tipo);
+                 id = hashvariavel_busca(nome, tipo, escopo, &hashVariavel);
+                 strcat(param, hashVariavel.variaveis[id].tipo);
+		 strcat(param, " ");
+                 strcat(param, hashVariavel.variaveis[id].nome);
+          
+}  Separador{strcat(param, ", ");} Variaveisfuncao
 ;	
 
 InicioProcedimento:
@@ -563,12 +658,15 @@ FimProcedimento:
 ;
 
 NomeProcedimento:
-	Identificador AbreParenteses Assinatura FechaParenteses
+	Identificador{strcpy (nomefuncao, nome); } AbreParenteses Assinatura FechaParenteses
 	| error{erros++;yyerror("Erro no nome do procedimento");}
 ;
 
 BlocoProcedimento:
-	InicioProcedimento NomeProcedimento QuebrasComando BlocoDeclaracao InicioLogica BlocosLogicos FimProcedimento QuebrasComando
+	InicioProcedimento{strcpy(escopo,"local");} NomeProcedimento{ inserirfuncao(nomefuncao, "void");
+                 id = hashfuncao_busca(nomefuncao, "void", &hashFuncao); printf("%d" , id);
+                 fprintf(arquivo, "%s    %s (%s) ", hashFuncao.funcoes[id].tiporeturn,hashFuncao.funcoes[id].nome,param);
+         } QuebrasComando BlocoDeclaracao InicioLogica BlocosLogicos FimProcedimento QuebrasComando
 	| error{erros++;yyerror("Erro no BlocoProcedimento");}
 ;
 
@@ -870,6 +968,9 @@ int yyerror(char *s) {
         item.lineNo = yylineno;
         item.errNo = yytext;
         item.errMsg = s;
+	yyerrork;
+	yyclearin;
+
         Empilha(item,&minhaPilha);
 	}
 }

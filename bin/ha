@@ -1,0 +1,13 @@
+algoritmo  "jennifer"
+
+var
+
+a3,doce: real
+a1,a2:inteiro
+a5: caractere
+
+inicio
+
+"haha"
+
+fimalgoritmo
