@@ -3022,7 +3022,9 @@ int main(int argc, char *argv[] ) {
 	hashfuncao_iniciar(&hashFuncao, &hashVariavel);
   	yyin = fopen(argv[1], "r" );
   	printf("Compilando...\n");
-  	yyparse();
+	FILE * arquivo = fopen ("../Saida.C", "w+");
+
+	yyparse();
   	if (erros == 0) {
         	printf("Sucesso!\n");
         	return 0;
