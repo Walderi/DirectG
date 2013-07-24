@@ -6,13 +6,20 @@
 #include <string.h>
 #include "pilha/PilhaDim.c"
 #include "hash/hashDirectG.c"
+
+//Pegar variavel com $$ -- Ex.: $$=strdup(yytext); , strdup(licate) OR strcpy($$,$1);
 #define YYSTYPE char*
+
+extern int 	yylineno;
+extern char 	*yytext;
+
+
 int erros=0;
 char escopo[30];
 char variavel[30];
 char tipo[30];
 char* a;
- FILE *arquivo;
+FILE *arquivo;
 
 VetFuncao hashFuncao;
 VetVariavel hashVariavel;
@@ -78,7 +85,10 @@ QuebrasComando:
 ;
 
 InicioAlgoritmo:
-	T_ALGORITMO {arquivo = fopen("../Saida.C","w+"); fprintf(arquivo , "Algoritmo");}
+	T_ALGORITMO {arquivo = fopen("../Saida.C","w+"); 
+			fprintf(arquivo , "Algoritmo"); //nao esquecer do fclose
+		     	printf("OLHA O MEU NOME AKEEWW %s\n", $$=strdup(yytext)); //teste impressao
+			}
 	| error{erros++;yyerror("Erro de inicializacao do programa esperado \" ALGORITMO \" ");}
 ;
 
@@ -822,9 +832,6 @@ OperadoresLogicos:
 
 
 %%
-
-extern int 	yylineno;
-extern char 	*yytext;
 
 //chamadas de funcoes da pilha dinamica
 extern void FPVazia(TipoPilha *Pilha);
