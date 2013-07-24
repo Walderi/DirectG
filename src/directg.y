@@ -93,7 +93,7 @@ InicioAlgoritmo:
 ;
 
 CabecalhoAlgoritmo:
-	InicioAlgoritmo NomeAlgoritmo/* {strcpy(escopo, "global");}*/ QuebrasComando
+	InicioAlgoritmo NomeAlgoritmo QuebrasComando {strcpy($$,$1); printf("HSHH %s\n",$$);  }
 ;
 
 FimAlgoritmo:
@@ -893,11 +893,11 @@ int main(int argc, char *argv[] ) {
         	printf("You Suck!\n");
         	while(Tamanho(minhaPilha) > 0) {
   			if (itemTopoNulo == 0) {
-				//printf("Mensagem de erro: %s\nNa linha:%d Token Encontrado:%s\n", minhaPilha.Topo->Item.errMsg,
-                                //         minhaPilha.Topo->Item.lineNo, minhaPilha.Topo->Item.errNo);
+				printf("Mensagem de erro: %s\nNa linha:%d Token Encontrado:%s\n", minhaPilha.Topo->Item.errMsg,
+                                         minhaPilha.Topo->Item.lineNo, minhaPilha.Topo->Item.errNo);
 				
-				printf("Mensagem de erro: %s\nNa linha:%d Token Encontrado:\n", minhaPilha.Topo->Item.errMsg,
-                                         minhaPilha.Topo->Item.lineNo);
+			//	printf("Mensagem de erro: %s\nNa linha:%d Token Encontrado:\n", minhaPilha.Topo->Item.errMsg,
+                        //                 minhaPilha.Topo->Item.lineNo);
                         	Desempilha(&minhaPilha,&minhaPilha.Topo->Item);
 			}
 			else {
