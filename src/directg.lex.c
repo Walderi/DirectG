@@ -748,7 +748,7 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "src/directg.lex"
 #line 3 "src/directg.lex"
-#define YYSTYPE double
+#define YYSTYPE double 
 #include "directg.tab.h"
 #line 754 "src/directg.lex.c"
 

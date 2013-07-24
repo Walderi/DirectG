@@ -1,15 +1,19 @@
 %{
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "pilha/PilhaDim.c"
 #include "hash/hashDirectG.c"
+#define YYSTYPE char*
 int erros=0;
 char escopo[30];
 char variavel[30];
 char tipo[30];
 char* a;
+ FILE *arquivo;
+
 VetFuncao hashFuncao;
 VetVariavel hashVariavel;
 %}
@@ -63,7 +67,7 @@ Input:
 	| Input BlocoAlgoritmo QuebrasComando 
 ;
 QuebraComando:
-	T_QUEBRA
+	T_QUEBRA{fprintf(arquivo, ";");}
 	| Comentario
 	| error{erros++;yyerror("Erro do fim de linha");}
 ;
@@ -74,7 +78,7 @@ QuebrasComando:
 ;
 
 InicioAlgoritmo:
-	T_ALGORITMO
+	T_ALGORITMO {arquivo = fopen("../Saida.C","w+"); fprintf(arquivo , "Algoritmo");}
 	| error{erros++;yyerror("Erro de inicializacao do programa esperado \" ALGORITMO \" ");}
 ;
 
@@ -101,7 +105,7 @@ NomeAlgoritmo:
 ;
 
 InicioLogica:
-	T_INICIO QuebrasComando
+	T_INICIO QuebrasComando {fprintf(arquivo, "int main() ");}
 	| error{erros++;yyerror("Faltando \" INICIO \" ");} 
 ;
 
@@ -130,7 +134,7 @@ DefineTipo:
 ;
 
 BlocoVariaveis:
-	| Variaveis DefineTipo Tipos QuebrasComando /*{hashvariavel_inserir(variavel, tipo, escopo, &hashVariavel);}*/ BlocoVariaveis
+	| Variaveis DefineTipo Tipos QuebrasComando BlocoVariaveis  
 	| Variaveis DefineTipo TipoVetor QuebrasComando BlocoVariaveis
 	| Comentarios BlocoVariaveis
 ;
@@ -871,7 +875,7 @@ int main(int argc, char *argv[] ) {
 	hashfuncao_iniciar(&hashFuncao, &hashVariavel);
   	yyin = fopen(argv[1], "r" );
   	printf("Compilando...\n");
-	FILE * arquivo = fopen ("../Saida.C", "w+");
+	
 
 	yyparse();
   	if (erros == 0) {
@@ -895,6 +899,7 @@ int main(int argc, char *argv[] ) {
 			}
 		}		
 	}
+	fclose(arquivo);
 	return 0;
 }
 

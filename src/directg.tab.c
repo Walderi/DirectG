@@ -68,23 +68,27 @@
 /* Line 268 of yacc.c  */
 #line 1 "src/directg.y"
 
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "pilha/PilhaDim.c"
 #include "hash/hashDirectG.c"
+#define YYSTYPE char*
 int erros=0;
 char escopo[30];
 char variavel[30];
 char tipo[30];
 char* a;
+ FILE *arquivo;
+
 VetFuncao hashFuncao;
 VetVariavel hashVariavel;
 
 
 /* Line 268 of yacc.c  */
-#line 88 "directg.tab.c"
+#line 92 "directg.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -205,7 +209,7 @@ typedef int YYSTYPE;
 
 
 /* Line 343 of yacc.c  */
-#line 209 "directg.tab.c"
+#line 213 "directg.tab.c"
 
 #ifdef short
 # undef short
@@ -617,38 +621,38 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    61,    61,    63,    66,    67,    68,    72,    73,    77,
-      78,    82,    86,    87,    91,    95,    99,   100,   104,   105,
-     109,   110,   111,   116,   117,   120,   121,   122,   123,   128,
-     129,   132,   133,   134,   135,   139,   140,   144,   145,   149,
-     153,   154,   155,   159,   163,   167,   171,   172,   173,   177,
-     181,   182,   183,   184,   185,   189,   190,   194,   195,   199,
-     203,   207,   211,   212,   216,   220,   221,   225,   229,   233,
-     237,   238,   245,   249,   250,   251,   252,   255,   256,   257,
-     258,   259,   260,   261,   262,   263,   264,   270,   271,   272,
-     277,   278,   282,   286,   287,   291,   292,   300,   304,   305,
-     309,   310,   314,   318,   319,   320,   324,   325,   326,   330,
-     331,   332,   333,   337,   341,   342,   343,   347,   348,   352,
-     356,   360,   361,   365,   366,   367,   373,   374,   380,   381,
-     385,   389,   390,   394,   395,   399,   400,   406,   407,   408,
-     409,   410,   411,   412,   416,   420,   421,   425,   426,   430,
-     431,   434,   435,   436,   442,   443,   447,   448,   452,   453,
-     457,   458,   459,   465,   468,   469,   470,   471,   472,   476,
-     477,   481,   482,   483,   487,   488,   492,   496,   497,   501,
-     502,   506,   507,   511,   512,   516,   517,   518,   519,   523,
-     527,   528,   532,   533,   537,   538,   539,   543,   547,   548,
-     552,   553,   557,   558,   562,   563,   567,   571,   575,   579,
-     583,   584,   585,   586,   587,   588,   592,   593,   597,   601,
-     605,   609,   613,   617,   621,   625,   629,   630,   634,   638,
-     642,   643,   644,   648,   649,   650,   651,   652,   653,   654,
-     655,   656,   657,   658,   659,   663,   664,   665,   666,   667,
-     668,   669,   673,   674,   675,   679,   680,   681,   682,   683,
-     684,   685,   686,   687,   691,   695,   696,   697,   701,   705,
-     709,   710,   714,   718,   719,   723,   727,   728,   731,   732,
-     733,   736,   737,   738,   739,   740,   741,   742,   743,   747,
-     748,   752,   756,   760,   764,   765,   769,   773,   774,   778,
-     779,   780,   781,   782,   783,   784,   788,   789,   790,   791,
-     796,   800,   804,   808,   812,   813,   814,   815
+       0,    65,    65,    67,    70,    71,    72,    76,    77,    81,
+      82,    86,    90,    91,    95,    99,   103,   104,   108,   109,
+     113,   114,   115,   120,   121,   124,   125,   126,   127,   132,
+     133,   136,   137,   138,   139,   143,   144,   148,   149,   153,
+     157,   158,   159,   163,   167,   171,   175,   176,   177,   181,
+     185,   186,   187,   188,   189,   193,   194,   198,   199,   203,
+     207,   211,   215,   216,   220,   224,   225,   229,   233,   237,
+     241,   242,   249,   253,   254,   255,   256,   259,   260,   261,
+     262,   263,   264,   265,   266,   267,   268,   274,   275,   276,
+     281,   282,   286,   290,   291,   295,   296,   304,   308,   309,
+     313,   314,   318,   322,   323,   324,   328,   329,   330,   334,
+     335,   336,   337,   341,   345,   346,   347,   351,   352,   356,
+     360,   364,   365,   369,   370,   371,   377,   378,   384,   385,
+     389,   393,   394,   398,   399,   403,   404,   410,   411,   412,
+     413,   414,   415,   416,   420,   424,   425,   429,   430,   434,
+     435,   438,   439,   440,   446,   447,   451,   452,   456,   457,
+     461,   462,   463,   469,   472,   473,   474,   475,   476,   480,
+     481,   485,   486,   487,   491,   492,   496,   500,   501,   505,
+     506,   510,   511,   515,   516,   520,   521,   522,   523,   527,
+     531,   532,   536,   537,   541,   542,   543,   547,   551,   552,
+     556,   557,   561,   562,   566,   567,   571,   575,   579,   583,
+     587,   588,   589,   590,   591,   592,   596,   597,   601,   605,
+     609,   613,   617,   621,   625,   629,   633,   634,   638,   642,
+     646,   647,   648,   652,   653,   654,   655,   656,   657,   658,
+     659,   660,   661,   662,   663,   667,   668,   669,   670,   671,
+     672,   673,   677,   678,   679,   683,   684,   685,   686,   687,
+     688,   689,   690,   691,   695,   699,   700,   701,   705,   709,
+     713,   714,   718,   722,   723,   727,   731,   732,   735,   736,
+     737,   740,   741,   742,   743,   744,   745,   746,   747,   751,
+     752,   756,   760,   764,   768,   769,   773,   777,   778,   782,
+     783,   784,   785,   786,   787,   788,   792,   793,   794,   795,
+     800,   804,   808,   812,   816,   817,   818,   819
 };
 #endif
 
@@ -2246,497 +2250,504 @@ yyreduce:
         case 6:
 
 /* Line 1806 of yacc.c  */
-#line 68 "src/directg.y"
+#line 72 "src/directg.y"
     {erros++;yyerror("Erro do fim de linha");}
+    break;
+
+  case 9:
+
+/* Line 1806 of yacc.c  */
+#line 81 "src/directg.y"
+    { printf("%d",yylineno ); arquivo = fopen("../Saida.C","w+"); fprintf(arquivo , "Algoritmo");}
     break;
 
   case 10:
 
 /* Line 1806 of yacc.c  */
-#line 78 "src/directg.y"
+#line 82 "src/directg.y"
     {erros++;yyerror("Erro de inicializacao do programa esperado \" ALGORITMO \" ");}
     break;
 
   case 13:
 
 /* Line 1806 of yacc.c  */
-#line 87 "src/directg.y"
+#line 91 "src/directg.y"
     {erros++;yyerror("Erro de termino de algoritmo esperado \" FIMALGORITMO \" ");}
     break;
 
   case 17:
 
 /* Line 1806 of yacc.c  */
-#line 100 "src/directg.y"
+#line 104 "src/directg.y"
     {erros++;yyerror("Algoritmo sem nome");}
     break;
 
   case 19:
 
 /* Line 1806 of yacc.c  */
-#line 105 "src/directg.y"
+#line 109 "src/directg.y"
     {erros++;yyerror("Faltando \" INICIO \" ");}
     break;
 
   case 24:
 
 /* Line 1806 of yacc.c  */
-#line 117 "src/directg.y"
+#line 121 "src/directg.y"
     {erros++;yyerror("Faltando \" VAR \" ");}
     break;
 
   case 30:
 
 /* Line 1806 of yacc.c  */
-#line 129 "src/directg.y"
+#line 133 "src/directg.y"
     {erros++;yyerror("Necessario \" : \" para declaracao da variavel");}
     break;
 
   case 36:
 
 /* Line 1806 of yacc.c  */
-#line 140 "src/directg.y"
+#line 144 "src/directg.y"
     {erros++;yyerror("Faltando \",\" para divisao de variaveis");}
     break;
 
   case 40:
 
 /* Line 1806 of yacc.c  */
-#line 153 "src/directg.y"
+#line 157 "src/directg.y"
     {/*sprintf(variavel,"%d",$1);*/}
     break;
 
   case 42:
 
 /* Line 1806 of yacc.c  */
-#line 155 "src/directg.y"
+#line 159 "src/directg.y"
     {erros++;yyerror("Identificador invalido");}
     break;
 
   case 43:
 
 /* Line 1806 of yacc.c  */
-#line 159 "src/directg.y"
+#line 163 "src/directg.y"
     {/*tipo="$1";*/}
     break;
 
   case 48:
 
 /* Line 1806 of yacc.c  */
-#line 173 "src/directg.y"
+#line 177 "src/directg.y"
     {erros++;yyerror("Esperado um numero");}
     break;
 
   case 54:
 
 /* Line 1806 of yacc.c  */
-#line 185 "src/directg.y"
+#line 189 "src/directg.y"
     {erros++; yyerror("Tipo de dado invalido!"); }
     break;
 
   case 56:
 
 /* Line 1806 of yacc.c  */
-#line 190 "src/directg.y"
+#line 194 "src/directg.y"
     {erros++;yyerror("Esperado \"(\"");}
     break;
 
   case 58:
 
 /* Line 1806 of yacc.c  */
-#line 195 "src/directg.y"
+#line 199 "src/directg.y"
     {erros++;yyerror("Esperado \")\"");}
     break;
 
   case 63:
 
 /* Line 1806 of yacc.c  */
-#line 212 "src/directg.y"
+#line 216 "src/directg.y"
     {erros++;yyerror("Erro na divisao do vetor \"..\"");}
     break;
 
   case 66:
 
 /* Line 1806 of yacc.c  */
-#line 221 "src/directg.y"
+#line 225 "src/directg.y"
     {erros++;yyerror("Faltou o termo de condicao do vetor \"DE\"");}
     break;
 
   case 86:
 
 /* Line 1806 of yacc.c  */
-#line 264 "src/directg.y"
+#line 268 "src/directg.y"
     {erros++;yyerror("Erro no bloco logico");}
     break;
 
   case 91:
 
 /* Line 1806 of yacc.c  */
-#line 278 "src/directg.y"
+#line 282 "src/directg.y"
     {erros++; yyerror("Esperado \"FACA\"");}
     break;
 
   case 94:
 
 /* Line 1806 of yacc.c  */
-#line 287 "src/directg.y"
+#line 291 "src/directg.y"
     {erros++;yyerror("Esperado \"FIMENQUANTO\"");}
     break;
 
   case 96:
 
 /* Line 1806 of yacc.c  */
-#line 292 "src/directg.y"
+#line 296 "src/directg.y"
     {erros++; yyerror("Erro no bloco ENQUANTO");}
     break;
 
   case 99:
 
 /* Line 1806 of yacc.c  */
-#line 305 "src/directg.y"
+#line 309 "src/directg.y"
     {erros++;yyerror("Esperado \"FIMPARA\"");}
     break;
 
   case 101:
 
 /* Line 1806 of yacc.c  */
-#line 310 "src/directg.y"
+#line 314 "src/directg.y"
     {erros++; yyerror("Esperado \"DE\"");}
     break;
 
   case 105:
 
 /* Line 1806 of yacc.c  */
-#line 320 "src/directg.y"
+#line 324 "src/directg.y"
     {erros++;yyerror("Nao encontrado um numero ou variavel do tipo inteiro");}
     break;
 
   case 108:
 
 /* Line 1806 of yacc.c  */
-#line 326 "src/directg.y"
+#line 330 "src/directg.y"
     {erros++;yyerror("Nao encontrado um numero ou variavel do tipo inteiro");}
     break;
 
   case 112:
 
 /* Line 1806 of yacc.c  */
-#line 333 "src/directg.y"
+#line 337 "src/directg.y"
     {erros++;yyerror("Nao encontrado um numero ou variavel do tipo inteiro");}
     break;
 
   case 116:
 
 /* Line 1806 of yacc.c  */
-#line 343 "src/directg.y"
+#line 347 "src/directg.y"
     {erros++;yyerror("Erro na condicao para");}
     break;
 
   case 118:
 
 /* Line 1806 of yacc.c  */
-#line 348 "src/directg.y"
+#line 352 "src/directg.y"
     {erros++;yyerror("Esperado \"FACA\"");}
     break;
 
   case 122:
 
 /* Line 1806 of yacc.c  */
-#line 361 "src/directg.y"
+#line 365 "src/directg.y"
     {erros++;yyerror("Espera \"ATE\" para finalizar o bloco REPITA");}
     break;
 
   case 125:
 
 /* Line 1806 of yacc.c  */
-#line 367 "src/directg.y"
+#line 371 "src/directg.y"
     {erros++;yyerror("Erro na expressao do ATE");}
     break;
 
   case 127:
 
 /* Line 1806 of yacc.c  */
-#line 374 "src/directg.y"
+#line 378 "src/directg.y"
     {erros++;yyerror("Erro no bloco REPITA");}
     break;
 
   case 132:
 
 /* Line 1806 of yacc.c  */
-#line 390 "src/directg.y"
+#line 394 "src/directg.y"
     {erros++;yyerror("Esperado \"FIMSE\"");}
     break;
 
   case 134:
 
 /* Line 1806 of yacc.c  */
-#line 395 "src/directg.y"
+#line 399 "src/directg.y"
     {erros++;yyerror("Esperado \"ENTAO\"");}
     break;
 
   case 136:
 
 /* Line 1806 of yacc.c  */
-#line 400 "src/directg.y"
+#line 404 "src/directg.y"
     {erros++;yyerror("Esperado \"SENAO\"");}
     break;
 
   case 143:
 
 /* Line 1806 of yacc.c  */
-#line 412 "src/directg.y"
+#line 416 "src/directg.y"
     {erros++;yyerror("Erro no Bloco SE");}
     break;
 
   case 146:
 
 /* Line 1806 of yacc.c  */
-#line 421 "src/directg.y"
+#line 425 "src/directg.y"
     {erros++;yyerror("Esperado \"FIMESCOLHA\"");}
     break;
 
   case 148:
 
 /* Line 1806 of yacc.c  */
-#line 426 "src/directg.y"
+#line 430 "src/directg.y"
     {erros++;yyerror("Esperado \"(\"");}
     break;
 
   case 150:
 
 /* Line 1806 of yacc.c  */
-#line 431 "src/directg.y"
+#line 435 "src/directg.y"
     {erros++;yyerror("Esperado \")\"");}
     break;
 
   case 153:
 
 /* Line 1806 of yacc.c  */
-#line 436 "src/directg.y"
+#line 440 "src/directg.y"
     {erros++;yyerror("Necessario uma variavel para ESCOLHA");}
     break;
 
   case 155:
 
 /* Line 1806 of yacc.c  */
-#line 443 "src/directg.y"
+#line 447 "src/directg.y"
     {erros++;yyerror("Erro no Bloco de ESCOLHA");}
     break;
 
   case 157:
 
 /* Line 1806 of yacc.c  */
-#line 448 "src/directg.y"
+#line 452 "src/directg.y"
     {erros++;yyerror("Necessario um CASO");}
     break;
 
   case 159:
 
 /* Line 1806 of yacc.c  */
-#line 453 "src/directg.y"
+#line 457 "src/directg.y"
     {erros++;yyerror("Necessario um OUTROCASO");}
     break;
 
   case 162:
 
 /* Line 1806 of yacc.c  */
-#line 459 "src/directg.y"
+#line 463 "src/directg.y"
     {erros++;yyerror("Erro no bloco caso");}
     break;
 
   case 168:
 
 /* Line 1806 of yacc.c  */
-#line 472 "src/directg.y"
+#line 476 "src/directg.y"
     {erros++;yyerror("Variavel de escolha errada");}
     break;
 
   case 178:
 
 /* Line 1806 of yacc.c  */
-#line 497 "src/directg.y"
+#line 501 "src/directg.y"
     {erros++;yyerror("Esperado \"FIMFUNCAO\"");}
     break;
 
   case 180:
 
 /* Line 1806 of yacc.c  */
-#line 502 "src/directg.y"
+#line 506 "src/directg.y"
     {erros++;yyerror("Esperado \":\"");}
     break;
 
   case 182:
 
 /* Line 1806 of yacc.c  */
-#line 507 "src/directg.y"
+#line 511 "src/directg.y"
     {erros++;yyerror("Erro na declaracao de FUNCAO");}
     break;
 
   case 184:
 
 /* Line 1806 of yacc.c  */
-#line 512 "src/directg.y"
+#line 516 "src/directg.y"
     {erros++;yyerror("Esperado \"RETORNE\"");}
     break;
 
   case 188:
 
 /* Line 1806 of yacc.c  */
-#line 519 "src/directg.y"
+#line 523 "src/directg.y"
     {erros++;yyerror("Parametro de retorno errado");}
     break;
 
   case 191:
 
 /* Line 1806 of yacc.c  */
-#line 528 "src/directg.y"
+#line 532 "src/directg.y"
     {erros++;yyerror("Erro no nome da funcao");}
     break;
 
   case 193:
 
 /* Line 1806 of yacc.c  */
-#line 533 "src/directg.y"
+#line 537 "src/directg.y"
     {erros++;yyerror("Esperado \":\"");}
     break;
 
   case 196:
 
 /* Line 1806 of yacc.c  */
-#line 539 "src/directg.y"
+#line 543 "src/directg.y"
     {erros++;yyerror("Erro no parametro da funcao");}
     break;
 
   case 199:
 
 /* Line 1806 of yacc.c  */
-#line 548 "src/directg.y"
+#line 552 "src/directg.y"
     {erros++;yyerror("Esperado \"FIMPROCEDIMENTO\"");}
     break;
 
   case 201:
 
 /* Line 1806 of yacc.c  */
-#line 553 "src/directg.y"
+#line 557 "src/directg.y"
     {erros++;yyerror("Erro no nome do procedimento");}
     break;
 
   case 203:
 
 /* Line 1806 of yacc.c  */
-#line 558 "src/directg.y"
+#line 562 "src/directg.y"
     {erros++;yyerror("Erro no BlocoProcedimento");}
     break;
 
   case 215:
 
 /* Line 1806 of yacc.c  */
-#line 588 "src/directg.y"
+#line 592 "src/directg.y"
     {erros++;yyerror("Valor atribuido de forma errada");}
     break;
 
   case 217:
 
 /* Line 1806 of yacc.c  */
-#line 593 "src/directg.y"
+#line 597 "src/directg.y"
     {erros++;yyerror("Esperado \"<-\"");}
     break;
 
   case 227:
 
 /* Line 1806 of yacc.c  */
-#line 630 "src/directg.y"
+#line 634 "src/directg.y"
     {erros++;yyerror("Esperado um numero do tipo inteiro");}
     break;
 
   case 254:
 
 /* Line 1806 of yacc.c  */
-#line 675 "src/directg.y"
+#line 679 "src/directg.y"
     {erros++;yyerror("Funcao inexistente");}
     break;
 
   case 263:
 
 /* Line 1806 of yacc.c  */
-#line 687 "src/directg.y"
+#line 691 "src/directg.y"
     {erros++;yyerror("Erro de assinatura de funcao");}
     break;
 
   case 267:
 
 /* Line 1806 of yacc.c  */
-#line 697 "src/directg.y"
+#line 701 "src/directg.y"
     {erros++;yyerror("Erro na funcao Compr()");}
     break;
 
   case 271:
 
 /* Line 1806 of yacc.c  */
-#line 710 "src/directg.y"
+#line 714 "src/directg.y"
     {erros++;yyerror("Erro na funcao Copia");}
     break;
 
   case 274:
 
 /* Line 1806 of yacc.c  */
-#line 719 "src/directg.y"
+#line 723 "src/directg.y"
     {erros++;yyerror("Erro no funcao Maiusc");}
     break;
 
   case 277:
 
 /* Line 1806 of yacc.c  */
-#line 728 "src/directg.y"
+#line 732 "src/directg.y"
     {erros++;yyerror("Erro na funcao Raiz");}
     break;
 
   case 280:
 
 /* Line 1806 of yacc.c  */
-#line 733 "src/directg.y"
+#line 737 "src/directg.y"
     {erros++;yyerror("Esperado \":NUMEROINTEIRO\"");}
     break;
 
   case 288:
 
 /* Line 1806 of yacc.c  */
-#line 743 "src/directg.y"
+#line 747 "src/directg.y"
     {erros++;yyerror("Parametro improprio para funcao escreva");}
     break;
 
   case 290:
 
 /* Line 1806 of yacc.c  */
-#line 748 "src/directg.y"
+#line 752 "src/directg.y"
     {erros++;yyerror("Erro na funcao Escreva");}
     break;
 
   case 295:
 
 /* Line 1806 of yacc.c  */
-#line 765 "src/directg.y"
+#line 769 "src/directg.y"
     {erros++;yyerror("Erro na funcao escreval");}
     break;
 
   case 298:
 
 /* Line 1806 of yacc.c  */
-#line 774 "src/directg.y"
+#line 778 "src/directg.y"
     {erros++;yyerror("Erro na funcao leia (Antigo paçoca)");}
     break;
 
   case 305:
 
 /* Line 1806 of yacc.c  */
-#line 784 "src/directg.y"
+#line 788 "src/directg.y"
     {erros++;yyerror("Erro na condicao logica");}
     break;
 
 
 
 /* Line 1806 of yacc.c  */
-#line 2740 "directg.tab.c"
+#line 2751 "directg.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2967,7 +2978,7 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 820 "src/directg.y"
+#line 824 "src/directg.y"
 
 
 extern int 	yylineno;
@@ -3022,7 +3033,7 @@ int main(int argc, char *argv[] ) {
 	hashfuncao_iniciar(&hashFuncao, &hashVariavel);
   	yyin = fopen(argv[1], "r" );
   	printf("Compilando...\n");
-	FILE * arquivo = fopen ("../Saida.C", "w+");
+	
 
 	yyparse();
   	if (erros == 0) {
@@ -3046,6 +3057,7 @@ int main(int argc, char *argv[] ) {
 			}
 		}		
 	}
+	fclose(arquivo);
 	return 0;
 }
 

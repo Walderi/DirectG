@@ -12,6 +12,7 @@ clean:
 	rm -rf src/directg.tab.c
 	rm -rf src/directg.lex.c
 	rm -rf bin/directg
+	rm -rf Saida.C
 	@ echo Cleaned!
 
 testseq:
