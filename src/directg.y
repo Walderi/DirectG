@@ -20,9 +20,12 @@ int erros=0;
 char escopo[30];
 char nome[30];
 char  *variavel;
+char *NomeVetor;
 char nomefuncao[30];
 char tipo[30];
 char* a;
+int posInicial;
+int posFinal;
 char param[30];
 FILE *arquivo;
 int id; // Idenficação na busca
@@ -139,7 +142,7 @@ QuebrasComando:
 InicioAlgoritmo:
 	T_ALGORITMO {arquivo = fopen("../Saida.C","w+"); 
 		     	strcpy(escopo,"global");
-			fprintf(arquivo, "#include <stdio.h> \n#include <stdlib.h> \n#include <math.h> \n#include <string.h> \n#define false 0\n#define true 1  ");			
+			fprintf(arquivo, "#include <stdio.h>\n#include<ctype.h> \n#include <stdlib.h> \n#include <math.h> \n#include <string.h> \n#define false 0\n#define true 1  ");			
 
 				}
 	| error{erros++;yyerror("Erro de inicializacao do programa esperado \" ALGORITMO \" ");}
@@ -204,7 +207,10 @@ BlocoVariaveis:
 									
 					fprintf(arquivo, "%s	%s ;", hashVariavel.variaveis[id].tipo,param); }
 				  QuebrasComando {strcpy(param,"");} BlocoVariaveis 
-	| Variaveis DefineTipo TipoVetor QuebrasComando BlocoVariaveis
+	| Variaveis DefineTipo TipoVetor {inserirvariavel(nome, tipo, escopo);
+					  id = hashvariavel_busca(nome,tipo,escopo, &hashVariavel);
+					  posFinal = posFinal - posInicial;
+					  fprintf(arquivo, "%s    %s[ %d ] ;", hashVariavel.variaveis[id].tipo,param, posFinal);} QuebrasComando BlocoVariaveis
 	| Comentarios BlocoVariaveis
 ;
 
@@ -301,7 +307,7 @@ ExprInternaColcheteVetor:
 ;
 
 PosInicialVetor:
-	NumeroInteiro
+	NumeroInteiroInicialVetor
 ;
 
 EntrePosVetor:
@@ -310,7 +316,17 @@ EntrePosVetor:
 ;
 
 PosFinalVetor:
-	NumeroInteiro
+	NumeroInteiroFinalVetor
+;
+
+NumeroInteiroInicialVetor:
+	 T_NUMINTEIRO {$$=strdup(yytext); posInicial=atoi($$);}
+        | error{erros++;yyerror("Esperado um numero do tipo inteiro");}
+;
+
+NumeroInteiroFinalVetor:
+         T_NUMINTEIRO {$$=strdup(yytext); posFinal=atoi($$);}
+        | error{erros++;yyerror("Esperado um numero do tipo inteiro");}
 ;
 
 DefineTipoVetor:
@@ -323,7 +339,7 @@ TipoDoTipoVetor:
 ;
 
 NomeVetor:
-	T_VETOR
+	T_VETOR{ NomeVetor = strdup(yytext); }
 ;
 
 TipoVetor: 
@@ -371,12 +387,12 @@ Lacos:
 
 //------------------------------------------------------------------------------------------------------------INICIO ENQUANTO
 FacaEnquanto:
-	T_FACA{fprintf(arquivo,"{ \n ");}
+	T_FACA{fprintf(arquivo,")  { \n ");}
 	| error{erros++; yyerror("Esperado \"FACA\"");}
 ;
 
 InicioEnquanto:
-	T_ENQUANTO {fprintf(arquivo, "While " );}
+	T_ENQUANTO {fprintf(arquivo, "While ( " );}
 ;
 
 FimEnquanto:
@@ -478,7 +494,7 @@ Desvios:
 ;
 
 InicioSe:
-	T_SE{fprintf(arquivo, " if ");}
+	T_SE{fprintf(arquivo, " if ( ");}
 ;
 
 FimSe:
@@ -487,7 +503,7 @@ FimSe:
 ;
 
 DesvioEntao:
-	T_ENTAO{fprintf(arquivo, " {\n");}
+	T_ENTAO{fprintf(arquivo, " ) {\n");}
 	| error{erros++;yyerror("Esperado \"ENTAO\"");}
 ;
 
@@ -764,7 +780,7 @@ NumeroReal:
 ;
 
 Pi:
-	T_PI
+	T_PI {$$=strdup(yytext);  fprintf(arquivo,"%s",$$);}
 ;
 
 Numero:
@@ -784,7 +800,7 @@ ArtmExpr:
 	| ArtmExpr ExprMod ArtmExpr   
 	| Negativo ArtmExpr  
 	| ArtmExpr ExprPot ArtmExpr  
-	| AbreParenteses ArtmExpr FechaParenteses  
+	| AbreParenteses{fprintf(arquivo, "(");} ArtmExpr{fprintf(arquivo, "(");}  FechaParenteses  
     	| FuncaoRetornavel
 ;
 //-----------------------------------------------------------------------FUNCAO NATIVA
@@ -817,17 +833,17 @@ AssinaturaExistente:
 ;
 
 InicioComprimento:
-	T_COMPR
+	T_COMPR{fprintf(arquivo,"strlen");}
 ;
 
 Comprimento:
-	InicioComprimento AbreParenteses Variavel {existeVariavel(variavel);}  FechaParenteses
-	| InicioComprimento AbreParenteses String FechaParenteses
+	InicioComprimento AbreParenteses {fprintf(arquivo, "(");}  Variavel {existeVariavel(variavel);} {fprintf(arquivo, ")");}  FechaParenteses
+	| InicioComprimento AbreParenteses {fprintf(arquivo, "(");}   String {fprintf(arquivo, ")");}   FechaParenteses
 /*	| error{erros++;yyerror("Erro na funcao Compr()");}*/
 ;
 
 InicioCopia:
-	T_COPIA
+	T_COPIA{fprintf(arquivo,"strcpy");}
 ;
 
 SegundoTermoCopia:
@@ -835,25 +851,25 @@ SegundoTermoCopia:
 ;
 
 Copia:
-	InicioCopia AbreParenteses Variavel {existeVariavel(variavel);}  Separador SegundoTermoCopia Separador NumeroInteiro FechaParenteses
+	InicioCopia AbreParenteses Variavel {existeVariavel(variavel);}  Separador SegundoTermoCopia Separador NumeroInteiro FechaParenteses 
 	| error{erros++;yyerror("Erro na funcao Copia");}
 ;
 
 InicioMaiusc:
-	T_MAIUSC
+	T_MAIUSC{fprintf(arquivo,"toupper");}
 ;
 
 Maiusc:
-	InicioMaiusc AbreParenteses Variavel {existeVariavel(variavel);}  FechaParenteses
+	InicioMaiusc AbreParenteses {fprintf(arquivo, "(");}  Variavel {existeVariavel(variavel);} {fprintf(arquivo, ")");}   FechaParenteses
 /*	| error{erros++;yyerror("Erro no funcao Maiusc");}*/
 ;
 
 InicioRaiz:
-	T_RAIZQ
+	T_RAIZQ {fprintf(arquivo,"sqrt");}
 ;
 
 Raiz: 
-	InicioRaiz AbreParenteses ArtmExpr FechaParenteses
+	InicioRaiz AbreParenteses {fprintf(arquivo, "(");}  ArtmExpr {fprintf(arquivo, ")");}    FechaParenteses 
 /*	| error{erros++;yyerror("Erro na funcao Raiz");} */
 ;
 
@@ -867,13 +883,13 @@ ExprEscreva:
 	| ArtmExpr CasasDecimais
 	| ExprEscreva Separador ArtmExpr DefineTipo NumeroInteiro
 	| ExprEscreva Separador ArtmExpr
-	| ExprEscreva Separador ArtmExpr DefineTipo NumeroInteiro DefineTipo NumeroInteiro
-	| ExprEscreva Separador String
+	| ExprEscreva Separador  ArtmExpr DefineTipo NumeroInteiro DefineTipo NumeroInteiro
+	| ExprEscreva Separador  String
 /*	| error{erros++;yyerror("Parametro improprio para funcao escreva");}*/
 ;
 
 ParametrosEscreva:
-	AbreParenteses ExprEscreva FechaParenteses
+	AbreParenteses{fprintf(arquivo, " (   ");} ExprEscreva {fprintf(arquivo, "  ) ");}  FechaParenteses
 	| error{erros++;yyerror("Erro na funcao Escreva");}
 ;
 
