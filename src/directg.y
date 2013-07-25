@@ -22,6 +22,7 @@ char nome[30];
 char  *variavel;
 char *NomeVetor;
 char nomefuncao[30];
+char*  nomeFuncao;
 char tipo[30];
 char* a;
 int posInicial;
@@ -70,6 +71,16 @@ int existe;
        	//	 yyerror("Essa variavel não existe ");
         }
 
+}
+
+void existeFuncao(char *nome, char* tipo) {
+int existe;
+	existe = hashfuncao_existe(nome, tipo, &hashFuncao);
+	if (existe == 1) {
+		fprintf(arquivo, " %s ", nome);
+	} else {
+		//tes
+	}
 }
 
 
@@ -249,7 +260,7 @@ Variavel:
 ;
 
 Identificador:
-	T_IDENTIFICADOR{$$=strdup(yytext); strcpy(nome, $$); variavel =$$;}
+	T_IDENTIFICADOR{$$=strdup(yytext); strcpy(nome, $$); variavel =$$; nomeFuncao =$$;}
 	| VariavelVetor
 	| error{erros++;yyerror("Identificador invalido",yytext);}
 ;
@@ -618,7 +629,7 @@ DefinidorFuncao:
 
 Funcao:
 	IniciaFuncao{strcpy(escopo,"local");} NomeFuncao DefinidorFuncao Tipos{ inserirfuncao(nomefuncao, tipo);   
-	         id = hashfuncao_busca(nomefuncao, tipo, &hashFuncao); // printf("%d" , id);
+	         id = hashfuncao_busca(nomefuncao, tipo, &hashFuncao);  //printf("%s" , hashFuncao.funcoes[id].nome);
                  fprintf(arquivo, "%s    %s (%s) ", hashFuncao.funcoes[id].tiporeturn,hashFuncao.funcoes[id].nome,param);
 	 } QuebrasComando 
 		 
@@ -732,7 +743,7 @@ Atribuido:
 ;
 
 Atribuicao:
-	Identificador {$$=strdup($1); strcpy(nome,$$); existeVariavel(nome); } Atribuidor Atribuido 
+	Identificador {$$=strdup($1); strcpy(nome,$$); existeVariavel(nome); existeFuncao(nome,tipo); } Atribuidor Atribuido 
 /*	| error{erros++;yyerror("Esperado \"<-\"");}*/
 ;
 
@@ -818,8 +829,8 @@ FuncaoNativa:
 ;
 
 FuncaoNaoNativa:
-	Identificador AbreParenteses  FechaParenteses
-	| Identificador AbreParenteses AssinaturaExistente  FechaParenteses
+	Identificador  AbreParenteses{nomeFuncao = nome; existeFuncao(nomeFuncao, tipo);  fprintf(arquivo, "(");} FechaParenteses {fprintf(arquivo,")");}
+	| Identificador AbreParenteses{nomeFuncao = nome; existeFuncao(nomeFuncao, tipo);  fprintf(arquivo, "(");} AssinaturaExistente  FechaParenteses {fprintf(arquivo,")");}
 /*	| error{erros++;yyerror("Funcao inexistente");} */
 ;
 
@@ -828,7 +839,7 @@ AssinaturaExistente:
 	| Variavel {existeVariavel(variavel);}  Separador AssinaturaExistente
 	| Numero
 	| Numero Separador AssinaturaExistente
-	| FuncaoNaoNativa
+	| FuncaoNaoNativa {existeFuncao(nomeFuncao,tipo);}
 	| FuncaoNaoNativa Separador AssinaturaExistente
 	| FuncaoNativa
 	| FuncaoNativa Separador AssinaturaExistente
