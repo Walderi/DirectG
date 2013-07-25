@@ -852,7 +852,7 @@ SegundoTermoCopia:
 
 Copia:
 	InicioCopia AbreParenteses Variavel {existeVariavel(variavel);}  Separador SegundoTermoCopia Separador NumeroInteiro FechaParenteses 
-	| error{erros++;yyerror("Erro na funcao Copia");}
+	/*| error{erros++;yyerror("Erro na funcao Copia");}*/
 ;
 
 InicioMaiusc:
