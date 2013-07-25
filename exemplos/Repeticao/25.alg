@@ -18,10 +18,10 @@ inicio
          	contador <- contador+1
 	ate(contador=QtPessoas)
 	escreva("Media de idades ", (soma/contador))
-	se ((soma/contador)>0) e ((soma/contador)<25) entao
+	se (soma/contador>0 e soma/contador<25) entao
   		 escreval(" e a turma e Jovem")
    	senao
-   		se ((soma/contador)>25) e ((soma/contador)<60) entao
+   		se (soma/contador>25 e soma/contador<60) entao
       			escreval(" e a turma e Adulta")
       		senao
       			escreval(" e a turma e Idosa")

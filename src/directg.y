@@ -13,7 +13,7 @@
 extern int 	yylineno;
 extern char 	*yytext;
 
-yyerrork; //stack error correction
+extern char * yyerrork; //stack error correction
 
 
 int erros=0;
@@ -26,7 +26,7 @@ char tipo[30];
 char* a;
 int posInicial;
 int posFinal;
-char param[30];
+char param[300];
 FILE *arquivo;
 int id; // Idenficação na busca
 
@@ -41,8 +41,8 @@ int existe;
 	if (existe == 0) {
 	hashvariavel_inserir(Nome, Tipo,escopo, &hashVariavel);
 	} else {
-	erros++;
-	yyerror("Variavel Já Declarada!! ");
+	//erros++;
+	//	yyerror("Variavel Já Declarada!! ");
 	}
 }
 
@@ -53,8 +53,8 @@ int existe;
 	if(existe == 0){
 	hashfuncao_inserir( nome, tiporeturn, &hashFuncao);
 	}else{
-	erros++;
-        yyerror("Função já Declarada!! ");
+	//erros++;
+       // yyerror("Função já Declarada!! ");
 	}
 
 
@@ -131,7 +131,7 @@ Input:
 QuebraComando:
 	T_QUEBRA{fprintf(arquivo, "\n");}
 	| Comentario
-	| error{erros++;yyerror("Erro do fim de linha");}
+	| error{erros++;yyerror("Erro do fim de linha",yytext);}
 ;
 	
 QuebrasComando:
@@ -139,13 +139,16 @@ QuebrasComando:
 	|QuebraComando QuebrasComando 
 ;
 
+//------------------------------------------------------------------------------INICIO ESPIRITUAL
+
+
 InicioAlgoritmo:
-	T_ALGORITMO {arquivo = fopen("../Saida.C","w+"); 
+	T_ALGORITMO {arquivo = fopen("./Saida.C","w+"); 
 		     	strcpy(escopo,"global");
 			fprintf(arquivo, "#include <stdio.h>\n#include<ctype.h> \n#include <stdlib.h> \n#include <math.h> \n#include <string.h> \n#define false 0\n#define true 1  ");			
 
 				}
-	| error{erros++;yyerror("Erro de inicializacao do programa esperado \" ALGORITMO \" ");}
+	| error{erros++;yyerror("Erro de inicializacao do programa esperado \" ALGORITMO \" ",yytext);}
 ;
 
 CabecalhoAlgoritmo:
@@ -154,7 +157,7 @@ CabecalhoAlgoritmo:
 
 FimAlgoritmo:
 	T_FIMALGORITMO {fprintf(arquivo, "return 0; \n } ");}
-	| error{erros++;yyerror("Erro de termino de algoritmo esperado \" FIMALGORITMO \" ");}
+	| error{erros++;yyerror("Erro de termino de algoritmo esperado \" FIMALGORITMO \" ",yytext);}
 ;
 
 BlocoAlgoritmo: 
@@ -168,12 +171,12 @@ String:
 
 NomeAlgoritmo:
 	String
-	| error{erros++;yyerror("Algoritmo sem nome");}
+	| error{erros++;yyerror("Algoritmo sem nome",yytext);}
 ;
 
 InicioLogica:
 	T_INICIO QuebrasComando 
-	| error{erros++;yyerror("Faltando \" INICIO \" ");} 
+	| error{erros++;yyerror("Faltando \" INICIO \" ",yytext);} 
 ;
 
 BlocoCodigo:
@@ -185,7 +188,7 @@ BlocoCodigo:
 
 InicioBlocoDeclaracao:
 	T_VAR
-	| error{erros++;yyerror("Faltando \" VAR \" ");}
+	| error{erros++;yyerror("Faltando \" VAR \" ",yytext);}
 ;
 
 BlocoDeclaracao:
@@ -197,7 +200,7 @@ BlocoDeclaracao:
 
 DefineTipo:
 	T_DECLARAVAR
-	| error{erros++;yyerror("Necessario \" : \" para declaracao da variavel");}
+	| error{erros++;yyerror("Necessario \" : \" para declaracao da variavel",yytext);}
 ;
 
 BlocoVariaveis:
@@ -216,7 +219,7 @@ BlocoVariaveis:
 
 Separador:
 	T_SEPARADOR
-	| error{erros++;yyerror("Faltando \",\" para divisao de variaveis");} 
+	| error{erros++;yyerror("Faltando \",\" para divisao de variaveis",yytext);} 
 ;
 
 Variaveis:
@@ -248,7 +251,7 @@ Variavel:
 Identificador:
 	T_IDENTIFICADOR{$$=strdup(yytext); strcpy(nome, $$); variavel =$$;}
 	| VariavelVetor
-	| error{erros++;yyerror("Identificador invalido");}
+	| error{erros++;yyerror("Identificador invalido",yytext);}
 ;
 
 TipoInteiro:
@@ -281,7 +284,7 @@ Tipos:
 	| TipoReal
 	| TipoCaractere
 	| TipoLogico
-	| error {erros++; yyerror("Tipo de dado invalido!"); }	
+	| error {erros++; yyerror("Tipo de dado invalido!",yytext); }	
 
 ;
 
@@ -290,12 +293,12 @@ Tipos:
 
 AbreColchete:
 	T_ABRECOLCHETE
-	| error{erros++;yyerror("Esperado \"[\"");}
+	| error{erros++;yyerror("Esperado \"[\"",yytext);}
 ;
 
 FechaColchete:
 	T_FECHACOLCHETE
-	| error{erros++;yyerror("Esperado \"]\"");}
+	| error{erros++;yyerror("Esperado \"]\"",yytext);}
 ;
 
 ExprColcheteVetor:
@@ -312,7 +315,7 @@ PosInicialVetor:
 
 EntrePosVetor:
 	T_PONTOPONTO
-	| error{erros++;yyerror("Erro na divisao do vetor \"..\"");}
+	| error{erros++;yyerror("Erro na divisao do vetor \"..\"",yytext);}
 ;
 
 PosFinalVetor:
@@ -321,17 +324,17 @@ PosFinalVetor:
 
 NumeroInteiroInicialVetor:
 	 T_NUMINTEIRO {$$=strdup(yytext); posInicial=atoi($$);}
-        | error{erros++;yyerror("Esperado um numero do tipo inteiro");}
+        | error{erros++;yyerror("Esperado um numero do tipo inteiro",yytext);}
 ;
 
 NumeroInteiroFinalVetor:
          T_NUMINTEIRO {$$=strdup(yytext); posFinal=atoi($$);}
-        | error{erros++;yyerror("Esperado um numero do tipo inteiro");}
+        | error{erros++;yyerror("Esperado um numero do tipo inteiro",yytext);}
 ;
 
 DefineTipoVetor:
 	T_DE
-	| error{erros++;yyerror("Faltou o termo de condicao do vetor \"DE\"");}
+	| error{erros++;yyerror("Faltou o termo de condicao do vetor \"DE\"",yytext);}
 ;
 
 TipoDoTipoVetor:
@@ -388,7 +391,7 @@ Lacos:
 //------------------------------------------------------------------------------------------------------------INICIO ENQUANTO
 FacaEnquanto:
 	T_FACA{fprintf(arquivo,")  { \n ");}
-	| error{erros++; yyerror("Esperado \"FACA\"");}
+	| error{erros++; yyerror("Esperado \"FACA\"",yytext);}
 ;
 
 InicioEnquanto:
@@ -397,7 +400,7 @@ InicioEnquanto:
 
 FimEnquanto:
 	T_FIMENQUANTO {fprintf(arquivo,"\n  } ");}
-	| error{erros++;yyerror("Esperado \"FIMENQUANTO\"");}
+	| error{erros++;yyerror("Esperado \"FIMENQUANTO\"",yytext);}
 ;
 
 BlocoEnquanto:
@@ -415,12 +418,12 @@ InicioPara:
 
 FimPara:
 	T_FIMPARA{fprintf(arquivo, "\n }");}
-	| error{erros++;yyerror("Esperado \"FIMPARA\"");}
+	| error{erros++;yyerror("Esperado \"FIMPARA\"",yytext);}
 ;
 
 AlcancePara:
 	T_DE {fprintf(arquivo, "; ");}
-	| error{erros++; yyerror("Esperado \"DE\"");}
+	| error{erros++; yyerror("Esperado \"DE\"",yytext);}
 ;
 
 AtePara:
@@ -453,12 +456,12 @@ PassoPara:
 ExprCondicaoPara:
 	AlcancePara InicioAlcancePara AtePara FimAlcancePara  
 	| AlcancePara InicioAlcancePara AtePara FimAlcancePara PassoPara AlcancePasso
-	| error{erros++;yyerror("Erro na condicao para");}
+	| error{erros++;yyerror("Erro na condicao para",yytext);}
 ;
 
 FacaPara:
 	T_FACA
-	| error{erros++;yyerror("Esperado \"FACA\"");}
+	| error{erros++;yyerror("Esperado \"FACA\"",yytext);}
 ;
 
 BlocoPara:
@@ -472,7 +475,7 @@ InicioRepita:
 
 RepitaAte:
 	T_ATE{fprintf(arquivo, "} while ");}
-	| error{erros++;yyerror("Espera \"ATE\" para finalizar o bloco REPITA");}
+	| error{erros++;yyerror("Espera \"ATE\" para finalizar o bloco REPITA",yytext);}
 ;
 
 ExprRepitaAte:
@@ -499,17 +502,17 @@ InicioSe:
 
 FimSe:
 	T_FIMSE {fprintf(arquivo, " } ");}
-	| error{erros++;yyerror("Esperado \"FIMSE\"");}
+	| error{erros++;yyerror("Esperado \"FIMSE\"",yytext);}
 ;
 
 DesvioEntao:
 	T_ENTAO{fprintf(arquivo, " ) {\n");}
-	| error{erros++;yyerror("Esperado \"ENTAO\"");}
+	| error{erros++;yyerror("Esperado \"ENTAO\"",yytext);}
 ;
 
 DesvioSenao:
 	T_SENAO{fprintf(arquivo, " } else {  ");}
-	| error{erros++;yyerror("Esperado \"SENAO\"");}
+	| error{erros++;yyerror("Esperado \"SENAO\"",yytext);}
 ;
 
 //--------------------------------------------------------------------------------------------------------------------------------------SE
@@ -521,7 +524,7 @@ BlocosSe:
 	| InicioSe ExpressaoLogica DesvioEntao QuebrasComando BlocosLogicos DesvioSenao QuebrasComando BlocosLogicos BlocosSe FimSe QuebrasComando
 	| InicioSe ExpressaoLogica DesvioEntao QuebrasComando BlocosLogicos BlocosSe DesvioSenao QuebrasComando BlocosLogicos BlocosSe FimSe QuebrasComando
 	| InicioSe ExpressaoLogica DesvioEntao QuebrasComando BlocosLogicos DesvioSenao BlocosSe FimSe QuebrasComando
-	| error{erros++;yyerror("Erro no Bloco SE");}
+	| error{erros++;yyerror("Erro no Bloco SE",yytext);}
 ;
 
 //--------------------------------------------------------------------------------------------------------------------------CASOS
@@ -531,17 +534,17 @@ InicioEscolha:
 
 FimEscolha:
 	T_FIMESCOLHA  {fprintf(arquivo, " } \n");}   
-	| error{erros++;yyerror("Esperado \"FIMESCOLHA\"");}
+	| error{erros++;yyerror("Esperado \"FIMESCOLHA\"",yytext);}
 ;
 
 AbreParenteses:
 	T_ABRE_PARENT {/*fprintf(arquivo, "( ");*/}
-	| error{erros++;yyerror("Esperado \"(\"");}
+	| error{erros++;yyerror("Esperado \"(\"",yytext);}
 ;
 
 FechaParenteses:
 	T_FECHA_PARENT{/*fprintf(arquivo, " ) ");*/}
-	| error{erros++;yyerror("Esperado \")\"");}
+	| error{erros++;yyerror("Esperado \")\"",yytext);}
 ;
 ExprEscolha:
 	Variavel
@@ -556,18 +559,18 @@ BlocosEscolha:
 
 AbreCaso:
 	T_CASO{fprintf(arquivo, "\n case ");} 
-	| error{erros++;yyerror("Necessario um CASO");}
+	| error{erros++;yyerror("Necessario um CASO",yytext);}
 ;
 
 OutroCaso:
 	T_OUTROCASO {fprintf(arquivo, "\n default : ");} 
-	| error{erros++;yyerror("Necessario um OUTROCASO");}
+	| error{erros++;yyerror("Necessario um OUTROCASO",yytext);}
 ;
 
 BlocosCaso:
 	AbreCaso SelecaoCasos QuebrasComando BlocosLogicos {fprintf(arquivo,"\n break;");}
 	| AbreCaso SelecaoCasos QuebrasComando BlocosLogicos {fprintf(arquivo,"\n break;");}  BlocosCaso
-	| error{erros++;yyerror("Erro no bloco caso");}
+	| error{erros++;yyerror("Erro no bloco caso",yytext);}
 ;
 
 
@@ -605,12 +608,12 @@ IniciaFuncao:
 
 FimFuncao:
 	T_FIMFUNCAO
-	| error{erros++;yyerror("Esperado \"FIMFUNCAO\"");}
+	| error{erros++;yyerror("Esperado \"FIMFUNCAO\"",yytext);}
 ;
 
 DefinidorFuncao:
 	T_DECLARAVAR	
-	| error{erros++;yyerror("Esperado \":\"");}
+	| error{erros++;yyerror("Esperado \":\"",yytext);}
 ;
 
 Funcao:
@@ -622,12 +625,12 @@ Funcao:
 
 	{fprintf(arquivo, "{ \n"); strcpy(param, "");   }  BlocoDeclaracao InicioLogica
 	 BlocosLogicos Retorno QuebrasComando {strcpy(escopo,"global");} FimFuncao{fprintf(arquivo, "} \n");} QuebrasComando 
-	| error{erros++;yyerror("Erro na declaracao de FUNCAO");}
+	| error{erros++;yyerror("Erro na declaracao de FUNCAO",yytext);}
 ;
 
 PalavraRetorno:
-	T_RETORNE
-	| error{erros++;yyerror("Esperado \"RETORNE\"");}
+	T_RETORNE   {fprintf(arquivo,"return "); }
+	| error{erros++;yyerror("Esperado \"RETORNE\"",yytext);}
 ;
 
 ExprRetorno:
@@ -638,23 +641,23 @@ ExprRetorno:
 ;
 
 Retorno:
-	PalavraRetorno ExprRetorno
+	PalavraRetorno ExprRetorno {fprintf(arquivo, ";"); }
 ;
 
 NomeFuncao:
 	 Identificador {strcpy (nomefuncao, nome);   }   AbreParenteses Assinatura FechaParenteses
-	| error{erros++;yyerror("Erro no nome da funcao");}
+	| error{erros++;yyerror("Erro no nome da funcao",yytext);}
 ;
 
 DefineVarAssinatura:
 	T_DECLARAVAR
-	| error{erros++;yyerror("Esperado \":\"");}
+	| error{erros++;yyerror("Esperado \":\"",yytext);}
 ;
 
 Assinatura:
 	Variaveisfuncao DefineVarAssinatura Tipos
 	| Assinatura  Separador Assinatura
-	| error{erros++;yyerror("Erro no parametro da funcao");}
+	| error{erros++;yyerror("Erro no parametro da funcao",yytext);}
 ;
 
 Variaveisfuncao:
@@ -680,12 +683,12 @@ InicioProcedimento:
 
 FimProcedimento:
 	T_FIMPROCEDIMENTO
-	| error{erros++;yyerror("Esperado \"FIMPROCEDIMENTO\"");}
+	| error{erros++;yyerror("Esperado \"FIMPROCEDIMENTO\"",yytext);}
 ;
 
 NomeProcedimento:
 	Identificador{strcpy (nomefuncao, nome); } AbreParenteses Assinatura FechaParenteses
-	| error{erros++;yyerror("Erro no nome do procedimento");}
+	| error{erros++;yyerror("Erro no nome do procedimento",yytext);}
 ;
 
 BlocoProcedimento:
@@ -772,7 +775,7 @@ ExprPot:
 
 NumeroInteiro:
 	T_NUMINTEIRO {$$=strdup(yytext);  fprintf(arquivo,"%s",$$);}
-	| error{erros++;yyerror("Esperado um numero do tipo inteiro");}
+	| error{erros++;yyerror("Esperado um numero do tipo inteiro",yytext);}
 ;
 
 NumeroReal:
@@ -852,7 +855,7 @@ SegundoTermoCopia:
 
 Copia:
 	InicioCopia AbreParenteses Variavel {existeVariavel(variavel);}  Separador SegundoTermoCopia Separador NumeroInteiro FechaParenteses 
-	/*| error{erros++;yyerror("Erro na funcao Copia");}*/
+/*	| error{erros++;yyerror("Erro na funcao Copia",yytext);}*/
 ;
 
 InicioMaiusc:
@@ -875,7 +878,7 @@ Raiz:
 
 CasasDecimais:
 	|T_DECLARAVAR NumeroInteiro
-	| error{erros++;yyerror("Esperado \":NUMEROINTEIRO\"");}
+	| error{erros++;yyerror("Esperado \":NUMEROINTEIRO\"",yytext);}
 ;
 
 ExprEscreva:
@@ -890,7 +893,7 @@ ExprEscreva:
 
 ParametrosEscreva:
 	AbreParenteses{fprintf(arquivo, " (   ");} ExprEscreva {fprintf(arquivo, "  ) ");}  FechaParenteses
-	| error{erros++;yyerror("Erro na funcao Escreva");}
+	| error{erros++;yyerror("Erro na funcao Escreva",yytext);}
 ;
 
 InicioEscreva:
@@ -898,7 +901,7 @@ InicioEscreva:
 ;
 
 Escreva:
-	InicioEscreva ParametrosEscreva
+	InicioEscreva ParametrosEscreva{fprintf(arquivo, ";");}
 ;
 
 InicioEscreval:
@@ -907,7 +910,7 @@ InicioEscreval:
 ;
 
 Escreval:
-	InicioEscreval ParametrosEscreva   {fprintf(arquivo, " printf(\"\\n\") ");} 	
+	InicioEscreval ParametrosEscreva   {fprintf(arquivo, ";  printf(\"\\n\") ");} 	
 /*	| error{erros++;yyerror("Erro na funcao escreval");}*/
 ;
 
@@ -927,7 +930,7 @@ CondicoesLogicas:
 	| T_MENORIGUALQUE {fprintf(arquivo, " <= ");}
 	| T_MAIORQUE {fprintf(arquivo, " > ");}
 	| T_MAIORIGUALQUE {fprintf(arquivo, " >= ");}
-	| error{erros++;yyerror("Erro na condicao logica");}
+	| error{erros++;yyerror("Erro na condicao logica",yytext);}
 ;
 
 ExpressaoLogica:
@@ -990,7 +993,7 @@ extern int hashvariavel_existenaHash( char nome[], VetVariavel *hashVariavel );
 
 
 
-int yyerror(char *s) {
+int yyerror(char *s, char * yytext) {
         if (strcmp(yytext,"\n")==0 || strcmp(yytext,"\r")==0) {
                 yytext="VAZIO";
 		item.lineNo = yylineno--;
@@ -1029,11 +1032,11 @@ int main(int argc, char *argv[] ) {
         	printf("You Suck!\n");
         	while(Tamanho(minhaPilha) > 0) {
   			if (itemTopoNulo == 0) {
-			//	printf("Mensagem de erro: %s\nNa linha:%d Token Encontrado:%s\n", minhaPilha.Topo->Item.errMsg,
-                        //                 minhaPilha.Topo->Item.lineNo, minhaPilha.Topo->Item.errNo);
+				printf("Mensagem de erro: %s\nNa linha:%d Token Encontrado:%s\n", minhaPilha.Topo->Item.errMsg,
+                                         minhaPilha.Topo->Item.lineNo, minhaPilha.Topo->Item.errNo);
 				
-				printf("Mensagem de erro: %s\nNa linha:%d Token Encontrado:\n", minhaPilha.Topo->Item.errMsg,
-                                         minhaPilha.Topo->Item.lineNo);
+			//	printf("Mensagem de erro: %s\nNa linha:%d Token Encontrado:\n", minhaPilha.Topo->Item.errMsg,
+                        //                 minhaPilha.Topo->Item.lineNo);
                         	Desempilha(&minhaPilha,&minhaPilha.Topo->Item);
 			}
 			else {
