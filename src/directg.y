@@ -13,7 +13,7 @@
 extern int 	yylineno;
 extern char 	*yytext;
 
-//yyerrork; //stack error correction
+yyerrork; //stack error correction
 
 
 int erros=0;
@@ -56,6 +56,17 @@ int existe;
 
 }
 
+void existeVariavel( char *nome){
+int existe;
+        existe = hashvariavel_existe(nome, tipo, escopo , &hashVariavel);
+        if (existe == 1) {
+       		fprintf(arquivo, " %s " , nome);
+        } else {
+       		 erros++;
+       		 yyerror("Essa variavel não existe ");
+        }
+
+}
 
 
 %}
@@ -67,7 +78,7 @@ int existe;
 
 /*Estrutura da linguagem*/
 %token T_ALGORITMO T_FIMALGORITMO
-token T_VAR T_INICIO T_COMENTARIO T_IDENTIFICADOR T_ATRIBUI T_SEPARADOR
+%token T_VAR T_INICIO T_COMENTARIO T_IDENTIFICADOR T_ATRIBUI T_SEPARADOR
 %token T_ABRE_PARENT T_FECHA_PARENT
 %token T_ABRECOLCHETE T_FECHACOLCHETE
 %token T_AND T_OR T_NOT T_XOR
@@ -707,7 +718,7 @@ Atribuido:
 ;
 
 Atribuicao:
-	Identificador Atribuidor Atribuido 
+	Identificador {$$=strdup($1); strcpy(nome,$$); existeVariavel(nome); } Atribuidor Atribuido 
 	| error{erros++;yyerror("Esperado \"<-\"");}
 ;
 
@@ -980,8 +991,8 @@ int yyerror(char *s) {
         item.lineNo = yylineno;
         item.errNo = yytext;
         item.errMsg = s;
-	//yyerrork;
-	//yyclearin;
+	yyerrork;
+	yyclearin;
 
         Empilha(item,&minhaPilha);
 	}
