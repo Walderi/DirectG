@@ -261,9 +261,8 @@ TipoCaractere:
 
 TipoNumerico:
 	TipoInteiro 
-
 	| TipoReal
-	| error{erros++;yyerror("Esperado um numero");}
+/*	| error{erros++;yyerror("Esperado um numero");}*/
 ;
 
 TipoLogico:
@@ -359,7 +358,7 @@ BlocoLogico:
 	| FuncaoNativa {fprintf(arquivo,";\n");} QuebrasComando
 	| FuncaoNaoNativa QuebrasComando
 	| QuebrasComando BlocoLogico 
-	| error{erros++;yyerror("Erro no bloco logico");}
+/*	| error{erros++;yyerror("Erro no bloco logico");} */
 ; 
 
 //------------------------------------------------------------------------------------------------LACOS
@@ -387,8 +386,7 @@ FimEnquanto:
 
 BlocoEnquanto:
 	InicioEnquanto ExpressaoLogica FacaEnquanto QuebrasComando BlocosLogicos FimEnquanto QuebrasComando
-
-	| error{erros++; yyerror("Erro no bloco ENQUANTO");}
+/*	| error{erros++; yyerror("Erro no bloco ENQUANTO");}*/
 ;
 
 //-----------------------------------------------------------------------------------------------------------FIM ENQUANTO
@@ -416,20 +414,20 @@ AtePara:
 InicioAlcancePara:
 	ArtmExpr
 	| NumeroInteiro 
-	| error{erros++;yyerror("Nao encontrado um numero ou variavel do tipo inteiro");}
+/*	| error{erros++;yyerror("Nao encontrado um numero ou variavel do tipo inteiro");} */
 ;
 
 FimAlcancePara:
 	ArtmExpr
 	| NumeroInteiro
-	| error{erros++;yyerror("Nao encontrado um numero ou variavel do tipo inteiro");}
+/*	| error{erros++;yyerror("Nao encontrado um numero ou variavel do tipo inteiro");}*/
 ;
 
 AlcancePasso:
 	Variavel
 	| NumeroInteiro
 	| ArtmExpr
-	| error{erros++;yyerror("Nao encontrado um numero ou variavel do tipo inteiro");}
+/*	| error{erros++;yyerror("Nao encontrado um numero ou variavel do tipo inteiro");}*/
 ;
 
 PassoPara:
@@ -456,7 +454,6 @@ InicioRepita:
 	T_REPITA{fprintf(arquivo, "do {");}
 ;
 
-
 RepitaAte:
 	T_ATE{fprintf(arquivo, "} while ");}
 	| error{erros++;yyerror("Espera \"ATE\" para finalizar o bloco REPITA");}
@@ -465,14 +462,12 @@ RepitaAte:
 ExprRepitaAte:
 	ExpressaoLogica
 	| AbreParenteses ExpressaoLogica FechaParenteses 
-	| error{erros++;yyerror("Erro na expressao do ATE");}
+/*	| error{erros++;yyerror("Erro na expressao do ATE");}*/
 ;
-
-
 
 BlocoRepita:
 	InicioRepita QuebrasComando BlocosLogicos RepitaAte ExprRepitaAte QuebrasComando
-	| error{erros++;yyerror("Erro no bloco REPITA");}
+/*	| error{erros++;yyerror("Erro no bloco REPITA");}*/
 ;
 
 //--------------------------------------------------------------------------------------------------DESVIOS
@@ -535,14 +530,12 @@ FechaParenteses:
 ExprEscolha:
 	Variavel
 	| AbreParenteses {fprintf(arquivo, " ( ");}   Variavel FechaParenteses {fprintf(arquivo, " )  { ");}	
-	| error{erros++;yyerror("Necessario uma variavel para ESCOLHA");}
+/*	| error{erros++;yyerror("Necessario uma variavel para ESCOLHA");}*/
 ;
-
-
 
 BlocosEscolha:
 	InicioEscolha ExprEscolha QuebrasComando BlocoCasos FimEscolha QuebrasComando	
-	| error{erros++;yyerror("Erro no Bloco de ESCOLHA");}
+/*	| error{erros++;yyerror("Erro no Bloco de ESCOLHA");}*/
 ;
 
 AbreCaso:
@@ -571,7 +564,7 @@ Selecao:
 	| Variavel
 	| String
 	| TipoNumerico
-	| error{erros++;yyerror("Variavel de escolha errada");}
+/*	| error{erros++;yyerror("Variavel de escolha errada");}*/
 ;
 
 SelecaoCasos:
@@ -625,7 +618,7 @@ ExprRetorno:
 	AbreParenteses String FechaParenteses
 	| String
 	| ArtmExpr
-	| error{erros++;yyerror("Parametro de retorno errado");}
+/*	| error{erros++;yyerror("Parametro de retorno errado");} */
 ;
 
 Retorno:
@@ -684,7 +677,7 @@ BlocoProcedimento:
                  id = hashfuncao_busca(nomefuncao, "void", &hashFuncao); printf("%d" , id);
                  fprintf(arquivo, "%s    %s (%s) ", hashFuncao.funcoes[id].tiporeturn,hashFuncao.funcoes[id].nome,param);
          } QuebrasComando BlocoDeclaracao InicioLogica BlocosLogicos FimProcedimento QuebrasComando
-	| error{erros++;yyerror("Erro no BlocoProcedimento");}
+/*	| error{erros++;yyerror("Erro no BlocoProcedimento");}*/
 ;
 
 Comentarios:
@@ -716,12 +709,12 @@ Atribuido:
 	| FuncaoRetornavel
 	| LogicoFalso
 	| LogicoVerdadeiro
-	| error{erros++;yyerror("Valor atribuido de forma errada");}
+/*	| error{erros++;yyerror("Valor atribuido de forma errada");}*/
 ;
 
 Atribuicao:
 	Identificador {$$=strdup($1); strcpy(nome,$$); existeVariavel(nome); } Atribuidor Atribuido 
-	| error{erros++;yyerror("Esperado \"<-\"");}
+/*	| error{erros++;yyerror("Esperado \"<-\"");}*/
 ;
 
 ExprSoma:
@@ -808,7 +801,7 @@ FuncaoNativa:
 FuncaoNaoNativa:
 	Identificador AbreParenteses  FechaParenteses
 	| Identificador AbreParenteses AssinaturaExistente  FechaParenteses
-	| error{erros++;yyerror("Funcao inexistente");}
+/*	| error{erros++;yyerror("Funcao inexistente");} */
 ;
 
 AssinaturaExistente:
@@ -820,7 +813,7 @@ AssinaturaExistente:
 	| FuncaoNaoNativa Separador AssinaturaExistente
 	| FuncaoNativa
 	| FuncaoNativa Separador AssinaturaExistente
-	| error{erros++;yyerror("Erro de assinatura de funcao");}
+/*	| error{erros++;yyerror("Erro de assinatura de funcao");}*/
 ;
 
 InicioComprimento:
@@ -830,7 +823,7 @@ InicioComprimento:
 Comprimento:
 	InicioComprimento AbreParenteses Variavel FechaParenteses
 	| InicioComprimento AbreParenteses String FechaParenteses
-	| error{erros++;yyerror("Erro na funcao Compr()");}
+/*	| error{erros++;yyerror("Erro na funcao Compr()");}*/
 ;
 
 InicioCopia:
@@ -852,7 +845,7 @@ InicioMaiusc:
 
 Maiusc:
 	InicioMaiusc AbreParenteses Variavel FechaParenteses
-	| error{erros++;yyerror("Erro no funcao Maiusc");}
+/*	| error{erros++;yyerror("Erro no funcao Maiusc");}*/
 ;
 
 InicioRaiz:
@@ -861,7 +854,7 @@ InicioRaiz:
 
 Raiz: 
 	InicioRaiz AbreParenteses ArtmExpr FechaParenteses
-	| error{erros++;yyerror("Erro na funcao Raiz");}
+/*	| error{erros++;yyerror("Erro na funcao Raiz");} */
 ;
 
 CasasDecimais:
@@ -876,7 +869,7 @@ ExprEscreva:
 	| ExprEscreva Separador ArtmExpr
 	| ExprEscreva Separador ArtmExpr DefineTipo NumeroInteiro DefineTipo NumeroInteiro
 	| ExprEscreva Separador String
-	| error{erros++;yyerror("Parametro improprio para funcao escreva");}
+/*	| error{erros++;yyerror("Parametro improprio para funcao escreva");}*/
 ;
 
 ParametrosEscreva:
@@ -899,7 +892,7 @@ InicioEscreval:
 
 Escreval:
 	InicioEscreval ParametrosEscreva   {fprintf(arquivo, " printf(\"\\n\") ");} 	
-	| error{erros++;yyerror("Erro na funcao escreval");}
+/*	| error{erros++;yyerror("Erro na funcao escreval");}*/
 ;
 
 InicioLeia:
@@ -908,7 +901,7 @@ InicioLeia:
 
 Leia:
 	InicioLeia AbreParenteses{fprintf(arquivo, " (");} Variavel FechaParenteses {fprintf(arquivo, " )");} 
-	| error{erros++;yyerror("Erro na funcao leia (Antigo paçoca)");}
+/*	| error{erros++;yyerror("Erro na funcao leia (Antigo paçoca)");} */
 ;
 
 CondicoesLogicas:
