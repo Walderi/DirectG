@@ -359,21 +359,22 @@ Lacos:
 
 //------------------------------------------------------------------------------------------------------------INICIO ENQUANTO
 FacaEnquanto:
-	T_FACA
+	T_FACA{fprintf(arquivo,"{ \n ");}
 	| error{erros++; yyerror("Esperado \"FACA\"");}
 ;
 
 InicioEnquanto:
-	T_ENQUANTO
+	T_ENQUANTO {fprintf(arquivo, "While " );}
 ;
 
 FimEnquanto:
-	T_FIMENQUANTO
+	T_FIMENQUANTO {fprintf(arquivo,"\n  } ");}
 	| error{erros++;yyerror("Esperado \"FIMENQUANTO\"");}
 ;
 
 BlocoEnquanto:
 	InicioEnquanto ExpressaoLogica FacaEnquanto QuebrasComando BlocosLogicos FimEnquanto QuebrasComando
+
 	| error{erros++; yyerror("Erro no bloco ENQUANTO");}
 ;
 
@@ -382,16 +383,16 @@ BlocoEnquanto:
 //---------------------------------------------------------------------------------------------------------------PARA
 
 InicioPara:
-	T_PARA
+	T_PARA{fprintf(arquivo, "for");}
 ;
 
 FimPara:
-	T_FIMPARA
+	T_FIMPARA{fprintf(arquivo, "\n }");}
 	| error{erros++;yyerror("Esperado \"FIMPARA\"");}
 ;
 
 AlcancePara:
-	T_DE
+	T_DE {fprintf(arquivo, "; ");}
 	| error{erros++; yyerror("Esperado \"DE\"");}
 ;
 
@@ -437,12 +438,14 @@ BlocoPara:
 	InicioPara Variavel ExprCondicaoPara FacaPara QuebrasComando BlocosLogicos FimPara QuebrasComando
 ;
 
+//-----------------------------------------------------------------------------------------------------------------------REPITA
 InicioRepita:
-	T_REPITA
+	T_REPITA{fprintf(arquivo, "do {");}
 ;
 
+
 RepitaAte:
-	T_ATE
+	T_ATE{fprintf(arquivo, "} while ");}
 	| error{erros++;yyerror("Espera \"ATE\" para finalizar o bloco REPITA");}
 ;
 
@@ -452,7 +455,7 @@ ExprRepitaAte:
 	| error{erros++;yyerror("Erro na expressao do ATE");}
 ;
 
-//-----------------------------------------------------------------------------------------------------------------------REPITA
+
 
 BlocoRepita:
 	InicioRepita QuebrasComando BlocosLogicos RepitaAte ExprRepitaAte QuebrasComando
@@ -467,21 +470,21 @@ Desvios:
 ;
 
 InicioSe:
-	T_SE
+	T_SE{fprintf(arquivo, " if ");}
 ;
 
 FimSe:
-	T_FIMSE
+	T_FIMSE {fprintf(arquivo, " } ");}
 	| error{erros++;yyerror("Esperado \"FIMSE\"");}
 ;
 
 DesvioEntao:
-	T_ENTAO
+	T_ENTAO{fprintf(arquivo, " { ");}
 	| error{erros++;yyerror("Esperado \"ENTAO\"");}
 ;
 
 DesvioSenao:
-	T_SENAO
+	T_SENAO{fprintf(arquivo, " } else {  ");}
 	| error{erros++;yyerror("Esperado \"SENAO\"");}
 ;
 
@@ -497,31 +500,32 @@ BlocosSe:
 	| error{erros++;yyerror("Erro no Bloco SE");}
 ;
 
+//--------------------------------------------------------------------------------------------------------------------------CASOS
 InicioEscolha:
-	T_ESCOLHA	
+	T_ESCOLHA{fprintf(arquivo, " switch ");}	
 ;
 
 FimEscolha:
-	T_FIMESCOLHA
+	T_FIMESCOLHA  {fprintf(arquivo, " } ");}   
 	| error{erros++;yyerror("Esperado \"FIMESCOLHA\"");}
 ;
 
 AbreParenteses:
-	T_ABRE_PARENT
+	T_ABRE_PARENT {/*fprintf(arquivo, "( ");*/}
 	| error{erros++;yyerror("Esperado \"(\"");}
 ;
 
 FechaParenteses:
-	T_FECHA_PARENT
+	T_FECHA_PARENT{/*fprintf(arquivo, " ) ");*/}
 	| error{erros++;yyerror("Esperado \")\"");}
 ;
 ExprEscolha:
 	Variavel
-	| AbreParenteses Variavel FechaParenteses	
+	| AbreParenteses {fprintf(arquivo, " ( ");}   Variavel FechaParenteses {fprintf(arquivo, " )  { ");}	
 	| error{erros++;yyerror("Necessario uma variavel para ESCOLHA");}
 ;
 
-//----------------------------------------------------------------------------------------------------------------------------------ESCOLHA
+
 
 BlocosEscolha:
 	InicioEscolha ExprEscolha QuebrasComando BlocoCasos FimEscolha QuebrasComando	
@@ -529,25 +533,25 @@ BlocosEscolha:
 ;
 
 AbreCaso:
-	T_CASO
+	T_CASO{fprintf(arquivo, "\n case ");} 
 	| error{erros++;yyerror("Necessario um CASO");}
 ;
 
 OutroCaso:
-	T_OUTROCASO
+	T_OUTROCASO {fprintf(arquivo, "\n default : ");} 
 	| error{erros++;yyerror("Necessario um OUTROCASO");}
 ;
 
 BlocosCaso:
-	AbreCaso SelecaoCasos QuebrasComando BlocosLogicos
-	| AbreCaso SelecaoCasos QuebrasComando BlocosLogicos BlocosCaso
+	AbreCaso SelecaoCasos QuebrasComando BlocosLogicos {fprintf(arquivo,"\n break;");}
+	| AbreCaso SelecaoCasos QuebrasComando BlocosLogicos {fprintf(arquivo,"\n break;");}  BlocosCaso
 	| error{erros++;yyerror("Erro no bloco caso");}
 ;
 
-//--------------------------------------------------------------------------------------------------------------------------CASOS
+
 
 BlocoCasos:
-	BlocosCaso OutroCaso QuebrasComando BlocosLogicos	 
+	BlocosCaso OutroCaso {fprintf(arquivo,"\n break;");}  QuebrasComando  BlocosLogicos	 
 ;
 
 Selecao:
@@ -558,8 +562,8 @@ Selecao:
 ;
 
 SelecaoCasos:
-	Selecao
-	| Selecao Separador SelecaoCasos
+	Selecao{fprintf(arquivo,":");}
+	| Selecao {fprintf(arquivo,":");} {fprintf(arquivo,"\n break;");}   Separador {fprintf(arquivo, " \n  case ");}   SelecaoCasos
 ;
 //--------------------------------------------------------------------Funcao
 Funcoes:
