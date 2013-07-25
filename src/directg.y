@@ -172,8 +172,8 @@ InicioLogica:
 ;
 
 BlocoCodigo:
-	BlocoDeclaracao InicioLogica {fprintf(arquivo, "int main() {");}  BlocosLogicos 
-	| BlocoDeclaracao Funcoes  InicioLogica {fprintf(arquivo, "int main() {");}   BlocosLogicos
+	BlocoDeclaracao InicioLogica {fprintf(arquivo, "int main() {\n");}  BlocosLogicos 
+	| BlocoDeclaracao Funcoes  InicioLogica {fprintf(arquivo, "int main() {\n");}   BlocosLogicos
 	| Comentarios BlocoCodigo	
 
 ;
@@ -283,12 +283,12 @@ Tipos:
 
 AbreColchete:
 	T_ABRECOLCHETE
-	| error{erros++;yyerror("Esperado \"(\"");}
+	| error{erros++;yyerror("Esperado \"[\"");}
 ;
 
 FechaColchete:
 	T_FECHACOLCHETE
-	| error{erros++;yyerror("Esperado \")\"");}
+	| error{erros++;yyerror("Esperado \"]\"");}
 ;
 
 ExprColcheteVetor:
@@ -338,7 +338,7 @@ VariavelVetor:
 //-----------------------------------------------------------------------------------------------------------------BLOCOS LOGICOS
 
 Interromper:
-	T_INTERROMPA
+	T_INTERROMPA{fprintf(arquivo,"break;\n");} 
 ;
 
 BlocosLogicos:
@@ -350,11 +350,11 @@ BlocosLogicos:
 
 BlocoLogico:
 	| String QuebrasComando
-	| Atribuicao QuebrasComando
+	| Atribuicao {fprintf(arquivo,";\n");} QuebrasComando
 	| Lacos 
 	| Desvios 
 	| Interromper QuebrasComando 
-	| FuncaoNativa QuebrasComando
+	| FuncaoNativa {fprintf(arquivo,";\n");} QuebrasComando
 	| FuncaoNaoNativa QuebrasComando
 	| QuebrasComando BlocoLogico 
 	| error{erros++;yyerror("Erro no bloco logico");}
@@ -490,7 +490,7 @@ FimSe:
 ;
 
 DesvioEntao:
-	T_ENTAO{fprintf(arquivo, " { ");}
+	T_ENTAO{fprintf(arquivo, " {\n");}
 	| error{erros++;yyerror("Esperado \"ENTAO\"");}
 ;
 
@@ -517,7 +517,7 @@ InicioEscolha:
 ;
 
 FimEscolha:
-	T_FIMESCOLHA  {fprintf(arquivo, " } ");}   
+	T_FIMESCOLHA  {fprintf(arquivo, " } \n");}   
 	| error{erros++;yyerror("Esperado \"FIMESCOLHA\"");}
 ;
 
@@ -691,7 +691,7 @@ Comentarios:
 ;
 
 Comentario:
-	T_COMENTARIO QuebrasComando
+	T_COMENTARIO {$$=strdup(yytext),fprintf(arquivo,"%s",$$);} QuebrasComando
 ; 
 
 Atribuidor:
