@@ -755,12 +755,12 @@ ExprPot:
 ;
 
 NumeroInteiro:
-	T_NUMINTEIRO
+	T_NUMINTEIRO {$$=strdup(yytext);  fprintf(arquivo,"%s",$$);}
 	| error{erros++;yyerror("Esperado um numero do tipo inteiro");}
 ;
 
 NumeroReal:
-	T_NUMREAL
+	T_NUMREAL {$$=strdup(yytext);  fprintf(arquivo,"%s",$$);}
 ;
 
 Pi:
