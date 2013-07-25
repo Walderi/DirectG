@@ -147,7 +147,7 @@ int hashvariavel_existenaHash(char nome[], VetVariavel *hashVariavel) {
 	int id;
 	for (id = 0; id < TAM_MAX_VARIAVEL; id++) {
 
-		if ((strcmp(nome, hashVariavel->variaveis[id].nome) == 0)
+		if (strcmp(nome, hashVariavel->variaveis[id].nome) == 0)
 		 {
 
 			return 1;

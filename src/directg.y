@@ -692,7 +692,7 @@ Comentarios:
 ;
 
 Comentario:
-	T_COMENTARIO {$$=strdup(yytext),fprintf(arquivo,"%s",$$);} QuebrasComando
+	T_COMENTARIO /*{$$=strdup(yytext),fprintf(arquivo,"%s",$$);}*/ QuebrasComando
 ; 
 
 Atribuidor:
