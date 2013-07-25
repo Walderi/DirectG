@@ -127,7 +127,7 @@ QuebrasComando:
 InicioAlgoritmo:
 	T_ALGORITMO {arquivo = fopen("../Saida.C","w+"); 
 		     	strcpy(escopo,"global");
-			fprintf(arquivo, "#include <stdio.h> \n#include <stdlib.h> \n#include <math.h> \n#include <string.h> \n ");			
+			fprintf(arquivo, "#include <stdio.h> \n#include <stdlib.h> \n#include <math.h> \n#include <string.h> \n#define false 0\n#define true 1  ");			
 
 				}
 	| error{erros++;yyerror("Erro de inicializacao do programa esperado \" ALGORITMO \" ");}
@@ -684,15 +684,17 @@ Comentario:
 ; 
 
 Atribuidor:
-	T_ATRIBUI
+	T_ATRIBUI {fprintf(arquivo, "=");}
 ;
 
 LogicoFalso:
-	T_LOGICO_FALSO	
+	T_LOGICO_FALSO {fprintf(arquivo, "false");}
+	
 ;
 
 LogicoVerdadeiro:
-	T_LOGICO_VERDADEIRO
+	T_LOGICO_VERDADEIRO {fprintf(arquivo, "true");}
+
 ;
 
 Atribuido:
@@ -710,35 +712,40 @@ Atribuicao:
 ;
 
 ExprSoma:
-	T_SOMA
+	T_SOMA {fprintf(arquivo, " + ");}
+
 ;
 
 ExprSub:
-	T_SUBTRACAO
+	T_SUBTRACAO{fprintf(arquivo, " - ");}
+
 ;
 
 ExprMult:
-	T_MULT
+	T_MULT{fprintf(arquivo, " * ");}
 ;
 
 ExprDiv:
-	T_DIVISAO
+	T_DIVISAO {fprintf(arquivo, " \\ ");}
+
 ;
 
 ExprDivInt:
-	T_DIVISAOINTEIRA
+	T_DIVISAOINTEIRA {fprintf(arquivo, " / ");}
+
 ; 
 
 ExprMod:
-	T_MOD
+	T_MOD {fprintf(arquivo, " %% ");}
 ;
 
 Negativo:
-	T_SUBTRACAO
+	T_SUBTRACAO {fprintf(arquivo, " - ");}
 ;
 
 ExprPot:
-	T_POTENCIA
+	T_POTENCIA {fprintf(arquivo, " pow  ");}
+
 ;
 
 NumeroInteiro:
@@ -865,7 +872,7 @@ ParametrosEscreva:
 ;
 
 InicioEscreva:
-	T_ESCREVA
+	T_ESCREVA{fprintf(arquivo, " printf ");}
 ;
 
 Escreva:
@@ -873,30 +880,31 @@ Escreva:
 ;
 
 InicioEscreval:
-	T_ESCREVAL
+	T_ESCREVAL {fprintf(arquivo, " printf ");}
+
 ;
 
 Escreval:
-	InicioEscreval ParametrosEscreva 	
+	InicioEscreval ParametrosEscreva {fprintf(arquivo, " printf(\"\\n\") ");} 	
 	| error{erros++;yyerror("Erro na funcao escreval");}
 ;
 
 InicioLeia:
-	T_LEIA
+	T_LEIA {fprintf(arquivo, " scanf ");}
 ;
 
 Leia:
-	InicioLeia AbreParenteses Variavel FechaParenteses
+	InicioLeia AbreParenteses{fprintf(arquivo, " (");} Variavel FechaParenteses {fprintf(arquivo, " )");} 
 	| error{erros++;yyerror("Erro na funcao leia (Antigo paçoca)");}
 ;
 
 CondicoesLogicas:
-	T_IGUAL
-	| T_DIFERENTE
-	| T_MENORQUE
-	| T_MENORIGUALQUE
-	| T_MAIORQUE
-	| T_MAIORIGUALQUE 
+	T_IGUAL {fprintf(arquivo, " == ");}
+	| T_DIFERENTE {fprintf(arquivo, " != ");}
+	| T_MENORQUE {fprintf(arquivo, " < ");}
+	| T_MENORIGUALQUE {fprintf(arquivo, " <= ");}
+	| T_MAIORQUE {fprintf(arquivo, " > ");}
+	| T_MAIORIGUALQUE {fprintf(arquivo, " >= ");}
 	| error{erros++;yyerror("Erro na condicao logica");}
 ;
 
@@ -909,19 +917,19 @@ ExpressaoLogica:
 
 
 LogicoAnd:
-	T_AND
+	T_AND {fprintf(arquivo, " && ");}
 ;
 
 LogicoOr:
-	T_OR
+	T_OR {fprintf(arquivo, " ||  ");}
 ;
 
 LogicoNot:
-	T_NOT
+	T_NOT {fprintf(arquivo, " ! ");}
 ;
 
 LogicoXor:
-	T_XOR
+	T_XOR {fprintf(arquivo, " ^ ");}
 ;
 
 OperadoresLogicos:
