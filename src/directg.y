@@ -67,7 +67,7 @@ int existe;
 
 /*Estrutura da linguagem*/
 %token T_ALGORITMO T_FIMALGORITMO
-%token T_VAR T_INICIO T_COMENTARIO T_IDENTIFICADOR T_ATRIBUI T_SEPARADOR
+token T_VAR T_INICIO T_COMENTARIO T_IDENTIFICADOR T_ATRIBUI T_SEPARADOR
 %token T_ABRE_PARENT T_FECHA_PARENT
 %token T_ABRECOLCHETE T_FECHACOLCHETE
 %token T_AND T_OR T_NOT T_XOR
@@ -215,7 +215,7 @@ Variaveis:
                  //strcat(param, " ");
                  strcat(param, hashVariavel.variaveis[id].nome);
 
-} Separador {strcat(param, ", ");} Variaveis {strcpy(param, "");}
+} Separador {strcat(param, ", ");} Variaveis
 ;
 
 
@@ -594,7 +594,7 @@ Funcao:
 	 } QuebrasComando 
 		 
 
-	{fprintf(arquivo, "{ \n");}  BlocoDeclaracao InicioLogica
+	{fprintf(arquivo, "{ \n"); strcpy(param, "");   }  BlocoDeclaracao InicioLogica
 	 BlocosLogicos Retorno QuebrasComando {strcpy(escopo,"global");} FimFuncao{fprintf(arquivo, "} \n");} QuebrasComando 
 	| error{erros++;yyerror("Erro na declaracao de FUNCAO");}
 ;
@@ -645,7 +645,7 @@ Variaveisfuncao:
 		 strcat(param, " ");
                  strcat(param, hashVariavel.variaveis[id].nome);
           
-}  Separador{strcat(param, ", ");} Variaveisfuncao {strcpy(param,"");}
+}  Separador{strcat(param, ", ");} Variaveisfuncao
 ;	
 
 InicioProcedimento:
