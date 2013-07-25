@@ -32,12 +32,12 @@ void hashfuncao_inserir(char* nome, char* tiporeturn, VetFuncao *hashFuncao) {
 				strcpy(hashFuncao->funcoes[id].tiporeturn, tiporeturn);
 				break;
 			} else {
-				printf("EXCESSO DE VARIAVEIS!! ESTOURO DE MEMORIA!\n");
+			//	printf("EXCESSO DE VARIAVEIS!! ESTOURO DE MEMORIA!\n");
 			}
 
 		}
 	} else {
-		printf("FUNCAO JA DECLARADA!!\n");
+		//printf("FUNCAO JA DECLARADA!!\n");
 	}
 }
 //A funcao hashfuncao_busca vai procurar por toda tabela qual o id da funcao
@@ -52,7 +52,7 @@ int hashfuncao_busca(char* nome, char* tiporeturn, VetFuncao *hashFuncao) {
 			return id;
 
 		} else {
-			printf("Funcao nao encontrada\n");
+		//	printf("Funcao nao encontrada\n");
 			return 1;
 		}
 	}
@@ -97,11 +97,11 @@ void hashvariavel_inserir(char nome[], char tipo[], char escopo[],
 
 				return;
 			} else {
-				printf("EXCESSO DE VARIAVEIS!! ESTOURO DE MEMORIA!\n");
+		//		printf("EXCESSO DE VARIAVEIS!! ESTOURO DE MEMORIA!\n");
 			}
 		}
 	} else {
-		printf("VARIAVEL JÁ DECLARADA!!\n");
+	//	printf("VARIAVEL JÁ DECLARADA!!\n");
 	}
 }
 

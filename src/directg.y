@@ -63,8 +63,8 @@ int existe;
         if (existe == 1) {
        		fprintf(arquivo, " %s " , nome);
         } else {
-       		 erros++;
-       		 yyerror("Essa variavel não existe ");
+       //	 erros++;
+       	//	 yyerror("Essa variavel não existe ");
         }
 
 }
@@ -214,7 +214,7 @@ Separador:
 ;
 
 Variaveis:
-	Variavel {inserirvariavel(nome,tipo,escopo); printf("%s %s",nome, tipo);
+	Variavel {inserirvariavel(nome,tipo,escopo); //printf("%s %s",nome, tipo);
                  id = hashvariavel_busca(nome, tipo, escopo, &hashVariavel);
                  //strcat(param, hashVariavel.variaveis[id].tipo);
                  //strcat(param, " ");
@@ -222,7 +222,7 @@ Variaveis:
 }
 
 
-	| Variavel { inserirvariavel(nome,tipo,escopo); printf("%s %s",nome, tipo);
+	| Variavel { inserirvariavel(nome,tipo,escopo); //printf("%s %s",nome, tipo);
                  id = hashvariavel_busca(nome, tipo, escopo, &hashVariavel);
                  //strcat(param, hashVariavel.variaveis[id].tipo);
                  //strcat(param, " ");
@@ -446,7 +446,7 @@ FacaPara:
 ;
 
 BlocoPara:
-	InicioPara Variavel ExprCondicaoPara FacaPara QuebrasComando BlocosLogicos FimPara QuebrasComando
+	InicioPara Variavel {existeVariavel(variavel);}  ExprCondicaoPara FacaPara QuebrasComando BlocosLogicos FimPara QuebrasComando
 ;
 
 //-----------------------------------------------------------------------------------------------------------------------REPITA
@@ -529,7 +529,7 @@ FechaParenteses:
 ;
 ExprEscolha:
 	Variavel
-	| AbreParenteses {fprintf(arquivo, " ( ");}   Variavel FechaParenteses {fprintf(arquivo, " )  { ");}	
+	| AbreParenteses {fprintf(arquivo, " ( ");}   Variavel {existeVariavel(variavel);}  FechaParenteses {fprintf(arquivo, " )  { ");}	
 /*	| error{erros++;yyerror("Necessario uma variavel para ESCOLHA");}*/
 ;
 
@@ -561,7 +561,7 @@ BlocoCasos:
 ;
 
 Selecao:
-	| Variavel
+	| Variavel {existeVariavel(variavel);}
 	| String
 	| TipoNumerico
 /*	| error{erros++;yyerror("Variavel de escolha errada");}*/
@@ -599,7 +599,7 @@ DefinidorFuncao:
 
 Funcao:
 	IniciaFuncao{strcpy(escopo,"local");} NomeFuncao DefinidorFuncao Tipos{ inserirfuncao(nomefuncao, tipo);   
-	         id = hashfuncao_busca(nomefuncao, tipo, &hashFuncao); printf("%d" , id);
+	         id = hashfuncao_busca(nomefuncao, tipo, &hashFuncao); // printf("%d" , id);
                  fprintf(arquivo, "%s    %s (%s) ", hashFuncao.funcoes[id].tiporeturn,hashFuncao.funcoes[id].nome,param);
 	 } QuebrasComando 
 		 
@@ -642,14 +642,14 @@ Assinatura:
 ;
 
 Variaveisfuncao:
-        Variavel{ inserirvariavel(nome,tipo,escopo); printf("%s %s",nome, tipo);
+        Variavel{ inserirvariavel(nome,tipo,escopo); //printf("%s %s",nome, tipo);
                  id = hashvariavel_busca(nome, tipo, escopo, &hashVariavel);
                  strcat(param, hashVariavel.variaveis[id].tipo);
                  strcat(param, " ");
                  strcat(param, hashVariavel.variaveis[id].nome);
 
 }
-        | Variavel { inserirvariavel(nome,tipo,escopo); printf("%s %s",nome, tipo);
+        | Variavel { inserirvariavel(nome,tipo,escopo);// printf("%s %s",nome, tipo);
                  id = hashvariavel_busca(nome, tipo, escopo, &hashVariavel);
                  strcat(param, hashVariavel.variaveis[id].tipo);
 		 strcat(param, " ");
@@ -674,7 +674,7 @@ NomeProcedimento:
 
 BlocoProcedimento:
 	InicioProcedimento{strcpy(escopo,"local");} NomeProcedimento{ inserirfuncao(nomefuncao, "void");
-                 id = hashfuncao_busca(nomefuncao, "void", &hashFuncao); printf("%d" , id);
+                 id = hashfuncao_busca(nomefuncao, "void", &hashFuncao); // printf("%d" , id);
                  fprintf(arquivo, "%s    %s (%s) ", hashFuncao.funcoes[id].tiporeturn,hashFuncao.funcoes[id].nome,param);
          } QuebrasComando BlocoDeclaracao InicioLogica BlocosLogicos FimProcedimento QuebrasComando
 /*	| error{erros++;yyerror("Erro no BlocoProcedimento");}*/
@@ -775,7 +775,7 @@ Numero:
 
 ArtmExpr:
 	Numero
-	| Variavel 
+	| Variavel {existeVariavel(variavel);} 
 	| ArtmExpr ExprSoma ArtmExpr 
 	| ArtmExpr ExprSub ArtmExpr 
 	| ArtmExpr ExprMult ArtmExpr    
@@ -805,8 +805,8 @@ FuncaoNaoNativa:
 ;
 
 AssinaturaExistente:
-	Variavel
-	| Variavel Separador AssinaturaExistente
+	Variavel {existeVariavel(variavel);}
+	| Variavel {existeVariavel(variavel);}  Separador AssinaturaExistente
 	| Numero
 	| Numero Separador AssinaturaExistente
 	| FuncaoNaoNativa
@@ -821,7 +821,7 @@ InicioComprimento:
 ;
 
 Comprimento:
-	InicioComprimento AbreParenteses Variavel FechaParenteses
+	InicioComprimento AbreParenteses Variavel {existeVariavel(variavel);}  FechaParenteses
 	| InicioComprimento AbreParenteses String FechaParenteses
 /*	| error{erros++;yyerror("Erro na funcao Compr()");}*/
 ;
@@ -835,7 +835,7 @@ SegundoTermoCopia:
 ;
 
 Copia:
-	InicioCopia AbreParenteses Variavel Separador SegundoTermoCopia Separador NumeroInteiro FechaParenteses
+	InicioCopia AbreParenteses Variavel {existeVariavel(variavel);}  Separador SegundoTermoCopia Separador NumeroInteiro FechaParenteses
 	| error{erros++;yyerror("Erro na funcao Copia");}
 ;
 
@@ -844,7 +844,7 @@ InicioMaiusc:
 ;
 
 Maiusc:
-	InicioMaiusc AbreParenteses Variavel FechaParenteses
+	InicioMaiusc AbreParenteses Variavel {existeVariavel(variavel);}  FechaParenteses
 /*	| error{erros++;yyerror("Erro no funcao Maiusc");}*/
 ;
 
@@ -900,7 +900,7 @@ InicioLeia:
 ;
 
 Leia:
-	InicioLeia AbreParenteses{fprintf(arquivo, " (");} Variavel FechaParenteses {fprintf(arquivo, " )");} 
+	InicioLeia AbreParenteses{fprintf(arquivo, " (");} Variavel {existeVariavel(variavel);}  FechaParenteses {fprintf(arquivo, " )");} 
 /*	| error{erros++;yyerror("Erro na funcao leia (Antigo paçoca)");} */
 ;
 
@@ -918,7 +918,7 @@ ExpressaoLogica:
 	ArtmExpr CondicoesLogicas ArtmExpr
 	| ExpressaoLogica OperadoresLogicos ExpressaoLogica
 	| AbreParenteses ExpressaoLogica FechaParenteses
-	| Variavel
+	| Variavel{existeVariavel(variavel);}
 ;
 
 
@@ -1013,11 +1013,11 @@ int main(int argc, char *argv[] ) {
         	printf("You Suck!\n");
         	while(Tamanho(minhaPilha) > 0) {
   			if (itemTopoNulo == 0) {
-				printf("Mensagem de erro: %s\nNa linha:%d Token Encontrado:%s\n", minhaPilha.Topo->Item.errMsg,
-                                         minhaPilha.Topo->Item.lineNo, minhaPilha.Topo->Item.errNo);
+			//	printf("Mensagem de erro: %s\nNa linha:%d Token Encontrado:%s\n", minhaPilha.Topo->Item.errMsg,
+                        //                 minhaPilha.Topo->Item.lineNo, minhaPilha.Topo->Item.errNo);
 				
-			//	printf("Mensagem de erro: %s\nNa linha:%d Token Encontrado:\n", minhaPilha.Topo->Item.errMsg,
-                        //                 minhaPilha.Topo->Item.lineNo);
+				printf("Mensagem de erro: %s\nNa linha:%d Token Encontrado:\n", minhaPilha.Topo->Item.errMsg,
+                                         minhaPilha.Topo->Item.lineNo);
                         	Desempilha(&minhaPilha,&minhaPilha.Topo->Item);
 			}
 			else {

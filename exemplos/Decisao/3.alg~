@@ -6,7 +6,6 @@ algoritmo "Feminino ou Masculino "
 var
 genero : caracter
 
-
 inicio
 	// Seção de Comandos
 	escreval ( "Entre com o F ou M:")
