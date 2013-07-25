@@ -36,5 +36,5 @@ int hashfuncao_existe( char nome[], char tiporeturn[], VetFuncao *hashFuncao);
 void hashvariavel_inserir(char nome[], char tipo[], char escopo[], VetVariavel *hashVariavel);
 int hashvariavel_busca( char nome[], char tipo[], char escopo[],VetVariavel *hashVariavel );
 int hashvariavel_existe( char nome[], char tipo[], char escopo[], VetVariavel *hashVariavel );
-int hashvariavel_existenaHash( char nome[], VetVariavel *hashVariavel );
+
 #endif
