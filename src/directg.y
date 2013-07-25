@@ -145,7 +145,7 @@ InicioAlgoritmo:
 ;
 
 CabecalhoAlgoritmo:
-	InicioAlgoritmo NomeAlgoritmo QuebrasComando
+	InicioAlgoritmo{fprintf(arquivo,"// "); } NomeAlgoritmo {fprintf(arquivo,"\n"); }   QuebrasComando
 ;
 
 FimAlgoritmo:
@@ -158,7 +158,8 @@ BlocoAlgoritmo:
 ;
 
 String:
-	T_STRING
+	T_STRING{ $$=strdup(yytext);
+	fprintf(arquivo," %s ", $$);}
 ;
 
 NomeAlgoritmo:
