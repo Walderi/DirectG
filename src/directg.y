@@ -19,6 +19,7 @@ yyerrork; //stack error correction
 int erros=0;
 char escopo[30];
 char nome[30];
+char  *variavel;
 char nomefuncao[30];
 char tipo[30];
 char* a;
@@ -58,7 +59,7 @@ int existe;
 
 void existeVariavel( char *nome){
 int existe;
-        existe = hashvariavel_existe(nome, tipo, escopo , &hashVariavel);
+        existe = hashvariavel_existenaHash(nome, &hashVariavel);
         if (existe == 1) {
        		fprintf(arquivo, " %s " , nome);
         } else {
@@ -239,7 +240,7 @@ Variavel:
 ;
 
 Identificador:
-	T_IDENTIFICADOR{$$=strdup(yytext); strcpy(nome, $$);}
+	T_IDENTIFICADOR{$$=strdup(yytext); strcpy(nome, $$); variavel =$$;}
 	| VariavelVetor
 	| error{erros++;yyerror("Identificador invalido");}
 ;
@@ -897,7 +898,7 @@ InicioEscreval:
 ;
 
 Escreval:
-	InicioEscreval ParametrosEscreva {fprintf(arquivo, " printf(\"\\n\") ");} 	
+	InicioEscreval ParametrosEscreva   {fprintf(arquivo, " printf(\"\\n\") ");} 	
 	| error{erros++;yyerror("Erro na funcao escreval");}
 ;
 
@@ -976,6 +977,7 @@ extern int hashfuncao_existe( char nome[], char tiporeturn[], VetFuncao *hashFun
 extern void hashvariavel_inserir(char nome[], char tipo[], char escopo[], VetVariavel *hashVariavel);
 extern int hashvariavel_busca( char nome[], char tipo[], char escopo[],VetVariavel *hashVariavel );
 extern int hashvariavel_existe( char nome[], char tipo[], char escopo[], VetVariavel *hashVariavel );
+extern int hashvariavel_existenaHash( char nome[], VetVariavel *hashVariavel );
 
 
 
